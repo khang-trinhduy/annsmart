@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAalIF9evOwkKINPAQ53MIaQAAAAACAAAAAAAQZgAAAAEAACAAAACBbQELm7VI5gtIWGjvxb53G8ggePGUnwreElQ0KytNjgAAAAAOgAAAAAIAACAAAADPKO5ELsVi5tm72SBi1UM3S6A3XAQ4Jo0mRcLAS3P0zBAAAAATQf4zwDxPg4m4cuEHx4J8QAAAAJwjAWpIm8E8g65eau2ovgeU2x9pl9yqEpSRph4msYxm4S9wsyVomccHlDn1rv/2rTb12xT0Ghg5+cUogXrDrDg=</EncryptedPassword>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="BookingFormContext">
+      <Value>Data Source=192.168.9.5%3bInitial Catalog=annhome.booking%3bPersist Security Info=True%3bUser ID=khang%3bPassword=khang</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+  <ItemGroup>
+    <EFMigrations Include="BookingForm.Models.BookingFormContext">
+      <Value>Data Source=192.168.9.5%3bInitial Catalog=annhome.booking%3bPersist Security Info=True%3bUser ID=khang%3bPassword=khang</Value>
+    </EFMigrations>
+  </ItemGroup>
+</Project>

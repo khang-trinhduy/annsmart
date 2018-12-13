@@ -1,0 +1,109 @@
+﻿@model BookingForm.Models.Sale
+
+<div style="display:block; height:235px;width:235px;border-radius:50%" class="polaroid">
+    <img id="img" src=@Url.Action("GetPhoto", "Sales", new { id = Model.ID }) style="width:235px;height:235px;border-radius:50%;transition: .5s ease;backface-visibility: hidden; border:0" />
+        <div class="container">
+    <input asp-for="portrait" type="file" id="portrait" class="inputFile" name="portrait" />
+    <label class="photo" style="display:block; margin-top:50px;" for="portrait">Photo</label>
+</div>
+    </div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    function readURL(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#img').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#portrait").change(function () {
+        readURL(this);
+    });
+</script>
+
+<style>
+    .inputFile {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+
+    .photo {
+        transition: .5s ease;
+        opacity: 0;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%)
+    }
+    .polaroid:hover .photo {
+        opacity:1;
+    }
+    div.polaroid {
+        border-radius:50%;
+        width: 200px;
+        height:200px;
+        background-color: white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        margin-bottom: 25px;
+    }
+    div.container {
+        text-align: center;
+        padding: 10px 20px;
+
+    }
+    label.photo {
+       
+        background-color: transparent !important;
+        color: rgb(22, 185, 123) !important;
+        cursor:pointer;
+    }
+
+        label.photo:hover {
+            opacity:1;
+        }
+
+    #img:hover {
+        opacity: 0.3;
+    }
+
+    #img:hover label.photo {
+        opacity: 1;
+    }
+
+     #img:hover .middle {
+        opacity: 1;
+     }
+
+        .inputFile + label {
+            font-size: 1.25em;
+            font-weight: 700;
+            color: #4CAF50;
+            background-color: white;
+            display: inline-block;
+        }
+
+            .inputfile:focus + label,
+            .inputfile + label:hover {
+                background-color: white;
+            }
+
+        .inputfile + label {
+            cursor: pointer; /* "hand" cursor */
+        }
+
+        .inputfile:focus + label {
+            outline: 1px dotted #000;
+            outline: -webkit-focus-ring-color auto 5px;
+        }
+</style>

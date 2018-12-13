@@ -1,0 +1,307 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
+for details on configuring this project to bundle and minify static web assets. */
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+/* Wrapping element */
+/* Set some basic padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+ul.dashed {
+    list-style: none;
+    padding-left: 0;
+}
+ul.dashed > li {
+    margin-left: 15px;
+}
+
+        /* Prevent nested li's from getting messed up */
+ul.dashed > li::before {
+    content: "-";
+    margin-left: -15px;
+}
+
+/* Carousel */
+.carousel-caption p {
+    font-size: 20px;
+    line-height: 1.4;
+}
+
+/* Make .svg files in the carousel display properly in older browsers */
+.carousel-inner .item img[src$=".svg"] {
+    width: 100%;
+}
+
+/* QR code generator */
+#qrCode {
+    margin: 15px;
+}
+button {
+    background: #1AAB8A;
+    color: #fff;
+    border: none;
+    position: relative;
+    height: 60px;
+    font-size: 1.6em;
+    padding: 0 2em;
+    cursor: pointer;
+    transition: 800ms ease all;
+    outline: none;
+}
+
+    button:hover {
+        background: #fff;
+        color: #1AAB8A;
+        cursor: pointer;
+    }
+
+    button:before, button:after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 2px;
+        width: 0;
+        background: #1AAB8A;
+        transition: 400ms ease all;
+    }
+
+    button:after {
+        right: inherit;
+        top: inherit;
+        left: 0;
+        bottom: 0;
+    }
+
+    button:hover:before, button:hover:after {
+        width: 100%;
+        transition: 800ms ease all;
+    }
+
+#new {
+    background: #1AAB8A;
+    color: #fff;
+    border: none;
+    position: relative;
+    height: 60px;
+    font-size: 1.0em;
+    padding: 0 0;
+    cursor: pointer;
+    transition: 800ms ease all;
+    outline: none;
+    padding: 1em 1.5em;
+    position: relative;
+    text-decoration: none;
+}
+
+    #new:hover {
+        text-decoration: none;
+        background: #fff;
+        color: #1AAB8A;
+        cursor: pointer;
+    }
+
+    #new:before, #new:after {
+        text-decoration: none;
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 2px;
+        width: 0;
+        background: #1AAB8A;
+        transition: 400ms ease all;
+    }
+
+    #new:after {
+        right: inherit;
+        top: inherit;
+        left: 0;
+        bottom: 0;
+    }
+
+    #new:hover:before, #new:hover:after {
+        width: 100%;
+        transition: 800ms ease all;
+    }
+
+#home {
+    background: #f7c40e;
+    color: #fff;
+    border: none;
+    position: relative;
+    height: 60px;
+    font-size: 1.0em;
+    padding: 0 0;
+    cursor: pointer;
+    transition: 800ms ease all;
+    outline: none;
+    padding: 1em 1.5em;
+    position: relative;
+    text-decoration: none;
+}
+
+    #home:hover {
+        text-decoration: none;
+        background: #fff;
+        color: #f7c40e;
+        cursor: pointer;
+    }
+
+    #home:before, #home:after {
+        text-decoration: none;
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 2px;
+        width: 0;
+        background: #f7c40e;
+        transition: 400ms ease all;
+    }
+
+    #home:after {
+        right: inherit;
+        top: inherit;
+        left: 0;
+        bottom: 0;
+    }
+
+    #home:hover:before, #home:hover:after {
+        width: 100%;
+        transition: 800ms ease all;
+    }
+
+#hd {
+    background: #fc5f5f;
+    color: #fff;
+    border: none;
+    position: relative;
+    height: 60px;
+    font-size: 1.0em;
+    padding: 0 0;
+    cursor: pointer;
+    transition: 800ms ease all;
+    outline: none;
+    padding: 1em 1.5em;
+    position: relative;
+    text-decoration: none;
+}
+
+    #hd:hover {
+        text-decoration: none;
+        background: #fff;
+        color: #fc5f5f;
+        cursor: pointer;
+    }
+
+    #hd:before, #hd:after {
+        text-decoration: none;
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 2px;
+        width: 0;
+        background: #fc5f5f;
+        transition: 400ms ease all;
+    }
+
+    #hd:after {
+        right: inherit;
+        top: inherit;
+        left: 0;
+        bottom: 0;
+    }
+
+    #hd:hover:before, #hd:hover:after {
+        width: 100%;
+        transition: 800ms ease all;
+    }
+
+#home, #hd {
+    border: none;
+    position: relative;
+    height: 50px;
+    font-size: 1.0em;
+    padding: 0 0;
+    cursor: pointer;
+    transition: 800ms ease all;
+    outline: none;
+    padding: 1em 1.5em;
+    position: relative;
+    text-decoration: none;
+}
+
+#home {
+    background: #f7c40e;
+    color: #fff;
+}
+
+    #home:hover {
+        text-decoration: none;
+        background: #fff;
+        color: #f7c40e;
+        cursor: pointer;
+    }
+
+    #home:before, #home:after {
+        /*text-decoration: none;
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 2px;
+        width: 0;*/
+        background: #f7c40e;
+        transition: 400ms ease all;
+    }
+
+#hd {
+    background: #fc5f5f;
+    color: #fff;
+}
+
+    #hd:hover {
+        text-decoration: none;
+        background: #fff;
+        color: #fc5f5f;
+        cursor: pointer;
+    }
+
+    #hd:before, #hd:after {
+        /*text-decoration: none;
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        height: 2px;
+        width: 0;*/
+        background: #fc5f5f;
+        transition: 400ms ease all;
+    }
+
+#hh {
+    white-space: nowrap;
+    vertical-align: middle;
+}
+
+    #hh:hover {
+        background: #FFF;
+        color: #FFF;
+    }
+
+
+/* Hide/rearrange for smaller screens */
+@media screen and (max-width: 767px) {
+    /* Hide captions */
+    .carousel-caption {
+        display: none;
+    }
+}
+

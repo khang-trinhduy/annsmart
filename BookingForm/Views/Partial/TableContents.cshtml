@@ -1,0 +1,163 @@
+﻿@model IEnumerable<BookingForm.Models.Appoinment>
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<tbody>
+    @foreach (var item in Model)
+    {
+        var statusClass = "Yellow";
+
+        if (item.Deposit == "Đúng thời hạn")
+        {
+            statusClass = "Green";
+        }
+        else if (item.Deposit == "Không đúng thời hạn")
+        {
+            statusClass = "Red";
+        }
+        <tr class="@statusClass">
+            <td style="white-space: nowrap;">
+                @Html.DisplayFor(modelItem => item.Customer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.sale) -
+                @Html.DisplayFor(modelItem => item.SaleDetails)
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Contract)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.sale)
+                </td>*@
+            <td>
+                @{
+                    string str = "";
+                    if (item.ph > 0)
+                    {
+                        str = "<input type=\"checkbox\" name=\"ph\" value=\"Boat\" checked disabled>( Số: " + item.ph + " )";
+                    }
+                    else
+                    {
+                        str = "<input type=\"checkbox\" name=\"ph\" value=\"Boat\" disabled>";
+                    }
+                }
+                @Html.Raw(str)
+            </td>
+            <td>
+                @{
+                    string str1 = "";
+                    if (item.pms > 0)
+                    {
+                        str1 = "<input type=\"checkbox\" name=\"ph\" value=\"Boat\" checked disabled>( Số: " + item.pms + " )";
+                    }
+                    else
+                    {
+                        str1 = "<input type=\"checkbox\" name=\"ph\" value=\"Boat\" disabled>";
+                    }
+                }
+                @Html.Raw(str1)
+                @*@Html.DisplayFor(modelItem => item.pms)*@
+            </td>
+            <td>
+                @{
+                    string str2 = "";
+                    if (item.psh > 0)
+                    {
+                        str2 = "<input type=\"checkbox\" name=\"ph\" value=\"Boat\" checked disabled>( Số: " + item.psh + " )";
+                    }
+                    else
+                    {
+                        str2 = "<input type=\"checkbox\" name=\"ph\" value=\"Boat\" disabled>";
+                    }
+                }
+                @Html.Raw(str2)
+                @*@Html.DisplayFor(modelItem => item.psh)*@
+            </td>
+            <td>
+                @{
+                    string str3 = "";
+                    if (item.pshh > 0)
+                    {
+                        str3 = "<input type=\"checkbox\" name=\"ph\" value=\"Boat\" checked disabled>( Số: " + item.pshh + " )";
+                    }
+                else
+                    {
+                        str3 = "<input type=\"checkbox\" name=\"ph\" value=\"Boat\" disabled>";
+                    }
+                }
+                @Html.Raw(str3)
+                @*@Html.DisplayFor(modelItem => item.pshh)*@
+            </td>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.Money)*@
+                @String.Format("{0:N0}", item.Money)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.cTime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DType)
+            </td>
+            <td>
+                @*@Html.DisplayFor(modelItem => item.Cash)*@
+                @String.Format("{0:N0}", item.Cash)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.dTime)
+            </td>
+            <td>
+                @{
+                    string tmp = "";
+                    if (item.Price > 0)
+                    {
+                        tmp = "<input type =\"checkbox\" name=\"ph\" value=\"Boat\" checked disabled> " + @String.Format("{0:N0}", item.Price);
+                    }
+                    else
+                    {
+                        tmp = "<input type =\"checkbox\" name=\"ph\" value=\"Boat\" disabled>";
+                    }
+                }
+                @Html.Raw(tmp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Requires)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Confirm)
+            </td>
+            <td>
+                <a asp-action="AppDetails" asp-route-id="@item.Contract">XHĐ</a>|
+                <a asp-action="Confirm" asp-route-id="@item.Contract">XN</a>|
+                <a asp-action="Draft" asp-route-id="@item.Contract">Draft</a>|
+                <a asp-action="Delete" asp-route-id="@item.Contract">Hủy</a>
+                @*<a asp-action="Details" asp-route-id="@item.Contract">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Contract">Delete</a>*@
+            </td>
+        </tr>
+    }
+
+</tbody>
+
+<style>
+    /*tr:hover {
+        background-color: #ddd;
+    }*/
+    .Red {
+        color: #ffffff;
+        background-color: #f74743
+    }
+
+    .Green {
+        color: #ffffff;
+        background-color: #2ed75d
+    }
+
+    .Yellow {
+        background-color: #f6f11d
+    }
+
+    th, td {
+        border-left: 1px solid #ddd;
+    }
+</style>

@@ -1,0 +1,60 @@
+﻿@model BookingForm.Models.Appoinment
+
+@{
+    ViewData["Title"] = "Xác nhận tiền -";
+}
+
+<h2>Xác nhận chuyển tiền</h2>
+<div class="row">
+    <div class="col-md-6">
+        <form asp-action="Confirmed" method="post">
+            <input value="@Model.Contract" asp-for="Contract" type="hidden" />
+            <label class="control-label">Số tiền đã nộp</label>
+            <input class="number" asp-for="Cash" />
+            <label asp-for="dTime" class="control-label"></label>
+            <input type="hidden" id="dTime" asp-for="dTime" class="form-control" />
+            <span style="display:block; height:10px"></span>
+            <input placeholder="Ngày" type="date" id="day" class="form-control" />
+            <input min="0" max="23" placeholder="Giờ (0,1,2,...,23)" type="number" id="hh" class="form-control" />
+            <input min="0" max="59" placeholder="Phút (0,1,2,...,59)" type="number" id="MM" class="form-control" />
+            <input min="0" max="59" placeholder="Giây (0,1,2,...,59)" type="number" id="ss" class="form-control" />
+            <input min="0" placeholder="Mili giây (nhiều nhất 7 chữ số)" type="number" id="FF" class="form-control" />
+            <span style="display:block; height:15px"></span>
+            <button onclick="generate()" type="submit" style="float:right;">Xác nhận</button>
+        </form>
+    </div>
+</div>
+<script>
+    function add(number) {
+
+        return (number < 10 ? '0' : '') + number
+
+    }
+    function generate() {
+        var hour = document.getElementById("hh").value;
+        var minute = document.getElementById("MM").value;
+        var second = document.getElementById("ss").value;
+        var milisecond = document.getElementById("FF").value;
+        var time = add(hour) + ":" + add(minute) + ":" + add(second) + "." + add(milisecond);
+
+        var day = document.getElementById("day").value.split("-");
+        var new_day = day[2] + day[1] + day[0];
+
+        time = new_day + " " + time;
+        document.getElementById("dTime").value = time;
+    }
+    $('input.number').keyup(function (event) {
+
+        // skip for arrow keys
+        if (event.which >= 37 && event.which <= 40) return;
+
+        // format number
+        $(this).val(function (index, value) {
+            return value
+                .replace(/\D/g, "")
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+        });
+    });
+</script>
+

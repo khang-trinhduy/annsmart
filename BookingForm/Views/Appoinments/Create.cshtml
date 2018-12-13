@@ -1,0 +1,216 @@
+﻿@model BookingForm.Models.Appoinment
+@inject IOptions<RecaptchaSettings> RecaptchaSettings
+@using Microsoft.Extensions.Options
+@using reCAPTCHA.AspNetCore
+
+@{
+    ViewData["Title"] = "Tạo HĐ -";
+}
+
+
+<div style="text-align:center">
+    <h2 style="text-align:center">Thỏa thuận đăng ký giữ chỗ</h2>
+    <label style="text-align:center;color:orangered;width: 1000px;height: 5px;" class="control-label">(*)Bắt buộc</label>
+</div>
+<hr />
+<div class="row">
+    
+    <div class="col-md-12 col-xs-12">
+        @*<div class="col-md-4 row-md-4"></div>
+        <div class="col-md-4 col-xs-4">*@
+            <form asp-action="Create">
+                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+
+                <div class="form-group">
+                    <label asp-for="Customer" class="control-label"></label>
+                    <input asp-for="Customer" class="form-control" placeholder="Nguyễn Văn A" />
+                    <span asp-validation-for="Customer" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Gender" class="control-label"></label>
+                    @Html.RadioButton("Gender", "Nam", true, new { style = "margin-left: 25px;" })Nam
+                    @Html.RadioButton("Gender", "Nữ", new { style = "margin-left: 25px;" })Nữ
+                    <span asp-validation-for="Gender" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Address" class="control-label"></label>
+                    <input asp-for="Address" class="form-control" placeholder="755 Ba Tháng Hai, Phường 7, Quận 10, Hồ Chí Minh" />
+                    <span asp-validation-for="Address" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Phone" class="control-label"></label>
+                    <input asp-for="Phone" class="form-control" placeholder="0909898787" />
+                    <span asp-validation-for="Phone" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Email" class="control-label"></label>
+                    <input asp-for="Email" class="form-control" placeholder="example@mail.com" />
+                    <span asp-validation-for="Email" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Job" class="control-label"></label>
+                    <input asp-for="Job" class="form-control" placeholder="Nhân Viên" />
+                    <span asp-validation-for="Job" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="WorkPlace" class="control-label"></label>
+                    <input asp-for="WorkPlace" class="form-control" placeholder="TP Hồ Chí Minh" />
+                    <span asp-validation-for="WorkPlace" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="HKTT" class="control-label"></label>
+                    <input asp-for="HKTT" class="form-control" placeholder="755 Ba Tháng Hai, Phường 7, Quận 10, Hồ Chí Minh" />
+                    <span asp-validation-for="HKTT" class="text-danger"></span>
+                </div>
+
+                @*</div>
+        <div class="col-md-4 col-xs-4">*@
+                <div class="form-group">
+                    <label asp-for="Cmnd" class="control-label"></label>
+                    <input asp-for="Cmnd" class="form-control" placeholder="250877659" />
+                    <span asp-validation-for="Cmnd" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Day" class="control-label"></label>
+                    <input asp-for="Day" class="form-control" />
+                    <span asp-validation-for="Day" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Place" class="control-label"></label>
+                    <input asp-for="Place" class="form-control" />
+                    <span asp-validation-for="Place" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label style="text-align:left;width: 165px;" class="control-label">Sản phẩm</label>
+                    <label class="control-label">Số lượng</label>
+                    <ul style="padding-left: 20px;">
+                        <li>
+                            <label class="control-label" style="width: 150px;">Căn 1PN:</label>
+                            <input onchange="calculate()" id="c1" value="0" asp-for="NCH1" min="0" style="text-align:left;padding-left: 0px;width: 100px;" />
+                        </li>
+                        <li>
+                            <label class="control-label" style="width: 150px;">Căn 2PN 1WC:</label>
+                            <input onchange="calculate()" id="c2" value="0" asp-for="NCH2" min="0" style="text-align:left;padding-left: 0px;width: 100px;" />
+                        </li>
+                        <li>
+                            <label class="control-label" style="width: 150px;">Căn 2PN 2WC:</label>
+                            <input onchange="calculate()" id="c21" value="0" asp-for="NCH21" min="0" style="text-align:left;padding-left: 0px;width: 100px;" />
+                        </li>
+                        <li>
+                            <label class="control-label" style="width: 150px;">Căn 3PN:</label>
+                            <input onchange="calculate()" id="c3" value="0" asp-for="NCH3" min="0" style="text-align:left;padding-left: 0px;width: 100px;" />
+                        </li>
+                        <li>
+                            <label class="control-label" style="width: 150px;">Nhà phố:</label>
+                            <input onchange="calculate()" id="sh" value="0" asp-for="NSH" min="0" style="text-align:left;padding-left: 0px;width: 100px;" />
+                        </li>
+                        <li>
+                            <label class="control-label" style="width: 150px;">Nhà phố thương mại:</label>
+                            <input onchange="calculate()" id="shh" value="0" asp-for="NSHH" min="0" style="text-align:left;padding-left: 0px;width: 100px;" />
+                        </li>
+
+                        <li>
+                            <label class="control-label" style="width: 150px;">Shop(kios chung cư):</label>
+                            <input onchange="calculate()" id="ns" value="0" asp-for="NS" min="0" style="text-align:left;padding-left: 0px;width: 100px;" />
+                        </li>
+                        <li>
+                            <label class="control-label" style="width: 150px;">Biệt thự:</label>
+                            <input onchange="calculate()" id="ms" value="0" asp-for="NMS" min="0" style="text-align:left;padding-left: 0px;width: 100px;" />
+                        </li>
+                    </ul>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Money" class="control-label"></label>
+                    <input class="number" id="Money" asp-for="Money" @*class="form-control"*@ readonly="readonly" />
+                    <span asp-validation-for="Money" class="text-danger"></span>
+                </div>
+                @*</div>
+        <div class="col-md-4 col-xs-4">*@
+                <div class="form-group">
+                    <label asp-for="Purpose" class="control-label"></label>
+                    <select asp-for="Purpose" class="dropdown">
+                        <option value="Để ở"> Để ở</option>
+                        <option value="Để cho thuê"> Để cho thuê</option>
+                        <option value="Để đầu tư"> Để đầu tư</option>
+                    </select>
+                    <span asp-validation-for="Purpose" class="text-danger"></span>
+                </div>
+                <label asp-for="DType" class="control-label"></label>
+                <div class="form-group">
+                    @Html.RadioButton("DType", "Tiền mặt", true)Tiền mặt
+                    @Html.RadioButton("DType", "Chuyển khoản", new { style = "margin-left: 25px;" })Chuyển khoản
+                    @Html.RadioButton("DType", "Cả hai", new { style = "margin-left: 25px;" })Cả hai
+                    <span asp-validation-for="DType" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Cash" class="control-label"></label>
+                    <input class="number" value="0" asp-for="Cash" @*class="form-control"*@ />
+                    <span asp-validation-for="Cash" class="text-danger"></span>
+                </div>
+                <hr />
+                <div class="form-group">
+                    <label asp-for="Price" class="control-label"></label>
+                    <input class="number" value="0" asp-for="Price" @*class="form-control"*@ />
+                    <span asp-validation-for="Price" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label asp-for="Requires" class="control-label"></label>
+                    <input asp-for="Requires" class="form-control" />
+                    <span asp-validation-for="Requires" class="text-danger"></span>
+                </div>
+                @*<div class="form-group">
+            <label asp-for="sale" class="control-label"></label>
+            <input asp-for="sale" class="form-control" value="@TempData["email"]" />
+            <span asp-validation-for="sale" class="text-danger"></span>
+        </div>*@
+                <div class="form-group">
+                    <label asp-for="password" class="control-label"></label>
+                    <input asp-for="password" class="form-control" />
+                    <span asp-validation-for="password" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    @Html.Recaptcha(RecaptchaSettings?.Value)
+                </div>
+                <div class="form-group">
+                    <button type="submit" OnClientClick="return false;">Xác nhận</button>
+                </div>
+            </form>
+            </div>
+        @*<div class="col-md-4 row-xs-4"></div>*@
+       
+</div>
+<script>
+    function calculate() {
+        var value = document.getElementById("c1").value * 30000000 +
+            document.getElementById("c2").value * 30000000 +
+            document.getElementById("c3").value * 30000000 +
+            document.getElementById("sh").value * 50000000 +
+            document.getElementById("shh").value * 100000000 +
+            document.getElementById("ms").value * 200000000 +
+            document.getElementById("c21").value * 30000000 +
+            document.getElementById("ns").value * 100000000;
+        document.getElementById("Money").value = value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
+    $('input.number').keyup(function (event) {
+
+        // skip for arrow keys
+        if (event.which >= 37 && event.which <= 40) return;
+
+        // format number
+        $(this).val(function (index, value) {
+            return value
+                .replace(/\D/g, "")
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                ;
+        });
+    });
+</script>
+@*<div>
+    <a asp-action="Index">Tro</a>
+</div>*@
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}

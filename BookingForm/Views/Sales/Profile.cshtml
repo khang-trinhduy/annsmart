@@ -1,0 +1,91 @@
+﻿@model BookingForm.Models.Sale
+
+<h4>Hồ sơ cá nhân</h4>
+<form asp-action="SaveProfile" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-md-4 row-md-4">
+
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="ID" />
+            <div class="form-group">
+                <label asp-for="name" class="control-label"></label>
+                <input asp-for="name" class="form-control" />
+                <span asp-validation-for="name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="phone" class="control-label"></label>
+                <input id="phone" asp-for="phone" class="form-control" />
+                <span asp-validation-for="phone" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="info" class="control-label"></label>
+                <input asp-for="info" class="form-control" />
+                <span asp-validation-for="info" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="display" class="control-label"></label>
+                <input asp-for="display" class="form-control" />
+                <span asp-validation-for="display" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="birthday" class="control-label"></label>
+                <input type="text" id="date" asp-for="birthday" class="form-control" />
+                <span asp-validation-for="birthday" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <select asp-for="gender">
+                    <option value="Nam">Nam</option>
+                    <option value="Nữ">Nữ</option>
+                    <option value="Không xác định">Không xác định</option>
+                </select>
+                <span asp-validation-for="gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="address" class="control-label"></label>
+                <input id="address" asp-for="address" class="form-control" />
+                <span asp-validation-for="address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <button id="save" class="btn-success" type="submit">Lưu lại</button>
+            </div>
+
+        </div>
+        <div class="col-md-4 row-md-4">
+            <partial name="Image" model="Model" />
+        </div>
+
+    </div>
+</form>
+<style>
+    /*.inputFile {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+
+        .inputFile + label {
+            font-size: 1.25em;
+            font-weight: 700;
+            color: white;
+            background-color: red;
+            display: inline-block;
+        }
+
+            .inputfile:focus + label,
+            .inputfile + label:hover {
+                background-color: red;
+            }
+
+        .inputfile + label {
+            cursor: pointer; /* "hand" cursor 
+        }
+
+        .inputfile:focus + label {
+            outline: 1px dotted #000;
+            outline: -webkit-focus-ring-color auto 5px;
+        }*/
+</style>

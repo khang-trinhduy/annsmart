@@ -1,0 +1,156 @@
+﻿[
+  {
+    "name": "Hoàng Thế Vinh",
+    "pass": "hvinh400",
+    "email": "vinh.hoang@annhome.vn",
+    "phone": "0932778922",
+    "info": "Hoàng Thế Vinh - Trưởng phòng kinh doanh",
+    "display": "Hoàng Thế Vinh"
+  },
+  {
+    "name": "Hoàng Cường",
+    "pass": "ch404",
+    "email": "clinton.hoang@annhome.vn",
+    "phone": "0899819167",
+    "info": "Hoàng Cường - Trưởng nhóm kinh doanh",
+    "display": "Hoàng Cường"
+  },
+  {
+    "name": "Phạm Tấn Duy",
+    "pass": "pk401",
+    "email": "kai.pham@annhome.vn",
+    "phone": "0933333654-0818888172",
+    "info": "Phạm Tấn Duy - Phụ trách kinh doanh Sàn 1",
+    "display": "Phạm Tấn Duy"
+  },
+  {
+    "name": "Nguyễn Hoàng Nhật Trường",
+    "pass": "Truong@1993",
+    "email": "truong.nguyen@annhome.vn",
+    "phone": "0931998832",
+    "info": "Nguyễn Hoàng Nhật Trường - Giám đốc kinh doanh",
+    "display": "Nguyễn Hoàng Nhật Trường"
+  },
+  {
+    "name": "Đại lý ILA_F2",
+    "pass": "092018",
+    "email": "group092018@gmail.com",
+    "phone": "0165290737",
+    "info": "Đại lý ILA_F2",
+    "display": ""
+  },
+  
+  {
+    "name": "Đại lý Toàn Đất Việt_F2",
+    "pass": "minh01",
+    "email": "hongminhgraphic@gmail.com",
+    "phone": "0165290XXX",
+    "info": "Toàn Đất Việt_F2",
+    "display": ""
+  },
+  {
+    "name": "Trần Văn Ngọc",
+    "pass": "ngoc01",
+    "email": "tranngoc20988@gmail.com",
+    "phone": "0937173702",
+    "info": "Trần Văn Ngọc - Cộng tác viên",
+    "display": "Trần Văn Ngọc"
+  },
+  {
+    "name": "Lê Thị Mai Phương",
+    "pass": "phuong01",
+    "email": "victory.le@annhome.vn",
+    "phone": "0974392993",
+    "info": "Lê Thị Mai Phương - Nhân viên kinh doanh",
+    "display": "Lê Thị Mai Phương"
+  },
+  {
+    "name": "Nguyễn Văn Hiếu",
+    "pass": "hieu01",
+    "email": "hieunv.geleximco@gmail.com",
+    "phone": "0972994224",
+    "info": "Nguyễn Văn Hiếu - Cộng tác viên",
+    "display": "Nguyễn Văn Hiếu"
+  },
+  {
+    "name": "Đại lý TLH_F2",
+    "pass": "nga01",
+    "email": "ngalt@thanglongreal.vn",
+    "phone": "0985863154",
+    "info": "Đại lý TLH_F2",
+    "display": ""
+  },
+  {
+    "name": "Nguyễn Quý Dương",
+    "pass": "duong01",
+    "email": "clinton.nguyen@annhome.vn",
+    "phone": "0933472001",
+    "info": "Nguyễn Quý Dương - Trợ lý TGĐ",
+    "display": "Nguyễn Quý Dương"
+  },
+  {
+    "name": "Ngô Thu Hương",
+    "pass": "huong01",
+    "email": "huong.ngo@annhome.vn",
+    "phone": "0902003509",
+    "info": "Ngô Thu Hương - Admin",
+    "display": "Ngô Thu Hương"
+  },
+  {
+    "name": "Phạm Thanh Bình",
+    "pass": "binh01",
+    "email": "pmthanhbinh@gmail.com",
+    "phone": "",
+    "info": "Phạm Thanh Bình_Trường.SKD2",
+    "display": "Phạm Thanh Bình"
+  },
+  {
+    "name": "Nguyễn Anh Tiến",
+    "pass": "tien01",
+    "email": "nguyenanhtien04031991@gmail.com",
+    "phone": "",
+    "info": "Nguyễn Anh Tiến_Trường.SKD2",
+    "display": "Nguyễn Anh Tiến"
+  },
+  {
+    "name": "Thân Thanh Hiệp",
+    "pass": "hiep01",
+    "email": "clinton.than@annhome.vn",
+    "phone": "01682182469",
+    "info": "Thân Thanh Hiệp - Nhân viên kinh doanh",
+    "display": "Thân Thanh Hiệp"
+  },
+  {
+    "name": "Nguyễn Thị Thanh Nhàn_ILA",
+    "pass": "nhan01",
+    "email": "thnhan1195@gmail.com",
+    "phone": "0918705885",
+    "info": " Nguyễn Thị Thanh Nhàn_ILA",
+    "display": "Nguyễn Thị Thanh Nhàn_ILA"
+  },
+  {
+    "name": "Vũ Công Đông",
+    "pass": "dong01",
+    "email": "clinton.vu@annhome.vn",
+    "phone": "0936325888",
+    "info": "Vũ Công Đông - Nhân viên kinh doanh",
+    "display": "Vũ Công Đông"
+  },
+  {
+    "name": "Phạm Ngọc Thành",
+    "pass": "thanh01",
+    "email": "clinton.pham@annhome.vn",
+    "phone": "0964385394",
+    "info": "Phạm Ngọc Thành - Nhân viên kinh doanh",
+    "display": "Phạm Ngọc Thành"
+  },
+  {
+    "name": "Phạm Văn Phúc",
+    "pass": "phuc01",
+    "email": "harry.pham@annhome.vn",
+    "phone": "0931506009",
+    "info": "Phạm Văn Phúc - Nhân viên kinh doanh",
+    "display": "Phạm Văn Phúc"
+  }
+]
+//Phạm Văn Phúc    Nhân viên kinh doanh    0931506009    harry.pham@annhome.vn    phuc01

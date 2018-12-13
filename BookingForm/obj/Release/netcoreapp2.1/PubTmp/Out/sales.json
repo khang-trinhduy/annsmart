@@ -1,0 +1,237 @@
+﻿[
+  {
+    "id": 0,
+    "name": "Hoàng Thế Vinh",
+    "pass": "hvinh400",
+    "email": "vinh.hoang@annhome.vn",
+    "phone": "0932778922",
+    "info": "Hoàng Thế Vinh - Giám đốc điều hành",
+    "display": "Hoàng Thế Vinh"
+  },
+  {
+    "id": 1,
+    "name": "Nguyễn Quang Sơn",
+    "pass": "1",
+    "email": "son.nguyen@annhome.vn",
+    "phone": "0909770808",
+    "info": "0909808770",
+    "display": "Nguyễn Quang Sơn"
+  },
+  {
+    "id": 2,
+    "name": "Trần Tú Uyên",
+    "pass": "2",
+    "email": "uyen.tran@annhome.vn",
+    "phone": "0909327880",
+    "info": "0909808770",
+    "display": "Trần Tú Uyên"
+  },
+  {
+    "id": 3,
+    "name": "Hoàng Cường",
+    "pass": "ch404",
+    "email": "clinton.hoang@annhome.vn",
+    "phone": "0899819167",
+    "info": "Hoàng Cường - Trưởng nhóm kinh doanh",
+    "display": "Hoàng Cường"
+  },
+  {
+    "id": 4,
+    "name": "Phạm Tấn Duy",
+    "pass": "pk401",
+    "email": "kai.pham@annhome.vn",
+    "phone": "0933333654-0818888172",
+    "info": "Phạm Tấn Duy - Phụ trách kinh doanh Sàn 1",
+    "display": "Phạm Tấn Duy"
+  },
+  {
+    "id": 5,
+    "name": "Nguyễn Hoàng Nhật Trường",
+    "pass": "Truong@1993",
+    "email": "truong.nguyen@annhome.vn",
+    "phone": "0931998832",
+    "info": "Nguyễn Hoàng Nhật Trường - Giám đốc kinh doanh",
+    "display": "Nguyễn Hoàng Nhật Trường"
+  },
+  {
+    "id": 6,
+    "name": "Đại lý ILA_F2",
+    "pass": "092018",
+    "email": "group092018@gmail.com",
+    "phone": "0165290737",
+    "info": "Đại lý ILA_F2",
+    "display": ""
+  },
+  {
+    "id": 1412,
+    "name": "Bankexpress Admin",
+    "pass": "dkML2014",
+    "email": "admin@bankexpress.vn",
+    "phone": "0165290XXX",
+    "info": "0909808XXX",
+    "display": ""
+  },
+  {
+    "id": 7,
+    "name": "Đại lý Toàn Đất Việt_F2",
+    "pass": "minh01",
+    "email": "hongminhgraphic@gmail.com",
+    "phone": "0165290XXX",
+    "info": "Toàn Đất Việt_F2",
+    "display": ""
+  },
+  {
+    "id": 8,
+    "name": "Trần Văn Ngọc",
+    "pass": "ngoc01",
+    "email": "tranngoc20988@gmail.com",
+    "phone": "0937173702",
+    "info": "Trần Văn Ngọc - Cộng tác viên",
+    "display": "Trần Văn Ngọc"
+  },
+  {
+    "id": 9,
+    "name": "Lê Thị Mai Phương",
+    "pass": "phuong01",
+    "email": "victory.le@annhome.vn",
+    "phone": "0974392993",
+    "info": "Lê Thị Mai Phương - Nhân viên kinh doanh",
+    "display": "Lê Thị Mai Phương"
+  },
+  {
+    "id": 10,
+    "name": "Nguyễn Văn Hiếu",
+    "pass": "hieu01",
+    "email": "hieunv.geleximco@gmail.com",
+    "phone": "0972994224",
+    "info": "Nguyễn Văn Hiếu - Cộng tác viên",
+    "display": "Nguyễn Văn Hiếu"
+  },
+  {
+    "id": 11,
+    "name": "Đại lý TLH_F2",
+    "pass": "nga01",
+    "email": "ngalt@thanglongreal.vn",
+    "phone": "0985863154",
+    "info": "Đại lý TLH_F2",
+    "display": ""
+  },
+  {
+    "id": 12,
+    "name": "Nguyễn Quý Dương",
+    "pass": "duong01",
+    "email": "clinton.nguyen@annhome.vn",
+    "phone": "0933472001",
+    "info": "Nguyễn Quý Dương - Trợ lý TGĐ",
+    "display": "Nguyễn Quý Dương"
+  },
+  {
+    "id": 13,
+    "name": "Ngô Thu Hương",
+    "pass": "huong01",
+    "email": "huong.ngo@annhome.vn",
+    "phone": "0902003509",
+    "info": "Ngô Thu Hương - Admin",
+    "display": "Ngô Thu Hương"
+  },
+  {
+    "id": 14,
+    "name": "Phạm Thanh Bình",
+    "pass": "binh01",
+    "email": "pmthanhbinh@gmail.com",
+    "phone": "",
+    "info": "Phạm Thanh Bình_Trường.SKD2",
+    "display": "Phạm Thanh Bình"
+  },
+  {
+    "id": 15,
+    "name": "Nguyễn Anh Tiến",
+    "pass": "tien01",
+    "email": "nguyenanhtien04031991@gmail.com",
+    "phone": "",
+    "info": "Nguyễn Anh Tiến_Trường.SKD2",
+    "display": "Nguyễn Anh Tiến"
+  },
+  {
+    "id": 16,
+    "name": "Thân Thanh Hiệp",
+    "pass": "hiep01",
+    "email": "clinton.than@annhome.vn",
+    "phone": "01682182469",
+    "info": "Thân Thanh Hiệp - Nhân viên kinh doanh",
+    "display": "Thân Thanh Hiệp"
+  },
+  {
+    "id": 17,
+    "name": "Nguyễn Thị Thanh Nhàn_ILA",
+    "pass": "nhan01",
+    "email": "thnhan1195@gmail.com",
+    "phone": "0918705885",
+    "info": " Nguyễn Thị Thanh Nhàn_ILA",
+    "display": "Nguyễn Thị Thanh Nhàn_ILA"
+  },
+  {
+    "id": 18,
+    "name": "Vũ Công Đông",
+    "pass": "dong01",
+    "email": "clinton.vu@annhome.vn",
+    "phone": "0936325888",
+    "info": "Vũ Công Đông - Nhân viên kinh doanh",
+    "display": "Vũ Công Đông"
+  },
+  {
+    "id": 19,
+    "name": "Phạm Ngọc Thành",
+    "pass": "thanh01",
+    "email": "clinton.pham@annhome.vn",
+    "phone": "0964385394",
+    "info": "Phạm Ngọc Thành - Nhân viên kinh doanh",
+    "display": "Phạm Ngọc Thành"
+  },
+  {
+    "id": 20,
+    "name": "Phạm Văn Phúc",
+    "pass": "phuc01",
+    "email": "harry.pham@annhome.vn",
+    "phone": "0931506009",
+    "info": "Phạm Văn Phúc - Nhân viên kinh doanh",
+    "display": "Phạm Văn Phúc"
+  },
+  {
+    "id": 21,
+    "name": "Đại lý HTP_F2",
+    "pass": "hoang01",
+    "email": "nguyendinhhoangboss@gmail.com",
+    "phone": "090645335",
+    "info": "Đại lý HTP_F2",
+    "display": ""
+  },
+  {
+    "id": 22,
+    "name": "Nguyễn Phụng Kiều",
+    "pass": "kieu01",
+    "email": "nguyenphungkieu2106@gmail.com",
+    "phone": "‎0936434212",
+    "info": "Nguyễn Phụng Kiều_Trường.SKD2",
+    "display": "Nguyễn Phụng Kiều_CTV"
+  },
+  {
+    "id": 23,
+    "name": "Chi nhánh Vietcombank TP.HCM",
+    "pass": "Vietcombankhcm",
+    "email": "hattt.hcm@vietcombank.com.vn",
+    "phone": "‎0902213395",
+    "info": "Chi nhánh Vietcombank TP.HCM",
+    "display": "Chi nhánh Vietcombank TP.HCM"
+  },
+  {
+    "id": 24,
+    "name": "Nguyễn Huy Thông",
+    "pass": "thong02",
+    "email": "tom.nguyen@annhome.vn",
+    "phone": "‎0948044337",
+    "info": "Nguyễn Huy Thông - Nhân viên kinh doanh",
+    "display": "Nguyễn Huy Thông"
+  }
+]
+//Phạm Văn Phúc    Nhân viên kinh doanh    0931506009    harry.pham@annhome.vn    phuc01

@@ -1,0 +1,308 @@
+﻿@model BookingForm.Models.AdminModal
+@{
+    ViewData["Title"] = "Administrator -";
+    string officials = "Số hiện tại: Căn hộ - " + Model.appoinments.Where(a => a.IsActive == true).Max(m => m.ph) + "; Biệt thự - " + Model.appoinments.Where(a => a.IsActive == true).Max(m => m.pms) + "; Nhà phố - " + Model.appoinments.Where(a => a.IsActive == true).Max(m => m.psh) + "; Shophouse - " + Model.appoinments.Where(a => a.IsActive == true).Max(m => m.pshh) + "; Kios chung cư - " + Model.appoinments.Where(a => a.IsActive == true).Max(m => m.pns);
+}
+<img src="~/images/Ann_Logo.png" style="width:340px; height:172px; display:block;margin-left:auto;margin-right:auto;" alt="Annhome Logo" title="Annhome-logo" />
+
+<h2 style="text-align:right">Xin chào @Html.DisplayFor(m => m.admin.name)</h2>
+<h6 style="text-align:right; font-style:italic">Chức vụ: Admin</h6>
+<h6 style="font-style:italic; text-align:right">TP. Hồ Chí Minh, ngày @DateTime.Now.Day  tháng @DateTime.Now.Month năm @DateTime.Now.Year</h6>
+<span style="display:block; height:50px"></span>
+<div style="display:block; text-align:right"><a id="home" asp-action="Tutor">Xem hướng dẫn</a></div>
+<span style="display:block; height:25px"></span>
+@*<div style="display:block; text-align:right"><a asp-action="ImportCustomer">Import</a></div>*@
+<div style="display:block; text-align:right"><a id="new" asp-action="_export">Xuất file excel</a></div>
+<span style="display:block; height:25px"></span>
+<div style="display:block; text-align:right"><a id="new"  asp-action="_loans">Khách có nhu cầu vay</a></div>
+<span style="display:block; height:25px"></span>
+<div style="display:block; text-align:right"><a id="hd" asp-action="Summary">Tổng kết</a></div>
+<span style="display:block; height:25px"></span>
+<div style="display:block; text-align:right"><p style="color:#ec2924;">@officials</p></div>
+<div style="display:block; text-align:right"><p style="font-style:italic;color:#090909;">Màu vàng: HĐ chưa xác nhận tiền - Màu xanh: HĐ đã xác nhận tiền - Màu xám: HĐ hết hiệu lực. TG quy định hiện tại (2h làm việc kể từ khi ký HĐ)</p></div>
+<div style=" text-align:left">
+    <label style="display:inline-block">Hiện danh sách HĐ theo: </label>
+    <select id="contracts">
+        <option value="Today">Trong ngày</option>
+        <option value="All">Tất cả</option>
+        <option value="Cancel">HĐ hủy</option>
+    </select>
+    <label style="display:inline-block">Tìm kiếm: </label>
+    <select style="display:inline-block" id="filter">
+        <option value="choose">-- Loại --</option>
+        <option value="sale">Sale</option>
+        <option value="customer">KH</option>
+        <option value="address">Nơi sinh sống</option>
+        <option value="place">HKTT</option>
+        <option value="product">Loại sản phẩm</option>
+        <option value="date">Ngày tháng</option>
+    </select>
+    <div id="search_field">
+        
+    </div>
+    @*<a style="display:inline-block" asp-action="Contracts" asp-route-id="0">Ngày </a>
+    <span style="display:inline-block; width:2px;"></span>
+    <p style="display:inline-block"> / </p>
+    <span style="display:inline-block; width:2px;"></span>
+    <a asp-action="Contracts" asp-route-id="1">Tất cả</a>
+    <span style="display:inline-block; width:2px;"></span>
+    <p style="display:inline-block"> / </p>
+    <span style="display:inline-block; width:2px;"></span>
+    <a asp-action="Contracts" asp-route-id="2">Đã xác nhận tiền vào(trong ngày)</a>
+    <span style="display:inline-block; width:2px;"></span>
+    <p style="display:inline-block"> / </p>
+    <span style="display:inline-block; width:2px;"></span>
+    <a asp-action="Contracts" asp-route-id="3">Chưa xác nhận  tiền vào(trong ngày)</a>
+    <span style="display:inline-block; width:2px;"></span>
+    <p style="display:inline-block"> / </p>
+    <span style="display:inline-block; width:2px;"></span>
+    <a asp-action="Contracts" asp-route-id="4">Các hợp đồng cũ</a>*@
+</div>
+@*<a asp-action="Download">download</a>*@
+@*<div style="text-align:right">
+        <a asp-action="AddMeeting" asp-route-id="@Model.ID">Xếp số hợp đồng</a>
+    </div>*@
+<h3 style="display:inline-block">Danh sách hợp đồng xếp chỗ </h3>
+<div id="partial_list">
+    @*<partial name="List" model="Model.appoinments" />*@
+</div>
+
+
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+<script type="text/javascript" language="JavaScript">
+$(document).ready(function () {
+            $('#btnUpload').on('click', function () {
+                var fileExtension = ['xls', 'xlsx'];
+                var filename = $('#fUpload').val();
+                if (filename.length == 0) {
+                    alert("Please select a file.");
+                    return false;
+                }
+                else {
+                    var extension = filename.replace(/^.*\./, '');
+                    if ($.inArray(extension, fileExtension) == -1) {
+                        alert("Please select only excel files.");
+                        return false;
+                    }
+                }
+                var fdata = new FormData();
+                var fileUpload = $("#fUpload").get(0);
+                var files = fileUpload.files;
+                fdata.append(files[0].name, files[0]);
+                $.ajax({
+                    type: "POST",
+                    url: "/ImportExport?handler=Import",
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("XSRF-TOKEN",
+                            $('input:hidden[name="__RequestVerificationToken"]').val());
+                    },
+                    data: fdata,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        if (response.length == 0)
+                            alert('Some error occured while uploading');
+                        else {
+                            $('#dvData').html(response);
+                        }
+                    },
+                    error: function (e) {
+                        $('#dvData').html(e.responseText);
+                    }
+                });
+            })
+        });
+        $(function (){
+            $("#contracts").change(function (e) {
+                var url = '@Url.Action("Contracts", "Admin")' + "?type="  + $(this).val();
+                $("#partial_list").load(url, function () {
+                    console.log("It worked");
+                    $('#partialPlaceHolder').fadeIn('slow');
+                });
+            });
+        });
+        
+        $("#filter").change(function (e) {
+            var type = $(this).val();
+            var url = '@Url.Action("Type", "Admin")' + "?type=" + type;
+            $("#search_field").load(url, function () {
+                $('#search_field').fadeIn('slow');
+            });
+        });
+
+
+    $(document).on('change','#context', function (e) {
+            var type = $(this).val();
+
+            var url = '@Url.Action("Contracts", "Admin")' + "?type=" + type;
+            $("#partial_list").load(url, function () {
+                console.log(type);
+                $('#partial_list').fadeIn('slow');
+
+            });
+    });
+
+    $(document).on('keypress', '#input', function (e) {
+        var context = $(this).val();
+        if (e.which == 13) {
+            var url = '@Url.Action("Filter", "Admin")' + "?type=" + $("#filter").val() + "&context=" + context.split(" ").join("_");
+            console.log(url);
+            $("#partial_list").load(url, function () {
+                $('#partial_list').fadeIn('slow');
+            });
+        }
+    });
+
+    $(document).on('click', '#_search', function (e) {
+        var context = $("#_date").val();
+        var url = '@Url.Action("Filter", "Admin")' + "?type=" + $("#filter").val() + "&context=" + context.split(" ").join("_");
+        console.log(context);
+        $("#partial_list").load(url, function () {
+            $('#partial_list').fadeIn('slow');
+        });
+    });
+
+    $(document).on('click', '#search', function (e) {
+        var context = $("#input").val();
+        var url = '@Url.Action("Filter", "Admin")' + "?type=" + $("#filter").val() + "&context=" + context;
+        console.log(context);
+        $("#partial_list").load(url, function () {
+            $('#partial_list').fadeIn('slow');
+        });
+    });
+    
+
+    $(document).ready(function (e) {
+        var url = '@Url.Action("Contracts", "Admin")' + "?type=Today";
+        $("#partial_list").load(url, function () {
+            console.log("It worked");
+            $('#partial_list').fadeIn('slow');
+        });
+    });
+</script>
+}
+
+<style>
+    /*tr:hover {
+        background-color: #ddd;
+    }*/
+    .Red {
+        color: #ffffff;
+        background-color: #29c29e
+    }
+
+    .Green {
+        color: #ffffff;
+        background-color: #29c29e
+    }
+
+    .Yellow {
+        background-color: #e4e148
+    }
+    .White {
+        background-color: #ddd;
+    }
+
+    th, td {
+        border-left: 1px solid #ffffff;
+    }
+    table, td, th {
+        border: 1px solid #ffffff;
+        text-align: left;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 15px;
+    }
+    th, td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    .search {
+        padding: 8px 15px;
+        background: rgba(50, 50, 50, 0.2);
+        border: 0px solid #dbdbdb;
+    }
+
+    .button {
+        position: relative;
+        padding: 6px 15px;
+        left: -8px;
+        border: 2px solid #207cca;
+        background-color: #207cca;
+        color: #fafafa;
+    }
+
+        .button:hover {
+            background-color: #fafafa;
+            color: #207cca;
+        }
+    .select {
+        font-size: 16px;
+        position: relative;
+        display: inline-block;
+    }
+
+        .select select {
+            outline: none;
+            -webkit-appearance: none;
+            display: block;
+            padding: 1.2em 3em 1.3em 1.5em;
+            margin: 0;
+            transition: border-color 0.2s;
+            border: 5px solid #EB5168;
+            border-radius: 5px;
+            background: #fff;
+            color: #555;
+            line-height: normal;
+            font-family: inherit;
+            font-size: inherit;
+            line-height: inherit;
+        }
+        .select .arr {
+            background: #fff;
+            bottom: 5px;
+            position: absolute;
+            right: 5px;
+            top: 5px;
+            width: 50px;
+            pointer-events: none;
+        }
+
+            .select .arr:before {
+                content: '';
+                position: absolute;
+                top: 50%;
+                right: 24px;
+                margin-top: -5px;
+                pointer-events: none;
+                border-top: 10px solid #EB5168;
+                border-left: 10px solid transparent;
+                border-right: 10px solid transparent;
+            }
+
+            .select .arr:after {
+                content: '';
+                position: absolute;
+                top: 50%;
+                right: 28px;
+                margin-top: -5px;
+                pointer-events: none;
+                border-top: 6px solid #fff;
+                border-left: 6px solid transparent;
+                border-right: 6px solid transparent;
+            }
+
+    Read more at: https://www.proy.info/style-select-dropdown-using-css/ 
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script></script>

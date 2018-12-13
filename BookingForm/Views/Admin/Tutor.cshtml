@@ -1,0 +1,21 @@
+﻿
+@{
+    ViewData["Title"] = "Hướng dẫn -";
+}
+
+<h2>Hướng dẫn sử dụng trang quản lý hợp đồng đặt chỗ cho admin</h2>
+<p> Tại giao diện chính hiển thị danh sách các hợp đồng đặt chỗ." </p>
+<p> Hàng màu vàng là các hợp đồng chưa xác nhận nộp tiền, màu xanh là đã nộp tiền đúng thời hạn (2h), màu đỏ là nộp tiền không đúng thời hạn </p>
+<p> Click vào "Xem HĐ" để xem hợp đồng hoặc "Xác nhận chuyển tiền" để chuyển sang giao diện nhập thời gian và số tiền đã nhận</p>
+<p> Thời gian: giờ (0 -> 23), phút (0 -> 59), giây (0 -> 59)</p>
+<p> Để đưa ra số chính thức sau một ngày làm việc (từ 19h00' ngày hôm trước đến 18h59' ngày hôm sau), chọn "tổng kết" ở bên trên góc phải</p>
+<p> Nếu như còn một số bản hợp đồng đã đặt cọc nhưng chưa nhập vào hệ thống vui lòng nhập vào hệ thống trước 19h00' sau đó mới chọn "tổng kết"</p>
+<p>Lưu ý: Bắt buộc phải click vào "tổng kết" trước 19h00' nếu không hệ thống sẽ không hoạt động, các hợp đồng trong ngày hôm đó sẽ không có số chính thức</p>
+<p>Các trường hợp nộp tiền nhưng không nhập vào hệ thống, khi admin xác nhận vui lòng chọn thời gian nộp tiền lớn hơn với điểm hiện tại nếu không số chính thức sẽ bị sai. Đồng thời phải nhập vào hệ thống theo thứ tự tiền vào trước nhập trước</p>
+<p>Chỉ được chọn "tổng kết" một lần trong ngày, các số hợp đồng thông báo cho khách trước khi tổng kết chỉ là dự kiến</p>
+<p>Sau khi chọn "tổng kết", các HĐ nào đã nhập vào nhưng chưa xác nhận chuyển tiền sẽ bị loại khỏi hệ thống</p>
+<p>Các số ưu tiên cho trường hợp nộp đúng thời hạn sẽ không tăng nhưng có thể giảm, trường hợp không đúng thời hạn thì ngược lại</p>
+<p>Xuất file excel để tạo file tổng các HĐ đặt chỗ</p>
+<p>Khách có nhu cầu vay sẽ lọc ra danh sách khách có nhu cầu vay và thông tin chi tiết</p>
+<h5>Số chính thức sẽ ưu tiên cho những trường hợp nhập hợp đồng vào hệ thống và đóng đúng, đủ trong thời hạn, những trường hợp khác thì sẽ xét theo thời gian tiền vào</h5>
+<p style="text-decoration: underline; font-style:italic"> Hướng dẫn sẽ được cập nhật thêm</p>
