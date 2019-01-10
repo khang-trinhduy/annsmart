@@ -1,0 +1,30 @@
+﻿@model BookingForm.Models.Feedback
+@using Microsoft.AspNetCore.Identity
+@inject UserManager<Sale> UserManager
+@{ 
+    var curUser = await UserManager.GetUserAsync(User);
+}
+<hr />
+<div class="row">
+    <div class="col-12">
+        <form asp-action="Feedback">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group" hidden>
+                <input asp-for="SaleId" class="form-control" value="@curUser.Id" />
+                <span asp-validation-for="SaleId" class="text-danger"></span>
+            </div>
+            <partial name="_StatusMessage" model="@TempData["StatusMessage"]" />
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1">Feedback</label>
+                <textarea class="form-control" asp-for="Content" rows="4"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <input type="submit" value="Submit" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+

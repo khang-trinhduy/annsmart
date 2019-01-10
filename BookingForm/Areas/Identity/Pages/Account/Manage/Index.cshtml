@@ -1,0 +1,198 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Profile";
+}
+
+@{
+    var src = "/images/Profile/profile.png";
+    if (Model.Input.Portrait != null)
+    {
+        var base64 = Convert.ToBase64String(Model.Input.Portrait);
+        src = String.Format("data:image/gif;base64,{0}", base64);
+    }
+}
+
+<h4>@ViewData["Title"]</h4>
+@Html.Partial("_StatusMessage", Model.StatusMessage)
+<form id="profile-form" method="post" enctype="multipart/form-data">
+    <div class="row">
+        <div class="col-sm-8 col-xl-8 col-md-8">
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="Username"></label>
+                <input asp-for="Username" class="form-control" disabled />
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Email"></label>
+                @if (Model.IsEmailConfirmed)
+                {
+                    <div class="input-group">
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span class="input-group-addon" aria-hidden="true"><span class="glyphicon glyphicon-ok text-success"></span></span>
+                    </div>
+                }
+                else
+                {
+                    <input asp-for="Input.Email" class="form-control" />
+                    <button id="email-verification" type="submit" asp-page-handler="SendVerificationEmail" class="btn btn-link">Send verification email</button>
+                }
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.PhoneNumber"></label>
+                <input asp-for="Input.PhoneNumber" class="form-control" />
+                <span asp-validation-for="Input.PhoneNumber" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Name"></label>
+                <input asp-for="Input.Name" class="form-control" />
+                <span asp-validation-for="Input.Name" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Display"></label>
+                <input asp-for="Input.Display" class="form-control" />
+                <span asp-validation-for="Input.Display" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Address"></label>
+                <input asp-for="Input.Address" class="form-control" />
+                <span asp-validation-for="Input.Address" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.Gender"></label>
+                <select class="form-control" asp-for="Input.Gender">
+                    <option value="Nam">Nam</option>
+                    <option value="Nữ">Nữ</option>
+                    <option value="Không xác định">Không xác định</option>
+                </select>
+                <span asp-validation-for="Input.Gender" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Input.DOB"></label>
+                <input asp-for="Input.DOB" class="form-control" />
+                <span asp-validation-for="Input.DOB" class="text-danger"></span>
+            </div>
+            <button type="submit" class="btn btn-default">Save</button>
+        </div>
+        <div class="col-sm-4 col-xl-4 col-md-4">
+            <div style="display:block; height:235px;width:235px;border-radius:50%" class="polaroid">
+                <img id="img" src=@src style="width:235px;height:235px;border-radius:50%;transition: .5s ease;backface-visibility: hidden; border:0" />
+                <div class="content">
+                    <input asp-for="Input.Portrait" type="file" id="portrait" class="inputFile" name="portrait" />
+                    <label class="photo" style="display:block;" for="portrait">Photo</label>
+                </div>
+            </div>
+            
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    function readURL(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#img').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+
+    $("#portrait").change(function () {
+        readURL(this);
+    });
+</script>
+
+<style>
+    .inputFile {
+        width: 0.1px;
+        height: 0.1px;
+        opacity: 0;
+        overflow: hidden;
+        position: absolute;
+        z-index: -1;
+    }
+
+    .photo {
+        transition: .5s ease;
+        opacity: 0;
+        position: absolute;
+        top: 150px;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        -ms-transform: translate(-50%, -50%)
+    }
+
+    .polaroid:hover .photo {
+        opacity: 1;
+    }
+
+    div.polaroid {
+        border-radius: 50%;
+        width: 200px;
+        height: 200px;
+        background-color: white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        margin-bottom: 25px;
+        text-align: center;
+        display: block;
+        margin: 0 auto;
+    }
+
+    div.content {
+        text-align: center;
+        padding: 10px 20px;
+    }
+
+    label.photo {
+        background-color: transparent !important;
+        color: rgb(22, 185, 123) !important;
+        cursor: pointer;
+    }
+
+        label.photo:hover {
+            opacity: 1;
+        }
+
+    #img:hover {
+        opacity: 0.3;
+    }
+
+        #img:hover label.photo {
+            opacity: 1;
+        }
+
+        #img:hover .middle {
+            opacity: 1;
+        }
+
+    .inputFile + label {
+        font-size: 1.25em;
+        font-weight: 700;
+        color: #4CAF50;
+        background-color: white;
+        display: inline-block;
+    }
+
+        .inputfile:focus + label,
+        .inputfile + label:hover {
+            background-color: white;
+        }
+
+    .inputfile + label {
+        cursor: pointer; /* "hand" cursor */
+    }
+
+    .inputfile:focus + label {
+        outline: 1px dotted #000;
+        outline: -webkit-focus-ring-color auto 5px;
+    }
+</style>

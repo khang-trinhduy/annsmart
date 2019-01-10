@@ -1,0 +1,129 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Sale> SignInManager
+@inject UserManager<Sale> UserManager
+@inject RoleManager<Role> RoleManager
+
+@{
+    var src = "/images/Profile/profile.png";
+    var signed = false;
+    if (SignInManager.IsSignedIn(User))
+    {
+        signed = true;
+        var curUser = await UserManager.GetUserAsync(User);
+        if (curUser.Portrait != null)
+        {
+            var base64 = Convert.ToBase64String(curUser.Portrait);
+            src = String.Format("data:image/gif;base64,{0}", base64);
+        }
+    }
+
+
+}
+
+@if (SignInManager.IsSignedIn(User))
+{
+
+    <form asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Page("/Index", new { area = "" })" method="post" id="logoutForm" class="navbar-right">
+         
+        <ul class="nav navbar-nav navbar-right">
+            <li>
+                @*<a asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">Hello @UserManager.GetUserName(User)!</a>*@
+                <div class="dropdown">
+                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <img id="imgh" src=@src style="margin-top:1px; width:42px;height:42px;border-radius:50%;transition: .5s ease;backface-visibility: hidden; border:0" />
+                    </button>
+
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <a class="dropdown-item" asp-area="Identity" asp-page="/Account/Manage/Index" title="Manage">
+                            Profile
+                        </a>
+                        <div class="dropdown-divider"></div>
+                        @{
+                            if (User.IsInRole("Manager"))
+                            {
+                                <a class="dropdown-item" href="#">Manager</a>
+                                <a class="dropdown-item" href="/Admin/Dashboard">Administrator</a>
+                                <a class="dropdown-item" href="/Home/Dashboard"></a>
+
+                                @*<a class="dropdown-item" href="#">Manager</a>*@
+                                <div class="dropdown-divider"></div>
+                                <h5 class="dropdown-header">Help</h5>
+                                <a class="dropdown-item" href="/Admin/Tutor">Administrator</a>
+                                <a class="dropdown-item" href="/Home/Tutor">Sale</a>
+
+                            }
+                            else if (User.IsInRole("Administrator"))
+                            {
+                                <a class="dropdown-item" href="/Admin/Dashboard">Manager</a>
+                                <a class="dropdown-item" href="/Home/Dashboard">Appointment</a>
+                                <div class="dropdown-divider"></div>
+                                <h5 class="dropdown-header">Help</h5>
+                                <a class="dropdown-item" href="/Admin/Tutor">Administrator</a>
+                                <a class="dropdown-item" href="/Home/Tutor">Sale</a>
+
+                            }
+                            else if (User.IsInRole("Leader") || User.IsInRole("TeamLeader"))
+                            {
+                                <a class="dropdown-item" href="/Home/Dashboard">Appointment</a>
+                                <a class="dropdown-item" href="/Home/Manager">Manager</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="Home/Tutor">Help</a>
+                            }
+                            else if (User.IsInRole("Sale"))
+                            {
+                                <a class="dropdown-item" href="/Home/Dashboard">Appointment</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="/Home/Tutor">Help</a>
+                            }
+                            else if (User.IsInRole("TelSale"))
+                            {
+                                <a class="dropdown-item" href="#">Contact</a>
+                                <div class="dropdown-divider"></div>
+                                <a class="dropdown-item" href="#">Help</a>
+                            }
+                        }
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/Home/Feedback">Feedback</a>
+                        <div class="dropdown-divider"></div>
+                        <button type="submit" class="btn btn-link dropdown-item">Logout</button>
+                    </div>
+                </div>
+
+
+            </li>
+            <li>
+
+            </li>
+        </ul>
+</form>
+}
+else
+{
+    <ul class="nav navbar-nav navbar-right">
+        <li style="margin-right: 30px"><a asp-area="Identity" asp-page="/Account/Register">Register</a></li>
+        <li style="margin-right: 30px"><a asp-area="Identity" asp-page="/Account/Login">Login</a></li>
+    </ul>
+}
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script>
+    function readURL(input) {
+
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+
+            reader.onload = function (e) {
+                $('#imgh').attr('src', e.target.result);
+            }
+
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $(function () {
+        var tmp = '<% signed %>';
+        if (!tmp) {
+            $('body').css('background-image', 'url(christmas.jpg)');
+        }
+        
+    })
+</script>

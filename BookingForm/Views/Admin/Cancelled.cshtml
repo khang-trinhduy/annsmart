@@ -1,0 +1,395 @@
+﻿@model IEnumerable<BookingForm.Models.Appoinment>
+<table style="border:solid #ddd 1px;white-space:nowrap; overflow:hidden" class="table">
+    <colgroup>
+        <col span="11">
+    </colgroup>
+    <thead>
+        <tr style="background-color:#3fa5ea; color:#ffffff">
+            <th rowspan="2" style="vertical-align:middle; text-align:center"> STT </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Họ tên KH
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                TT Sale
+            </th>
+            @*<th>
+            Email
+        </th>*@
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Số HĐ
+            </th>
+            <th colspan="6">
+                STT từng loại
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Tiền đặt chỗ
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                TG đặt chỗ
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Đã nộp
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Thời gian nộp
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Ngày hoàn tiền
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Số tiền
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Hình thức
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Mã phiếu thu (nếu có)
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Ghi chú
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">Thao tác</th>
+        </tr>
+        <tr style="background-color:#1f96e7; color:#ffffff">
+            <th>CH</th>
+            <th>
+                BT
+            </th>
+            <th>
+                BTĐL
+            </th>
+            <th>
+                BTSL
+            </th>
+            <th>
+                NPTM
+            </th>
+            <th>
+                Kios
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int count = 1;}
+        @foreach (var item in Model)
+        {
+            var statusClass = "Yellow";
+            if (item.IsActive == false)
+            {
+                statusClass = "White";
+            }
+            else if (item.Confirm == true)
+            {
+                statusClass = "Green";
+            }
+
+        <tr class="@statusClass">
+            <td style="white-space:nowrap">@count</td>
+            @{ count++; }
+            <td style="white-space: nowrap; text-align:left">
+                @Html.DisplayFor(modelItem => item.Customer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sale.Email) -
+                @Html.DisplayFor(modelItem => item.SaleDetails)
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Contract)
+            </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.sale)
+        </td>*@
+            @{
+                string fs = "";
+                if (item.NCH1 > 0 || item.NCH2 > 0 || item.NCH3 > 0 || item.NCH21 > 0)
+                {
+                    //fs += "<li>Căn hộ: " + Model.appoinment.ph + "</li>";
+                    int n = item.NCH1 + item.NCH2 + item.NCH3 + item.NCH21;
+                    switch (n)
+                    {
+                        case 1:
+                            fs += "<td>" + item.ph + "</td>";
+                            break;
+                        case 2:
+                            fs += "<td>" + Convert.ToString(item.ph - 1) + " & " + item.ph + "</td>";
+                            break;
+                        default:
+                            fs += "<td>" + Convert.ToString(item.ph - n + 1) + " đến " + item.ph + "</td>";
+                            break;
+
+                    }
+                }
+                else
+                {
+                    fs += "<td></td>";
+                }
+                if (item.NMS > 0)
+                {
+                    //fs += "<li>Biệt thự: " + Model.appoinment.pms + "</li>";
+                    switch (item.NMS)
+                    {
+                        case 1:
+                            fs += "<td>" + item.pms + "</td>";
+                            break;
+                        case 2:
+                            fs += "<td>" + Convert.ToString(item.pms - 1) + " & " + item.pms + "</td>";
+                            break;
+                        default:
+                            fs += "<td>" + Convert.ToString(item.pms - item.pms + 1) + " đến " + item.pms + "</td>";
+                            break;
+
+                    }
+                }
+                else
+                {
+                    fs += "<td></td>";
+                }
+                if (item.NSH > 0)
+                {
+                    //fs += "<li>Nhà phố: " + Model.appoinment.psh + "</li>";
+                    switch (item.NSH)
+                    {
+                        case 1:
+                            fs += "<td>" + item.psh + "</p>";
+                            break;
+                        case 2:
+                            fs += "<td>" + Convert.ToString(item.psh - 1) + " & " + item.psh + "</p>";
+                            break;
+                        default:
+                            fs += "<td>" + Convert.ToString(item.psh - item.NSH + 1) + " đến " + item.psh + "</td>";
+                            break;
+
+                    }
+                }
+                else
+                {
+                    fs += "<td></td>";
+                }
+                if (item.NSH1 > 0)
+                {
+                    //fs += "<li>Nhà phố: " + Model.appoinment.psh + "</li>";
+                    switch (item.NSH1)
+                    {
+                        case 1:
+                            fs += "<td>" + item.psh1 + "</p>";
+                            break;
+                        case 2:
+                            fs += "<td>" + Convert.ToString(item.psh1 - 1) + " & " + item.psh1 + "</p>";
+                            break;
+                        default:
+                            fs += "<td>" + Convert.ToString(item.psh1 - item.NSH1 + 1) + " đến " + item.psh1 + "</td>";
+                            break;
+
+                    }
+                }
+                else
+                {
+                    fs += "<td></td>";
+                }
+                if (item.NSHH > 0)
+                {
+                    //fs += "<li>Shophouse: " + Model.appoinment.pshh + "</li>";
+                    switch (item.NSHH)
+                    {
+                        case 1:
+                            fs += "<td>" + item.pshh + "</td>";
+                            break;
+                        case 2:
+                            fs += "<td>" + Convert.ToString(item.pshh - 1) + " & " + item.pshh + "</td>";
+                            break;
+                        default:
+                            fs += "<td>" + Convert.ToString(item.pshh - item.NSHH + 1) + " đến " + item.pshh + "</td>";
+                            break;
+
+                    }
+                }
+                else
+                {
+                    fs += "<td></td>";
+                }
+                if (item.NS > 0)
+                {
+                    //fs += "<li>Shophouse: " + Model.appoinment.pshh + "</li>";
+                    switch (item.NS)
+                    {
+                        case 1:
+                            fs += "<td>" + item.pns + "</td>";
+                            break;
+                        case 2:
+                            fs += "<td>" + Convert.ToString(item.pns - 1) + " & " + item.pns + "</td>";
+                            break;
+                        default:
+                            fs += "<td>" + Convert.ToString(item.pns - item.NS + 1) + " đến " + item.pns + "</td>";
+                            break;
+
+                    }
+                }
+                else
+                {
+                    fs += "<td></td>";
+                }
+            }
+            @Html.Raw(fs)
+            <td>
+                @*@Html.DisplayFor(modelItem => item.Money)*@
+                @String.Format("{0:N0}", item.Money)
+            </td>
+            @{
+                    string day, month, year, hour, minute, second, millisecond = "";
+                    try
+                    {
+                        DateTime d = DateTime.ParseExact(item.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF",
+                                         System.Globalization.CultureInfo.InvariantCulture);
+                        day = Convert.ToString(d.Day);
+                        month = Convert.ToString(d.Month);
+                        year = Convert.ToString(d.Year);
+                        hour = Convert.ToString(d.Hour);
+                        minute = Convert.ToString(d.Minute);
+                        second = Convert.ToString(d.Second);
+                        millisecond = Convert.ToString(d.Millisecond);
+                    }
+                    catch (Exception)
+                    {
+
+                        day = "--";
+                        month = "--";
+                        year = "----";
+                        hour = "--";
+                        minute = "--";
+                        second = "--";
+                        millisecond = "-------";
+
+                    }
+                <td>
+                    @day/@month/@year @hour:@minute:@second
+                </td>
+            }
+            <td>
+                @String.Format("{0:N0}", item.Cash)
+            </td>
+            @{
+                    //string day, month, year, hour, minute, second, millisecond = "";
+                    try
+                    {
+                        DateTime d = DateTime.ParseExact(item.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF",
+                                         System.Globalization.CultureInfo.InvariantCulture);
+                        day = Convert.ToString(d.Day);
+                        month = Convert.ToString(d.Month);
+                        year = Convert.ToString(d.Year);
+                        hour = Convert.ToString(d.Hour);
+                        minute = Convert.ToString(d.Minute);
+                        second = Convert.ToString(d.Second);
+                        millisecond = Convert.ToString(d.Millisecond);
+                    }
+                    catch (Exception)
+                    {
+
+                        day = "--";
+                        month = "--";
+                        year = "----";
+                        hour = "--";
+                        minute = "--";
+                        second = "--";
+                        millisecond = "-------";
+
+                    }
+                <td>
+                    @day/@month/@year @hour:@minute:@second
+                </td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.WDay)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WMoney)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WType)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.WithdrawCode)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Note)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Sửa</a> |
+                @*<a asp-action="AppDetails" asp-route-id="@item.Id">HĐ</a>|*@
+                @*<a asp-action="Confirm" asp-route-id="@item.Id">Xác nhận tiền vào</a>|
+        <a asp-action="Draft" asp-route-id="@item.Id">HĐ(bản in)</a>|
+        <a asp-action="Edit" asp-route-id="@item.Id">Sửa</a> |*@
+                <a asp-action="Withdraw" asp-route-id="@item.Id">Đơn hoàn tiền</a>
+                @*<a asp-action="Details" asp-route-id="@item.Contract">Details</a> |
+        <a asp-action="Delete" asp-route-id="@item.Contract">Delete</a>*@
+            </td>
+        </tr>
+        }
+
+    </tbody>
+</table>
+@{
+    //string new_money = Convert.ToString(money);
+    double money = Model.Sum(m => m.Cash);
+    string new_money = String.Format("{0:N0}", money);
+
+}
+<label style="display:block; text-align:right;font-family:'Times New Roman'; font-style:italic; font-size:x-large">Tổng tiền: @new_money VNĐ</label>
+<label style="font-family:'Times New Roman'; font-size: x-large">Tổng số căn: </label>
+<ul style="font-family:'Times New Roman'; list-style: square; font-size: x-large">
+    <li>Căn hộ: @Model.Sum(m => m.NCH1 + m.NCH2 + m.NCH21 + m.NCH3)</li>
+    <li>Biệt thự: @Model.Sum(m => m.NMS)</li>
+    <li>Nhà phố: @Model.Sum(m => m.NSH)</li>
+    <li>Nhà phố thương mại: @Model.Sum(m => m.NSHH)</li>
+    <li>Shop khối đế: @Model.Sum(m => m.NS)</li>
+</ul>
+<style>
+    /*tr:hover {
+        background-color: #ddd;
+    }*/
+    .Red {
+        color: #ffffff;
+        background-color: #f74743
+    }
+
+    .Green {
+        color: #ffffff;
+        background-color: #2ed75d
+    }
+
+    .Yellow {
+        background-color: #f6f11d
+    }
+
+    th, td {
+        border-left: 1px solid #ddd;
+    }
+
+    table, td, th {
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 15px;
+    }
+
+    th, td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    tr:hover {
+        background-color: #ffffff;
+        color: #1f96e7;
+        cursor: pointer;
+    }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+<script></script>

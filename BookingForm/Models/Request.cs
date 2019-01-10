@@ -1,0 +1,32 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace BookingForm.Models
+{
+    public class Request
+    {
+        public Guid Id { get; set; }
+        [Display(Name = "Yêu cầu")]
+        public string RequestName { get; set; }
+        [Display(Name = "Loại yêu cầu")]
+        public string Subject { get; set; }
+        [Display(Name = "Nội dung")]
+        public string Contents { get; set; }
+        [Display(Name = "Tình trạng")]
+        public Status Status { get; set; }
+        [Display(Name = "Người yêu cầu")]
+        public virtual Sale Owner { get; set; }
+    }
+
+    public enum Status
+    {
+        Pending = 1,
+        Approved = 2,
+        Rejected = 3,
+        Canceled = 4,
+        Accepted = 5
+    }
+}

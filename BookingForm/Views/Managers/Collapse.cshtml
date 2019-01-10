@@ -1,0 +1,171 @@
+﻿@model  IEnumerable<BookingForm.Models.Appoinment>
+<div class="row">
+    <div class="col-2">
+        <div class="form-group">
+            <label class="control-label">Căn hộ</label>
+            <div class="input-group mb-3">
+                <input style="text-align:right" value="@Model.Where(m => m.Confirm == true && m.IsActive == true).Sum(m => m.NCH1 + m.NCH2 + m.NCH21 + m.NCH3)" class="form-control">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Căn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="form-group">
+            <label class="control-label">Biệt thự</label>
+            <div class="input-group mb-3">
+                <input style="text-align:right" value="@Model.Where(m => m.Confirm == true && m.IsActive == true).Sum(m => m.NMS)" class="form-control">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Căn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="form-group">
+            <label class="control-label">Biệt thự đơn lập</label>
+            <div class="input-group mb-3">
+                <input style="text-align:right" value="@Model.Where(m => m.Confirm == true && m.IsActive == true).Sum(m => m.NSH)" class="form-control">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Căn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="form-group">
+            <label class="control-label">Biệt thự song lập</label>
+            <div class="input-group mb-3">
+                <input style="text-align:right" value="@Model.Where(m => m.Confirm == true && m.IsActive == true).Sum(m => m.NSH1)" class="form-control">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Căn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="form-group">
+            <label class="control-label">Shophouse</label>
+            <div class="input-group mb-3">
+                <input style="text-align:right" value="@Model.Where(m => m.Confirm == true && m.IsActive == true).Sum(m => m.NSHH)" class="form-control">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Căn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-2">
+        <div class="form-group">
+            <label class="control-label">Kios (Shop khối đế)</label>
+            <div class="input-group mb-3">
+                <input style="text-align:right" value="@Model.Where(m => m.Confirm == true && m.IsActive == true).Sum(m => m.NS)" class="form-control">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Căn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-4">
+        <div class="form-group">
+            <label class="control-label">Số tiền đặt chỗ</label>
+            <div class="input-group mb-3">
+                <input style="text-align:right" value="@String.Format("{0:N0}", Model.Where(m => m.Confirm == true).Sum(m => m.Cash))" class="form-control">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">VNĐ</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-group">
+            <label class="control-label">Số tiền rút cọc</label>
+            <div class="input-group mb-3">
+                <input style="text-align: right" value="@String.Format("{0:N0}", Model.Where(m => m.Confirm == true && m.IsActive == false).Sum(m => m.Cash))" class="form-control" />
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">VNĐ</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    @{double _money = Model.Where(m => m.Confirm == true && m.IsActive == true).Sum(m => m.Cash); }
+    <div class="col-4">
+        <div class="form-group">
+            <label class="control-label">Tổng tiền</label>
+            <div class="input-group mb-3">
+                <input style="text-align: right" value="@String.Format("{0:N0}", _money)" class="form-control" />
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">VNĐ</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-3">
+        <div class="form-group">
+            <label>Số lượng booking đã vào tiền</label>
+            <div class="input-group mb-3">
+                <input style="text-align: right" value="@String.Format("{0:N0}", Model.Count(m => m.Confirm == true && m.IsActive == true))" class="form-control" />
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Căn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="form-group">
+            <label>Số lượng booking chưa vào tiền</label>
+            <div class="input-group mb-3">
+                <input style="text-align: right" value="@String.Format("{0:N0}", Model.Count(m => m.Confirm == false && m.IsActive == true))" class="form-control" />
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Căn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="form-group">
+            <label>Số lượng booking hủy</label>
+            <div class="input-group mb-3">
+                <input style="text-align: right" value="@String.Format("{0:N0}", Model.Count(m => m.IsActive == false))" class="form-control" />
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Căn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-3">
+        <div class="form-group">
+            <label>Tổng số lượng booking</label>
+            <div class="input-group mb-3">
+                <input style="text-align: right" value="@Model.Count()" class="form-control" />
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Căn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-6">
+        <label>Số HĐ có nhu cầu vay</label>
+        <div class="input-group mb-3">
+            <input style="text-align: right" value="@Model.Count(m => m.Price > 0 && m.IsActive == true)" class="form-control" />
+            <div class="input-group-append">
+                <span class="input-group-text" id="basic-addon2">HĐ</span>
+            </div>
+        </div>
+    </div>
+    <div class="col-6">
+        <label>Tổng số tiền cần vay</label>
+        <div class="input-group mb-3">
+            <input style="text-align: right" value="@String.Format("{0:N0}", Model.Where(m => m.Price > 0 && m.IsActive == true).Sum(m => m.Price))" class="form-control" />
+            <div class="input-group-append">
+                <span class="input-group-text" id="basic-addon2">VNĐ</span>
+            </div>
+        </div>
+    </div>
+</div>

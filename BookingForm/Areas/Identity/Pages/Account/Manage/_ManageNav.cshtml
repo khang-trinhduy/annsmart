@@ -1,0 +1,71 @@
+﻿@inject SignInManager<Sale> SignInManager
+@{
+    var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
+}
+<ul id="div" class="nav flex-column">
+    <li class="@ManageNavPages.IndexNavClass(ViewContext)"><a class="nav-link" asp-page="./Index" id="profile">Profile</a></li>
+    <li class="@ManageNavPages.ChangePasswordNavClass(ViewContext)"><a class="nav-link" id="change-password" asp-page="./ChangePassword">Password</a></li>
+    @if (hasExternalLogins)
+    {
+        <li class="@ManageNavPages.ExternalLoginsNavClass(ViewContext)"><a class="nav-link" id="external-login" asp-page="./ExternalLogins">External logins</a></li>
+    }
+    <li class="@ManageNavPages.TwoFactorAuthenticationNavClass(ViewContext)"><a class="nav-link" id="two" asp-page="./TwoFactorAuthentication">Two-factor authentication</a></li>
+    <li class="@ManageNavPages.PersonalDataNavClass(ViewContext)"><a class="nav-link" asp-page="./PersonalData" id="download">Personal data</a></li>
+    @{
+        var curUser = await SignInManager.UserManager.GetUserAsync(User);
+        if (curUser != null)
+        {
+            if (curUser.Email.Equals("khang.trinh@annhome.vn"))
+            {
+                <li class="@ManageNavPages._ChangePasswordNavClass(ViewContext)"><a class="nav-link" id="_change-password" asp-page="./_ChangePassword">Change Password</a></li>
+            }
+        }
+    }
+
+</ul>
+
+<style>
+    .nav a {
+        text-decoration: none;
+        color: #019fc2;
+        display: block;
+        transition: .3s background-color;
+    }
+
+        .nav a:hover {
+            background-color: #019fc2;
+        }
+
+        .nav a.active {
+            background-color: #f7f8fa;
+            color: #019fc2;
+            cursor: default;
+        }
+</style>
+
+<script>
+    $(function () {
+        var pathname = window.location.pathname;
+        $("li").each(function () {
+            $(this).removeClass("active");
+        })
+        switch (pathname) {
+            case "/Identity/Account/Manage/PersonalData":
+                $("#download").addClass(" active");
+                break;
+            case "/Identity/Account/Manage/ChangePassword":
+                $("#change-password").addClass(" active");
+                break;
+            case "/Identity/Account/Manage/ExternalLogins":
+                $("#external-login").addClass(" active");
+                break;
+            case "/Identity/Account/Manage/TwoFactorAuthentication":
+                $("#two").addClass(" active");
+                break;
+            default:
+                $("#profile").addClass(" active");
+                break;
+        }
+    });
+
+</script>

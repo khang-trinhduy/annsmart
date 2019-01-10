@@ -1,0 +1,90 @@
+﻿@model BookingForm.Models.Request
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+
+<div class="container">
+    <form asp-action="Request" method="post" class="was-validated">
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <partial name="_StatusMessage" model="@TempData["StatusMessage"]" />
+                    <span></span>
+                </div>
+                <div class="form-group">
+                    <select class="custom-select" asp-for="Subject" required>
+                        <option value="">Loại yêu cầu</option>
+                        <option value="Withdraw">Hoàn tiền</option>
+                        <option value="Reserve">Số thứ tự</option>
+                    </select>
+                    <div class="invalid-feedback">Vui lòng chọn loại yêu cầu</div>
+                </div>
+                <div class="form-group" hidden>
+                    <label class="control-label" asp-for="RequestName">Yêu cầu</label>
+                    <input required asp-for="RequestName" class="form-control" />
+                    <span asp-validation-for="RequestName" class="text-danger"></span>
+                </div>
+                <div class="form-group" hidden>
+                    <label class="control-label" asp-for="Contents"></label>
+                    <input required asp-for="Contents" class="form-control" />
+                    <span asp-validation-for="Contents" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div id="partial">
+        </div>
+
+    </form>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" language="JavaScript">
+    $("#Subject").change(function (e) {
+        var sbj = $(this).val();
+        var url = '@Url.Action("ChangeRequest", "Home")' + "?type=" + sbj;
+        $("#partial").load(url, function () {
+            $('#partial').fadeIn('slow');
+        });
+    })
+    $(document).on("click", "button", function (e) {
+        if ($("#Subject").val() == "Withdraw") {
+            var customer = $("#Customer").val();
+            var contract_number = $("#ContractNumber").val();
+            $("#RequestName").val("Yêu cầu hoàn tiền");
+            var str = "KH: " + customer + ". HĐ: " + contract_number + ". SP: ";
+            if ($("#PH").val() != "") {
+                str += "CH-" + $("#PH").val().toString();
+            }
+            if ($("#PMS").val() != "") {
+                str += ", BT-" + $("#PMS").val().toString();
+            }
+            if ($("#P1").val() != "") {
+                str += ", BTĐL-" + $("#P1").val().toString();
+            }
+            if ($("#P2").val() != "") {
+                str += ", BTSL-" + $("#P2").val().toString();
+            }
+            if ($("#SH").val() != "") {
+                str += ", SH-" + $("#SH").val().toString();
+            }
+            if ($("#KO").val() != "") {
+                str += ", KIOS-" + $("#KO").val().toString();
+            }
+            var ht = "";
+            if ($("#Cash").prop('checked', true)) {
+                ht = "TM";
+            }
+            else {
+                ht = "CK";
+            }
+            str += ". HTTT: " + ht + ". Số tiền: " + $("#Money").val().toString() + ". Lý do: " + $("#Reason").val().toString() + ".";
+            $("#Contents").val(str);
+        }
+        else {
+            $("#RequestName").val("Giữ số thứ tự");
+            var str = "STT: " + $("#Priority").val().toString() + ". Thời gian: " + $("#Duration").val().toString() + " ngày" + ". Lý do: " + $("#Reason").val().toString() + ".";
+            $("#Contents").val(str);
+        }
+        
+    })
+</script>

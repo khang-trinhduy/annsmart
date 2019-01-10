@@ -1,0 +1,255 @@
+﻿@model BookingForm.Models.ManagerModal
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div style="display:block; height:15px">
+
+</div>
+@foreach (var sale in Model.sales)
+{
+    if (sale.Email.Equals("khang.trinh@annhome.vn") || sale.Email.Equals("hang.le@annhome.vn"))
+    {
+        continue;
+    }
+@*<div class="col-xs-12 col-sm-6 col-md-4">*@
+    <div class="image-flip" style="float:left; width: 33%; height:100%" ontouchstart="this.classList.toggle('hover');">
+        <div class="mainflip">
+            <div style="float:left; width: 100%; height:100%" class="frontside">
+                <div class="card">
+                    <div class="card-body text-center">
+                        @{
+                            var src = "/images/Profile/profile.png";
+                            var signed = false;
+                            if (sale.Portrait != null)
+                            {
+                                var base64 = Convert.ToBase64String(sale.Portrait);
+                                src = String.Format("data:image/gif;base64,{0}", base64);
+                            }
+
+                        }
+                        <p><img class=" img-fluid" src="@src" alt="photo"></p>
+                        <h4 class="card-title">@sale.Name</h4>
+                        <p class="card-text">
+                            Birthday:
+                            @if (sale.DOB != null)
+                            {
+                                @DateTime.Parse(sale.DOB).ToString("dd-MM-yyyy")
+                            }
+                        </p>
+                        <p class="card-text">
+                            Position: @if (sale.Info != null)
+                            {
+                                if (sale.Info.Contains("-"))
+                                {
+                                    @sale.Info.Split("-")[1];
+                                }
+                                else
+                                {
+                                    @sale.Info;
+                                }
+                            }
+                        </p>
+                        <p class="card-text">Contact number: @sale.PhoneNumber</p>
+                        @*<a href="#" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i></a>*@
+                    </div>
+                </div>
+            </div>
+            <div style="float:left; width: 100%; height:100%" class="backside">
+                <div class="card">
+                    <div class="card-body text-center mt-4">
+                        <h4 class="card-title">Thông tin booking</h4>
+                        <p>(confirmed / unconfirmed / canceled)</p>
+                        @{
+                            bool DatesAreInTheSameWeek(DateTime date1, DateTime date2)
+                            {
+                                var cal = System.Globalization.DateTimeFormatInfo.CurrentInfo.Calendar;
+                                var da1 = date1.Date.AddDays(-1 * (int)cal.GetDayOfWeek(date1));
+                                var da2 = date2.Date.AddDays(-1 * (int)cal.GetDayOfWeek(date2));
+
+                                return da1 == da2;
+                            }
+                        }
+                        @{ int d1, d2, d3, w1, w2, w3, m1, m2, m3 = 0;
+                            d1 = Model.appoinments.Count(m => m.SEmail == sale.Email && m.Confirm == true && m.IsActive == true && m.cTime.Contains(DateTime.Now.Date.ToString("ddMMyyyy")));
+                            d2 = Model.appoinments.Count(m => m.SEmail == sale.Email && m.Confirm == false && m.IsActive == true && m.cTime.Contains(DateTime.Now.Date.ToString("ddMMyyyy")));
+                            d3 = Model.appoinments.Count(m => m.SEmail == sale.Email && m.Confirm == true && m.IsActive == false && m.WDay.Date == DateTime.Now.Date);
+                            w1 = Model.appoinments.Count(m => m.SEmail == sale.Email && m.Confirm == true && m.IsActive == true && DatesAreInTheSameWeek(DateTime.Now.Date, DateTime.ParseExact(m.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)));
+                            w2 = Model.appoinments.Count(m => m.SEmail == sale.Email && m.Confirm == false && m.IsActive == true && DatesAreInTheSameWeek(DateTime.Now.Date, DateTime.ParseExact(m.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)));
+                            w3 = Model.appoinments.Count(m => m.SEmail == sale.Email && m.Confirm == true && m.IsActive == false && m.WDay.Date.Year != 1 && DatesAreInTheSameWeek(DateTime.Now.Date, m.WDay.Date));
+                            m1 = Model.appoinments.Count(m => m.SEmail == sale.Email && m.Confirm == true && m.IsActive == true && m.cTime.Substring(2, 6).Contains(DateTime.Now.ToString("MMyyyy")));
+                            m2 = Model.appoinments.Count(m => m.SEmail == sale.Email && m.Confirm == false && m.IsActive == true && m.cTime.Substring(2, 6).Contains(DateTime.Now.ToString("MMyyyy")));
+                            m3 = Model.appoinments.Count(m => m.SEmail == sale.Email && m.Confirm == true && m.IsActive == false && m.WDay.Date.Month == DateTime.Now.Date.Month && m.WDay.Date.Year == DateTime.Now.Date.Year);
+                            double cash = Model.appoinments.Where(m => m.SEmail == sale.Email && m.Confirm == true && m.IsActive == true && m.cTime.Contains(DateTime.Now.Date.ToString("ddMMyyyy"))).Sum(m => m.Cash);
+                            cash -= Model.appoinments.Where(m => m.SEmail == sale.Email && m.Confirm == true && m.IsActive == false && m.cTime.Contains(DateTime.Now.Date.ToString("ddMMyyyy"))).Sum(m => m.Cash);
+                        }
+                        <ul>
+                            <li>Ngày: @d1  / @d2  / @d3</li>
+                            <li>Tuần: @w1  / @w2  / @w3</li>
+                            <li>Tháng: @m1  / @m2  / @m3</li>
+                        </ul>
+                        <p>Tổng tiền (trong ngày): @String.Format("{0:N0}", cash) vnđ.</p>
+                        <a asp-action="Dashboard" asp-route-id="@sale.Id" class="badge badge-info">Chi tiết</a>
+                        <ul class="list-inline">
+                            <li class="list-inline-item">
+                                <a class="social-icon text-xs-center" target="_blank" href="#">
+                                    <i class="fa fa-facebook"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="social-icon text-xs-center" target="_blank" href="#">
+                                    <i class="fa fa-twitter"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="social-icon text-xs-center" target="_blank" href="#">
+                                    <i class="fa fa-skype"></i>
+                                </a>
+                            </li>
+                            <li class="list-inline-item">
+                                <a class="social-icon text-xs-center" target="_blank" href="#">
+                                    <i class="fa fa-google"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<style>
+    /* FontAwesome for working BootSnippet :> */
+#team {
+    background: #eee !important;
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background-color: #108d6f;
+    border-color: #108d6f;
+    box-shadow: none;
+    outline: none;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #007b5e;
+    border-color: #007b5e;
+}
+
+section {
+    padding: 60px 0;
+}
+
+section .section-title {
+    text-align: center;
+    color: #007b5e;
+    margin-bottom: 50px;
+    text-transform: uppercase;
+}
+
+#team .card {
+    border: none;
+    background: #ffffff;
+}
+
+    .image-flip:hover .backside,
+    .image-flip.hover .backside {
+        -webkit-transform: rotateY(0deg);
+        -moz-transform: rotateY(0deg);
+        -o-transform: rotateY(0deg);
+        -ms-transform: rotateY(0deg);
+        transform: rotateY(0deg);
+        border-radius: .25rem;
+       
+    }
+
+.image-flip:hover .frontside,
+.image-flip.hover .frontside {
+    -webkit-transform: rotateY(180deg);
+    -moz-transform: rotateY(180deg);
+    -o-transform: rotateY(180deg);
+    transform: rotateY(180deg);
+}
+
+.mainflip {
+    -webkit-transition: 1s;
+    -webkit-transform-style: preserve-3d;
+    -ms-transition: 1s;
+    -moz-transition: 1s;
+    -moz-transform: perspective(1000px);
+    -moz-transform-style: preserve-3d;
+    -ms-transform-style: preserve-3d;
+    transition: 1s;
+    transform-style: preserve-3d;
+    position: relative;
+}
+
+    .frontside {
+        position: relative;
+        -webkit-transform: rotateY(0deg);
+        -ms-transform: rotateY(0deg);
+        z-index: 2;
+        margin-bottom: 30px;
+        margin-left: 1.5%;
+        margin-right: 1.5%;
+    }
+
+    .backside {
+        position: absolute;
+        top: 0;
+        left: 0;
+        background: white;
+        -webkit-transform: rotateY(-180deg);
+        -moz-transform: rotateY(-180deg);
+        -o-transform: rotateY(-180deg);
+        -ms-transform: rotateY(-180deg);
+        transform: rotateY(-180deg);
+        -webkit-box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
+        -moz-box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
+        box-shadow: 5px 7px 9px -4px rgb(158, 158, 158);
+        margin-bottom: 30px;
+        margin-left: 1.5%;
+        margin-right: 1.5%;
+    }
+
+.frontside,
+.backside {
+    -webkit-backface-visibility: hidden;
+    -moz-backface-visibility: hidden;
+    -ms-backface-visibility: hidden;
+    backface-visibility: hidden;
+    -webkit-transition: 1s;
+    -webkit-transform-style: preserve-3d;
+    -moz-transition: 1s;
+    -moz-transform-style: preserve-3d;
+    -o-transition: 1s;
+    -o-transform-style: preserve-3d;
+    -ms-transition: 1s;
+    -ms-transform-style: preserve-3d;
+    transition: 1s;
+    transform-style: preserve-3d;
+}
+
+.frontside .card,
+.backside .card {
+    min-height: 312px;
+}
+
+.backside .card a {
+    font-size: 18px;
+    color: #007b5e !important;
+}
+
+.frontside .card .card-title,
+.backside .card .card-title {
+    color: #007b5e !important;
+}
+
+.frontside .card .card-body img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+}
+</style>

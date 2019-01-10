@@ -1,0 +1,23 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+
+namespace BookingForm.Models
+{
+    public class Plan
+    {
+        public Guid Id { get; set; }
+        public string Name { get; set; }
+        public string Location { get; set; }
+        public Enum State { get; set; }
+        public ICollection<ProductPlan> ProductPlans { get; set; }
+    }
+
+    public enum State
+    {
+        OpenForSale = 1,
+        NotOpenForSale = 2,
+        Close = 3
+    }
+}

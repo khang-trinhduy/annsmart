@@ -1,0 +1,38 @@
+﻿@{
+    ViewData["Title"] = "Xác nhận tiền -";
+    string[] paths = null;
+    if (ViewBag.paths != null)
+    {
+        paths = ViewBag.paths.Split(" ");
+    }
+    
+}
+
+    <div class="form-group">
+        <label class="control-label">
+            Tên khách hàng
+        </label>
+        <input class="form-control" value="@TempData["Name"]" readonly />
+    </div>
+    <div class="form-group">
+        <label class="control-label">
+            Ảnh
+        </label>
+        @{
+            if (paths == null)
+            {
+                <label class="control-label">
+                    Không có
+                </label>
+            }
+            else
+            {
+                foreach (var path in paths)
+                {
+                    <img src="~/storage/@path" style="width: 400px; height:250px"/>
+                }
+            }
+        }
+        
+
+    </div>

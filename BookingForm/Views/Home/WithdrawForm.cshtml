@@ -1,0 +1,194 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div class="row">
+    <div class="col-8">
+        <div class="form-group">
+            <label class="control-label">Tên khách</label>
+            <input id="Customer" class="form-control" required />
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="form-group">
+            <label class="control-label">HĐ số</label>
+            <input id="ContractNumber" required class="form-control" style="text-align:right" />
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <label class="control-label">
+                Căn hộ
+            </label>
+            <div class="input-group mb-3">
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input type="checkbox" aria-label="Checkbox for following text input">
+                    </div>
+                </div>
+                <input style="text-align:right" type="number" class="form-control" aria-label="Text input with checkbox" id="PH">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Căn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <label class="control-label">
+                Biệt thự
+            </label>
+            <div class="input-group mb-3">
+
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input type="checkbox" aria-label="Checkbox for following text input">
+                    </div>
+                </div>
+                <input style="text-align:right" type="number" class="form-control" aria-label="Text input with checkbox" id="PMS">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Căn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <label class="control-label">
+                Biệt thự đơn lập
+            </label>
+            <div class="input-group mb-3">
+
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input type="checkbox" aria-label="Checkbox for following text input">
+                    </div>
+                </div>
+                <input style="text-align:right" type="number" class="form-control" aria-label="Text input with checkbox" id="P1">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Căn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <label class="control-label">
+                Biệt thự song lập
+            </label>
+            <div class="input-group mb-3">
+
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input type="checkbox" aria-label="Checkbox for following text input">
+                    </div>
+                </div>
+                <input style="text-align:right" type="number" class="form-control" aria-label="Text input with checkbox" id="P2">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Căn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <label class="control-label">
+                Shophouse
+            </label>
+            <div class="input-group mb-3">
+
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input type="checkbox" aria-label="Checkbox for following text input">
+                    </div>
+                </div>
+                <input style="text-align:right" type="number" class="form-control" aria-label="Text input with checkbox" id="SH">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Căn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <label class="control-label">
+                Kios (Shop khối đế)
+            </label>
+            <div class="input-group mb-3">
+
+                <div class="input-group-prepend">
+                    <div class="input-group-text">
+                        <input type="checkbox" aria-label="Checkbox for following text input">
+                    </div>
+                </div>
+                <input style="text-align:right" type="number" class="form-control" aria-label="Text input with checkbox" id="KO">
+                <div class="input-group-append">
+                    <span class="input-group-text" id="basic-addon2">Căn</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-4">
+        <label class="control-label">
+            Hình thức thanh toán
+        </label>
+        <div class="custom-control custom-radio">
+            <input type="radio" class="custom-control-input" id="Cash" name="radio-stacked" required>
+            <label class="custom-control-label" for="Cash">Tiền mặt</label>
+        </div>
+        <div class="custom-control custom-radio mb-3">
+            <input type="radio" class="custom-control-input" id="Card" name="radio-stacked" required>
+            <label class="custom-control-label" for="Card">Chuyển khoản</label>
+            <div class="invalid-feedback">Chọn hình thức thanh toán</div>
+        </div>
+    </div>
+    <div class="col-8">
+        <label class="control-label">Số tiền</label>
+        <div class="input-group mb-3">
+            <input required style="text-align:right" type="text" class="form-control" aria-describedby="basic-addon2" id="Money">
+            <div class="input-group-append">
+                <span class="input-group-text" id="basic-addon2">VNĐ</span>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <label class="control-label">
+                Lý do
+            </label>
+            <textarea required class="form-control" rows="3" id="Reason"></textarea>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col">
+        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+            <input type="checkbox" class="custom-control-input" id="customControlInline" required>
+            <label class="custom-control-label" for="customControlInline">Tôi xin xác nhận những thông tin bên trên là hoàn toàn chính xác đồng thời đã nộp đủ những giấy tờ theo yêu cầu của công ty Annhome (Nếu như có sai xót tôi xin chịu hoàn toàn trách nhiệm).</label>
+        </div>
+    </div>
+</div>
+<button type="submit" class="btn btn-light">Xác nhận</button>

@@ -1,0 +1,60 @@
+﻿@model BookingForm.Models.Request
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div class="container">
+    <form asp-action="Additional" method="post" class="was-validated">
+        <div class="form-group">
+            <partial name="_StatusMessage" model="@TempData["StatusMessage"]" />
+            <span></span>
+        </div>
+        <div class="form-group">
+            <label class="control-label">Yêu cầu</label>
+            <input asp-for="Subject" value="Bổ sung thông tin" class="form-control" readonly />
+            <span asp-validation-for="Subject" class="text-danger"></span>
+        </div>
+        <div class="form-group" hidden>
+            <label class="control-label" asp-for="RequestName">Yêu cầu</label>
+            <input required asp-for="RequestName" class="form-control" value="Additionals" />
+            <span asp-validation-for="RequestName" class="text-danger"></span>
+        </div>
+
+        <div class="row">
+            <div class="col-5">
+                <div class="form-group">
+                    <label class="control-label">Sale</label>
+                    <input readonly required class="form-control" id="To" value="@ViewBag.Sale" />
+                    <span class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="col-5">
+                <div class="form-group">
+                    <label class="control-label">Customer</label>
+                    <input readonly required class="form-control" id="Customer" value="@ViewBag.Customer" />
+                    <span class="text-danger"></span>
+                </div>
+
+            </div>
+            <div class="col-2">
+                <div class="form-group">
+                    <label class="control-label">Contract number</label>
+                    <input readonly required class="form-control" type="number" id="Contract" value="@ViewBag.Contract" />
+                    <span class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-12">
+                <div class="form-group">
+                    <label class="control-label">Contents</label>
+                    <textarea placeholder="Bổ sung cmnd..." required class="form-control" asp-for="Contents" rows="3"></textarea>
+                    <span class="text-danger"></span>
+                </div>
+
+            </div>
+        </div>
+        <button type="submit" class="btn btn-light">Xác nhận</button>
+    </form>
+</div>
+

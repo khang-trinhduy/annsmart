@@ -1,0 +1,246 @@
+﻿@model BookingForm.Models.Sale
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{
+    //ViewBag["Title"] = "Thông tin chi tiết - ";
+    string info = "";
+    if (Model.Info.Contains("-"))
+    {
+        info = Model.Info.Split("-")[1];
+    }
+    else
+    {
+        info = Model.Info;
+    }
+    var src = "/images/Profile/profile.png";
+    if (Model.Portrait != null)
+    {
+        var base64 = Convert.ToBase64String(Model.Portrait);
+        src = String.Format("data:image/gif;base64,{0}", base64);
+    }
+}
+<div class="container">
+    <div class="row">
+        @*<div class="col-12">*@
+        <div class="col-3">
+            <span style="display: inline-block; height: 10px;"></span>
+            <img id="img" src=@src style="width:235px;height:235px;border-radius:50%;transition: .5s ease;backface-visibility: hidden; border:0" />
+        </div>
+        <div class="col-9"></div>
+    </div>
+    <div class="row">
+        <div class="col-8">
+            <h4 class="control-label">Thông tin cá nhân</h4>
+        </div>
+        <div class="col-4">
+            <h4 class="control-label">Thông tin booking</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-4">
+            @*<div class="col-4">*@
+
+            <div class="form-group">
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" readonly class="form-control" />
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group">
+                <label asp-for="Gender"></label>
+                <input asp-for="Gender" readonly class="form-control" />
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group">
+                <label asp-for="DOB" class="control-label"></label>
+                <input style="text-align:right" asp-for="DOB" readonly class="form-control" />
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label class="control-label">Tổng số lượng booking active</label>
+                @*<input style="text-align:right" readonly class="form-control" value="@Model.Meetings.Count(m => m.Confirm == true && m.IsActive == true)" />*@
+                <div class="input-group mb-3">
+                    <input style="text-align:right" value="@Model.Meetings.Count(m => m.Confirm == true && m.IsActive == true)" class="form-control">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">Căn</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-5">
+            <div class="form-group">
+                <label class="control-label" asp-for="Address"></label>
+                <input readonly class="form-control" asp-for="Address" />
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="form-group">
+                <label class="control-label" asp-for="PhoneNumber"></label>
+                <input style="text-align:right" readonly class="form-control" asp-for="PhoneNumber" />
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label class="control-label">Số lượng hủy</label>
+                <div class="input-group mb-3">
+                    <input style="text-align:right" value="@Model.Meetings.Count(m => m.Confirm == true && m.IsActive == false)" class="form-control">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">Căn</span>
+                    </div>
+                </div>
+                @*<input style="text-align:right" readonly class="form-control" value="@Model.Meetings.Count(m => m.Confirm == true && m.IsActive == false)" />*@
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-6">
+            <div class="form-group">
+                <label class="control-label">Chức vụ</label>
+                <input value="@info" readonly class="form-control" />
+            </div>
+        </div>
+        <div class="col-2">
+            <div class="form-group">
+                <label class="control-label">Hình thức</label>
+                <input placeholder="Nội bộ / Ngoài" readonly class="form-control" />
+            </div>
+        </div>
+        <div class="col-4">
+            <div class="form-group">
+                <label class="control-label">Tổng số tiền (active)</label>
+                @{
+                    double money = Model.Meetings.Where(m => m.Confirm == true && m.IsActive == true).Sum(m => m.Cash);
+                }
+                <div class="input-group mb-3">
+                    <input style="text-align:right" value="@String.Format("{0:N0}", money)" class="form-control">
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="basic-addon2">VNĐ</span>
+                    </div>
+                </div>
+                @*<input style="text-align:right" readonly class="form-control" value="@String.Format("{0:N0}", money) VNĐ" />*@
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-5"><h4 class="control-label">Chi tiết số lượng booking</h4></div>
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <p>
+                <a style="font-size:x-large" class="control-label" data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Ngày</a>
+            </p>
+        </div>
+        <div class="col-9">
+
+        </div>
+    </div>
+    @*<div class="card card-body">*@
+    <div class="collapse" id="collapseExample">
+        <partial name="Collapse" model="@Model.Meetings.Where(m => m.cTime.Substring(0, 8).Contains(DateTime.Now.Date.ToString("ddMMyyyy")) || m.WDay.ToString("yyyy-MM-dd") == DateTime.Now.ToString("yyyy-MM-dd")).ToList()" />
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <p>
+                <a style="font-size:x-large" class="control-label" data-toggle="collapse" href="#collapseExample_m" role="button" aria-expanded="false" aria-controls="collapseExample">Tuần</a>
+            </p>
+        </div>
+        <div class="col-9">
+        </div>
+    </div>
+    @{
+        bool DatesAreInTheSameWeek(DateTime date1, DateTime date2)
+        {
+            var cal = System.Globalization.DateTimeFormatInfo.CurrentInfo.Calendar;
+            var da1 = date1.Date.AddDays(-1 * (int)cal.GetDayOfWeek(date1));
+            var da2 = date2.Date.AddDays(-1 * (int)cal.GetDayOfWeek(date2));
+
+            return da1 == da2;
+        }
+        //DatesAreInTheSameWeek(DateTime.Now.Date, DateTime.ParseExact(m.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null));
+        //DatesAreInTheSameWeek(DateTime.Now.Date, m.WDay.Date);
+    }
+    @*<div class="card card-body">*@
+    <div class="collapse" id="collapseExample_m">
+        <partial name="Collapse" model="@Model.Meetings.Where(m => DatesAreInTheSameWeek(DateTime.Now.Date, DateTime.ParseExact(m.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)) || ( m.WDay.Year != 1 && DatesAreInTheSameWeek(DateTime.Now.Date, m.WDay.Date))).ToList()" />
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <p>
+                <a style="font-size:x-large" class="control-label" data-toggle="collapse" href="#collapseExample2" role="button" aria-expanded="false" aria-controls="collapseExample">Tháng</a>
+            </p>
+        </div>
+        <div class="col-9">
+
+        </div>
+    </div>
+    @*<div class="card card-body">*@
+    <div class="collapse" id="collapseExample2">
+        <partial name="Collapse" model="@Model.Meetings.Where(m => m.cTime.Substring(0, 8).Contains(DateTime.Now.Date.ToString("MMyyyy")) || m.WDay.ToString("yyyy-MM") == DateTime.Now.ToString("yyyy-MM")).ToList()" />
+    </div>
+
+    <div class="row">
+        <div class="col-3">
+            <p>
+                <a style="font-size:x-large" class="control-label" data-toggle="collapse" href="#collapseExample4" role="button" aria-expanded="false" aria-controls="collapseExample">Năm</a>
+            </p>
+        </div>
+        <div class="col-9">
+
+        </div>
+    </div>
+    @*<div class="card card-body">*@
+    <div class="collapse" id="collapseExample4">
+        <partial name="Collapse" model="@Model.Meetings.Where(m => m.cTime.Substring(0, 8).Contains(DateTime.Now.Date.ToString("yyyy")) || m.WDay.ToString("yyyy") == DateTime.Now.ToString("yyyy")).ToList()" />
+    </div>
+    <div class="row">
+        <div class="col-3">
+            <p>
+                <a style="font-size:x-large" class="control-label" data-toggle="collapse" href="#collapseExample5" role="button" aria-expanded="false" aria-controls="collapseExample">Tất cả</a>
+            </p>
+        </div>
+        <div class="col-9">
+
+        </div>
+    </div>
+    <div class="collapse" id="collapseExample5">
+        <partial name="Collapse" model="@Model.Meetings" />
+    </div>
+</div>
+
+<style>
+    p a:hover, p a:visited, p a:link, p a:active {
+        text-decoration: none !important;
+        color: #000000
+    }
+
+    #img:hover {
+        opacity: 0.3;
+    }
+
+        #img:hover label.photo {
+            opacity: 1;
+        }
+
+        #img:hover .middle {
+            opacity: 1;
+        }
+
+    #img {
+        border-radius: 50%;
+        width: 200px;
+        height: 200px;
+        background-color: white;
+        box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        margin-bottom: 25px;
+        text-align: center;
+        display: block;
+        margin: 0 auto;
+    }
+</style>

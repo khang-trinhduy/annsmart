@@ -1,0 +1,17 @@
+﻿@model IEnumerable<BookingForm.Models.Sale>
+<div style="display:block; width:auto">
+    <ul style="list-style: none; border:1px solid black; background-color: #6be2de">
+        @{
+            foreach (var sale in Model)
+            {
+                <li style="font-family: 'Times New Roman'; font-size: large"><input class="check" id="check" type="checkbox" value="@sale.Name" /> <spans style="display:inline-block; width:5px"></spans> <label>@sale.Name</label></li>
+            }
+        }
+    </ul>
+</div>
+
+<style>
+    input:hover{
+        cursor: pointer;
+    }
+</style>

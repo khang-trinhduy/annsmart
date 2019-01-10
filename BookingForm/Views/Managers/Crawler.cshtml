@@ -1,0 +1,38 @@
+﻿@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+@{ 
+    int pg = 1;
+    if (TempData["page"] != null)
+    {
+        pg = Convert.ToInt16(TempData["page"]);
+    }
+}
+<form action="Save" method="post">
+    <input type="number" name="page" id="page" value="@pg" />
+    <input id="text" type="text" name="text" value="" />
+    <button type="submit">Save</button>
+</form>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+<script type="text/javascript" language="JavaScript">
+    var delay = (function () {
+        var timer = 0;
+        return function (callback, ms) {
+            clearTimeout(timer);
+            timer = setTimeout(callback, ms);
+        };
+    })();
+    $(document).ready(function () {
+        delay(function () {
+            // do stuff
+        }, 60000);
+        $.ajax({
+            url: 'https://admin.rever.vn/contact-api?sorts=-created_time&page=' + $("#page").val().toString() + '&size=50',
+            success: function (data) {
+
+                $("#text").val(JSON.stringify(data));
+                $("button").click();
+            } 
+        });
+    })
+</script>

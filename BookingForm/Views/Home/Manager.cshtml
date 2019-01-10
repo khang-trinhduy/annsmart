@@ -1,0 +1,158 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<Sale> UserManager
+@model BookingForm.Models.Management
+@{
+    ViewBag.Title = "Quản lý -";
+}
+@*<img src="~/images/Ann_Logo.png" style="width:340px; height:172px; display:block;margin-left:auto;margin-right:auto;" alt="Annhome Logo" title="Annhome-logo" />
+
+<h2 style="text-align:right">Xin chào  @Html.DisplayFor(model => model.manager.Name)</h2>
+@{
+    //TempData["sale"] = Model.manager.Email;
+    //string[] temp = Model.manager.Info.Split("-");
+    var curUser = await UserManager.GetUserAsync(User);
+    TempData["sale"] = curUser.Email;
+}
+@*<h6 style="font-style:italic;text-align:right">Chức vụ: @temp[1]</h6>*@
+<h6 style="font-style:italic; text-align:right">TP. Hồ Chí Minh, ngày @DateTime.Now.Day  tháng @DateTime.Now.Month năm @DateTime.Now.Year</h6>
+<hr />
+@*<p style="font-style:italic;">Lưu ý: Hệ thống chỉ hiện các hợp đồng đã có số chính thức và có thời gian lập hợp đồng chính xác</p>
+<div style="text-align:right"><a id="home" @*asp-action="Chart" >Sơ đồ</a></div>
+<span style="display:block; height:30px;"></span>
+<div style=" text-align:left">
+    <p style="display:inline-block">Hiện trong: </p>
+    <a id="new" asp-action="Manager" asp-route-id="0">Ngày </a>
+    <span style="display:inline-block; width:2px;"></span>
+    <span style="display:inline-block; width:2px;"></span>
+    <a id="new" asp-action="Manager" asp-route-id="1">Tuần</a>
+    <span style="display:inline-block; width:2px;"></span>
+    <span style="display:inline-block; width:2px;"></span>
+    <a id="new" asp-action="Manager" asp-route-id="2">Tháng</a>
+    <span style="display:inline-block; width:2px;"></span>
+    <span style="display:inline-block; width:2px;"></span>
+    <a id="new" asp-action="Manager" asp-route-id="3">Năm</a>
+</div>*@
+<span style="display:block; height:30px"></span>
+<table @*id="sales" *@ class="table">
+    <thead>
+        <tr>
+            <th colspan="1">Sale</th>
+            <th colspan="5">SL các loại (Đvị: căn)</th>
+        </tr>
+        <tr>
+            <th>Họ & tên</th>
+            <th>Căn hộ</th>
+            <th>Biệt thự</th>
+            <th>BTĐL</th>
+            <th>BTSL</th>
+            <th>NPTM (shophouse)</th>
+            <th>Kios chung cư</th>
+        </tr>
+
+    </thead>
+    <tbody>
+        @foreach (var sale in Model.sales)
+        {
+        <tr>
+            <td>@sale.Name</td>
+            @*</tr>
+        <tr>*@
+            <td>@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NCH1 + m.NCH2 + m.NCH3 + m.NCH21)</td>
+            <td>@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NMS)</td>
+            <td>@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NSH)</td>
+            <td>@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NSH1)</td>
+            <td>@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NSHH)</td>
+            <td>@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NS)</td>
+        </tr>
+        }
+
+    </tbody>
+</table>
+
+<style>
+    table, td, th {
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+    }
+
+    th, td {
+        padding: 15px;
+    }
+
+    th, td {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    table {
+        color: #333;
+        font-family: Helvetica, Arial, sans-serif;
+        width: 640px;
+        border-collapse: collapse;
+        border-spacing: 0;
+    }
+
+    td, th {
+        border: 1px solid transparent; /* No more visible border */
+        height: 30px;
+        transition: all 0.3s; /* Simple transition for hover effect */
+    }
+
+    th {
+        border: 1px solid #fa704f;
+        background: #fa704f;
+        font-weight: bold;
+        color: white;
+    }
+
+    td {
+        background: #FAFAFA;
+        text-align: center;
+    }
+
+    /* Cells in even rows (2,4,6...) are one color */
+    tr:nth-child(even) td {
+        background: #F1F1F1;
+    }
+
+    /* Cells in odd rows (1,3,5...) are another (excludes header cells)  */
+    tr:nth-child(odd) td {
+        background: #FEFEFE;
+    }
+
+    tr td:hover {
+        background: #666;
+        color: #FFF;
+    }
+
+    /*table {
+        overflow: hidden;
+        display: inline-block;
+    }*/
+
+    tr:hover {
+        background-color: #faf2de;
+    }
+
+
+    td, th {
+        position: relative;
+    }
+
+        td:hover::after,
+        th:hover::after {
+            content: "";
+            position: absolute;
+            background-color: #fa704f;
+            left: 0;
+            top: -5000px;
+            height: 1000px;
+            width: 100%;
+            z-index: -1;
+        }
+</style>
