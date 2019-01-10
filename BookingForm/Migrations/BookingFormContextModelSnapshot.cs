@@ -21,9 +21,8 @@ namespace BookingForm.Migrations
 
             modelBuilder.Entity("BookingForm.Models.Appoinment", b =>
                 {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
 
                     b.Property<string>("Address")
                         .IsRequired();
@@ -76,6 +75,8 @@ namespace BookingForm.Migrations
 
                     b.Property<int>("NSH");
 
+                    b.Property<int>("NSH1");
+
                     b.Property<int>("NSHH");
 
                     b.Property<bool>("New");
@@ -89,6 +90,8 @@ namespace BookingForm.Migrations
                     b.Property<string>("Phone")
                         .IsRequired();
 
+                    b.Property<string>("Photo");
+
                     b.Property<string>("Place");
 
                     b.Property<double>("Price");
@@ -98,9 +101,19 @@ namespace BookingForm.Migrations
 
                     b.Property<string>("Requires");
 
+                    b.Property<string>("SEmail");
+
                     b.Property<string>("SaleDetails");
 
-                    b.Property<int?>("SaleID");
+                    b.Property<Guid?>("SaleId");
+
+                    b.Property<DateTime>("WDay");
+
+                    b.Property<double>("WMoney");
+
+                    b.Property<string>("WType");
+
+                    b.Property<string>("WithdrawCode");
 
                     b.Property<string>("WorkPlace");
 
@@ -119,17 +132,34 @@ namespace BookingForm.Migrations
 
                     b.Property<int>("psh");
 
-                    b.Property<int>("pshh");
+                    b.Property<int>("psh1");
 
-                    b.Property<string>("sale");
+                    b.Property<int>("pshh");
 
                     b.Property<bool>("supporter");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
 
-                    b.HasIndex("SaleID");
+                    b.HasIndex("SaleId");
 
                     b.ToTable("appoinment");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.Feedback", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Content")
+                        .IsRequired();
+
+                    b.Property<Guid>("SaleId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SaleId");
+
+                    b.ToTable("Feedbacks");
                 });
 
             modelBuilder.Entity("BookingForm.Models.Logger", b =>
@@ -174,39 +204,143 @@ namespace BookingForm.Migrations
                     b.ToTable("Manager");
                 });
 
-            modelBuilder.Entity("BookingForm.Models.Sale", b =>
+            modelBuilder.Entity("BookingForm.Models.Request", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Contents");
+
+                    b.Property<Guid?>("OwnerId");
+
+                    b.Property<string>("RequestName");
+
+                    b.Property<int>("Status");
+
+                    b.Property<string>("Subject");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("OwnerId");
+
+                    b.ToTable("Requests");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.Role", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(256);
+
+                    b.Property<string>("NormalizedName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedName")
+                        .IsUnique()
+                        .HasName("RoleNameIndex")
+                        .HasFilter("[NormalizedName] IS NOT NULL");
+
+                    b.ToTable("AspNetRoles");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.RoleClaim", b =>
+                {
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("address");
+                    b.Property<string>("ClaimType");
 
-                    b.Property<string>("birthday");
+                    b.Property<string>("ClaimValue");
 
-                    b.Property<string>("display");
+                    b.Property<Guid>("RoleId");
 
-                    b.Property<string>("email")
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetRoleClaims");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.Sale", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<int>("AccessFailedCount");
+
+                    b.Property<string>("Address");
+
+                    b.Property<string>("ConcurrencyStamp")
+                        .IsConcurrencyToken();
+
+                    b.Property<string>("DOB");
+
+                    b.Property<string>("Display");
+
+                    b.Property<string>("Email")
+                        .HasMaxLength(256);
+
+                    b.Property<bool>("EmailConfirmed");
+
+                    b.Property<string>("Gender");
+
+                    b.Property<string>("Info");
+
+                    b.Property<bool>("LockoutEnabled");
+
+                    b.Property<DateTimeOffset?>("LockoutEnd");
+
+                    b.Property<string>("Members");
+
+                    b.Property<int>("NOfFeedbacks");
+
+                    b.Property<int>("NOfMeetings");
+
+                    b.Property<int>("NOfRequests");
+
+                    b.Property<string>("Name")
                         .IsRequired();
 
-                    b.Property<string>("gender");
+                    b.Property<string>("NormalizedEmail")
+                        .HasMaxLength(256);
 
-                    b.Property<string>("info");
+                    b.Property<string>("NormalizedUserName")
+                        .HasMaxLength(256);
 
-                    b.Property<string>("name")
-                        .IsRequired();
+                    b.Property<string>("PasswordHash");
 
-                    b.Property<string>("pass")
-                        .IsRequired();
+                    b.Property<string>("PhoneNumber");
 
-                    b.Property<string>("phone")
-                        .IsRequired();
+                    b.Property<bool>("PhoneNumberConfirmed");
 
-                    b.Property<byte[]>("portrait");
+                    b.Property<byte[]>("Portrait");
 
-                    b.HasKey("ID");
+                    b.Property<string>("SecurityStamp");
 
-                    b.ToTable("sale");
+                    b.Property<bool>("TwoFactorEnabled");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(256);
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("NormalizedEmail")
+                        .HasName("EmailIndex");
+
+                    b.HasIndex("NormalizedUserName")
+                        .IsUnique()
+                        .HasName("UserNameIndex")
+                        .HasFilter("[NormalizedUserName] IS NOT NULL");
+
+                    b.ToTable("AspNetUsers");
                 });
 
             modelBuilder.Entity("BookingForm.Models.Transaction", b =>
@@ -250,11 +384,135 @@ namespace BookingForm.Migrations
                     b.ToTable("transactions");
                 });
 
+            modelBuilder.Entity("BookingForm.Models.UserClaim", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("ClaimType");
+
+                    b.Property<string>("ClaimValue");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserClaims");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.UserLogin", b =>
+                {
+                    b.Property<string>("LoginProvider");
+
+                    b.Property<string>("ProviderKey");
+
+                    b.Property<string>("ProviderDisplayName");
+
+                    b.Property<Guid>("UserId");
+
+                    b.HasKey("LoginProvider", "ProviderKey");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("AspNetUserLogins");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.UserRole", b =>
+                {
+                    b.Property<Guid>("UserId");
+
+                    b.Property<Guid>("RoleId");
+
+                    b.HasKey("UserId", "RoleId");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("AspNetUserRoles");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.UserToken", b =>
+                {
+                    b.Property<Guid>("UserId");
+
+                    b.Property<string>("LoginProvider");
+
+                    b.Property<string>("Name");
+
+                    b.Property<string>("Value");
+
+                    b.HasKey("UserId", "LoginProvider", "Name");
+
+                    b.ToTable("AspNetUserTokens");
+                });
+
             modelBuilder.Entity("BookingForm.Models.Appoinment", b =>
                 {
+                    b.HasOne("BookingForm.Models.Sale", "Sale")
+                        .WithMany("Meetings")
+                        .HasForeignKey("SaleId");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.Feedback", b =>
+                {
                     b.HasOne("BookingForm.Models.Sale")
-                        .WithMany("meetings")
-                        .HasForeignKey("SaleID");
+                        .WithMany("Feedbacks")
+                        .HasForeignKey("SaleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BookingForm.Models.Request", b =>
+                {
+                    b.HasOne("BookingForm.Models.Sale", "Owner")
+                        .WithMany("Requests")
+                        .HasForeignKey("OwnerId");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.RoleClaim", b =>
+                {
+                    b.HasOne("BookingForm.Models.Role", "Role")
+                        .WithMany("RoleClaims")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BookingForm.Models.UserClaim", b =>
+                {
+                    b.HasOne("BookingForm.Models.Sale", "User")
+                        .WithMany("Claims")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BookingForm.Models.UserLogin", b =>
+                {
+                    b.HasOne("BookingForm.Models.Sale", "User")
+                        .WithMany("Logins")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BookingForm.Models.UserRole", b =>
+                {
+                    b.HasOne("BookingForm.Models.Role", "Role")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("BookingForm.Models.Sale", "User")
+                        .WithMany("UserRoles")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BookingForm.Models.UserToken", b =>
+                {
+                    b.HasOne("BookingForm.Models.Sale", "User")
+                        .WithMany("Tokens")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }

@@ -43,6 +43,21 @@
     <p>Địa chỉ liên hệ	: @Html.DisplayFor(model => model.Address)</p>
     <p>Điện thoại	: @Html.DisplayFor(model => model.Phone)</p>
     <p>Email	: @Html.DisplayFor(model => model.Email)</p>
+    @{
+        string borrow = "Nhu cầu vay NH: ";
+        if (Model.Price > 0)
+        {
+            borrow += "Có   Số tiền: " + string.Format("{0:N0}", Model.Price) + " VNĐ";
+        }
+        else
+        {
+            borrow += "Không";
+        }
+    }
+    <p>
+        @Html.Raw(borrow)
+    </p>
+    <p>Khả năng thanh toán: Thanh toán 100% / Thanh toán theo tiến độ</p>
     <p style="font-style:italic">(Sau đây gọi là Bên B)</p>
     <p>Các Bên thống nhất lập và ký kết phiếu đăng ký giữ chỗ này sau khi có xác nhận bên B thanh toán đầy đủ số tiền giữ chỗ cho bên A thông qua chuyển khoản hoặc tiền mặt để đảm bảo việc tham gia đăng ký mua sản phẩm bất động sản tại Dự Án Vincity Quận 9 với các nội dung sau đây:</p>
     <h5 style="font-weight:bold">Điều 1. Nội dung thỏa thuận</h5>
@@ -73,9 +88,20 @@
             {
                 <li>
                     <p style="font-weight:bold">
-                        Nhà phố:
+                        Biệt thự đơn lập:
                     </p><p style="display:inline">-	Số lượng căn: 0</p><p style="display:inline">
                         @Model.NSH……………Hướng:……………    View: ……………………
+                    </p>
+                </li>
+                <spans style="display:inline-block"></spans>
+            }
+            if (Model.NSH1 > 0)
+            {
+                <li>
+                    <p style="font-weight:bold">
+                        Biệt thự song lập:
+                    </p><p style="display:inline">-	Số lượng căn: 0</p><p style="display:inline">
+                        @Model.NSH1……………Hướng:……………    View: ……………………
                     </p>
                 </li>
                 <spans style="display:inline-block"></spans>

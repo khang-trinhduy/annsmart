@@ -13,12 +13,12 @@
                 TT Sale
             </th>
             @*<th>
-                    Email
-                </th>*@
+            Email
+        </th>*@
             <th rowspan="2" style="vertical-align:middle; text-align: center">
                 Số HĐ
             </th>
-            <th colspan="5">
+            <th colspan="6">
                 STT từng loại
             </th>
             <th rowspan="2" style="vertical-align:middle; text-align: center">
@@ -37,6 +37,9 @@
                 Thời gian nộp
             </th>
             <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Phiếu thu
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
                 Vay
             </th>
             <th rowspan="2" style="vertical-align:middle; text-align: center">
@@ -53,7 +56,10 @@
                 BT
             </th>
             <th>
-                NP
+                BTĐL
+            </th>
+            <th>
+                BTSL
             </th>
             <th>
                 NPTM
@@ -64,8 +70,7 @@
         </tr>
     </thead>
     <tbody>
-        @{ int count = 1;
-            double money = 0;}
+        @{ int count = 1;}
         @foreach (var item in Model)
         {
             var statusClass = "Yellow";
@@ -77,16 +82,15 @@
             {
                 statusClass = "Green";
             }
-           
+
             <tr class="@statusClass">
                 <td style="white-space:nowrap">@count</td>
-                @{ count++;
-                    money += item.Cash;}
+                @{ count++; }
                 <td style="white-space: nowrap; text-align:left">
                     @Html.DisplayFor(modelItem => item.Customer)
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.sale) -
+                    @Html.DisplayFor(modelItem => item.Sale.Email) -
                     @Html.DisplayFor(modelItem => item.SaleDetails)
 
                 </td>
@@ -154,6 +158,27 @@
                                 break;
                             default:
                                 fs += "<td>" + Convert.ToString(item.psh - item.NSH + 1) + " đến " + item.psh + "</td>";
+                                break;
+
+                        }
+                    }
+                    else
+                    {
+                        fs += "<td></td>";
+                    }
+                    if (item.NSH1 > 0)
+                    {
+                        //fs += "<li>Nhà phố: " + Model.appoinment.psh + "</li>";
+                        switch (item.NSH1)
+                        {
+                            case 1:
+                                fs += "<td>" + item.psh1 + "</p>";
+                                break;
+                            case 2:
+                                fs += "<td>" + Convert.ToString(item.psh1 - 1) + " & " + item.psh1 + "</p>";
+                                break;
+                            default:
+                                fs += "<td>" + Convert.ToString(item.psh1 - item.NSH1 + 1) + " đến " + item.psh1 + "</td>";
                                 break;
 
                         }
@@ -276,6 +301,9 @@
                     <td>
                         @day/@month/@year @hour:@minute:@second
                     </td>
+                    <td>
+                       
+                    </td>
                 }
                 <td>
                     @{
@@ -298,29 +326,37 @@
                     @Html.DisplayFor(modelItem => item.Confirm)
                 </td>
                 <td>
-                    <a asp-action="AppDetails" asp-route-id="@item.ID">XHĐ</a>|
-                    <a asp-action="Confirm" asp-route-id="@item.ID">XN</a>|
-                    <a asp-action="Draft" asp-route-id="@item.ID">Draft</a>|
-                    <a asp-action="Edit" asp-route-id="@item.ID">Sửa</a>
+                    @*<a asp-action="AppDetails" asp-route-id="@item.Id">HĐ</a>|*@
+                    <a asp-action="Confirm" asp-route-id="@item.Id">Xác nhận tiền vào</a>|
+                    <a asp-action="Draft" asp-route-id="@item.Id">HĐ(bản in)</a>|
+                    <a asp-action="Edit" asp-route-id="@item.Id">Sửa</a> |
+                    <a asp-action="Withdraw" asp-route-id="@item.Id">Đơn hoàn tiền</a> |
+                    <a asp-action="Passport" asp-route-id="@item.Id">CMND</a> |
+                    <a asp-action="Additional" asp-route-id="@item.Id">Bổ sung thông tin</a>
                     @*<a asp-action="Details" asp-route-id="@item.Contract">Details</a> |
-                        <a asp-action="Delete" asp-route-id="@item.Contract">Delete</a>*@
+        <a asp-action="Delete" asp-route-id="@item.Contract">Delete</a>*@
                 </td>
             </tr>
         }
 
     </tbody>
 </table>
-@{ 
+@{
     //string new_money = Convert.ToString(money);
+    double money = Model.Sum(m => m.Cash);
     string new_money = String.Format("{0:N0}", money);
-    //for (int i = 3; i < new_money.Length; i += 3)
-    //{
-    //    new_money = new_money.Insert(i, ",");
-    //    i++;
-    //}
-}
-<label style="display:block; text-align:right;font-family:'Times New Roman'; font-style:italic; font-size:large">Tổng tiền: @new_money VNĐ</label>
 
+}
+<label style="display:block; text-align:right;font-family:'Times New Roman'; font-style:italic; font-size:x-large">Tổng tiền: @new_money VNĐ</label>
+<label style="font-family:'Times New Roman'; font-size: x-large">Tổng số căn: </label>
+<ul style="font-family:'Times New Roman'; list-style: square; font-size: x-large">
+    <li>Căn hộ: @Model.Sum(m => m.NCH1 + m.NCH2 + m.NCH21 + m.NCH3)</li>
+    <li>Biệt thự: @Model.Sum(m => m.NMS)</li>
+    <li>Biệt thự ĐL: @Model.Sum(m => m.NSH)</li>
+    <li>Biệt thự SL: @Model.Sum(m => m.NSH1)</li>
+    <li>Nhà phố thương mại: @Model.Sum(m => m.NSHH)</li>
+    <li>Shop khối đế: @Model.Sum(m => m.NS)</li>
+</ul>
 <style>
     /*tr:hover {
         background-color: #ddd;
@@ -361,10 +397,11 @@
         text-align: center;
         vertical-align: middle;
     }
+
     tr:hover {
         background-color: #ffffff;
         color: #1f96e7;
-        cursor:pointer;
+        cursor: pointer;
     }
 </style>
 

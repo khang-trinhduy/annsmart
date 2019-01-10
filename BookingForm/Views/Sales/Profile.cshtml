@@ -6,45 +6,45 @@
         <div class="col-md-4 row-md-4">
 
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
+            <input type="hidden" asp-for="Id" />
             <div class="form-group">
-                <label asp-for="name" class="control-label"></label>
-                <input asp-for="name" class="form-control" />
-                <span asp-validation-for="name" class="text-danger"></span>
+                <label asp-for="Name" class="control-label"></label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="phone" class="control-label"></label>
-                <input id="phone" asp-for="phone" class="form-control" />
-                <span asp-validation-for="phone" class="text-danger"></span>
+                <label asp-for="PhoneNumber" class="control-label"></label>
+                <input id="phone" asp-for="PhoneNumber" class="form-control" />
+                <span asp-validation-for="PhoneNumber" class="text-danger"></span>
             </div>
 
             <div class="form-group">
-                <label asp-for="info" class="control-label"></label>
-                <input asp-for="info" class="form-control" />
-                <span asp-validation-for="info" class="text-danger"></span>
+                <label asp-for="Info" class="control-label"></label>
+                <input asp-for="Info" class="form-control" />
+                <span asp-validation-for="Info" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="display" class="control-label"></label>
-                <input asp-for="display" class="form-control" />
-                <span asp-validation-for="display" class="text-danger"></span>
+                <label asp-for="Display" class="control-label"></label>
+                <input asp-for="Display" class="form-control" />
+                <span asp-validation-for="Display" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="birthday" class="control-label"></label>
-                <input type="text" id="date" asp-for="birthday" class="form-control" />
-                <span asp-validation-for="birthday" class="text-danger"></span>
+                <label asp-for="DOB" class="control-label"></label>
+                <input type="text" id="date" asp-for="DOB" class="form-control" />
+                <span asp-validation-for="DOB" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <select asp-for="gender">
+                <select asp-for="Gender">
                     <option value="Nam">Nam</option>
                     <option value="Nữ">Nữ</option>
                     <option value="Không xác định">Không xác định</option>
                 </select>
-                <span asp-validation-for="gender" class="text-danger"></span>
+                <span asp-validation-for="Gender" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="address" class="control-label"></label>
-                <input id="address" asp-for="address" class="form-control" />
-                <span asp-validation-for="address" class="text-danger"></span>
+                <label asp-for="Address" class="control-label"></label>
+                <input id="address" asp-for="Address" class="form-control" />
+                <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <button id="save" class="btn-success" type="submit">Lưu lại</button>

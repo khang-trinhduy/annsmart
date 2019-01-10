@@ -10,17 +10,20 @@ using Microsoft.AspNetCore.Http;
 using System.Net.Http.Headers;
 using System.IO;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 
 namespace BookingForm
 {
     public class SalesController : Controller
     {
+        private readonly UserManager<Sale> _userManager;
         private readonly BookingFormContext _context;
         private static Sale sale;
         private readonly IHostingEnvironment _environment;
 
-        public SalesController(BookingFormContext context, IHostingEnvironment environment)
+        public SalesController(BookingFormContext context, IHostingEnvironment environment, UserManager<Sale> userManager)
         {
+            _userManager = userManager;
             _environment = environment;
             _context = context;
         }
@@ -32,7 +35,7 @@ namespace BookingForm
             int count = 0;
             foreach (var sale in sales)
             {
-                var meetings = _context.appoinment.Where(b => b.sale.Contains(sale.email)).ToList();
+                var meetings = _context.appoinment.Where(b => b.Sale == sale).ToList();
                 temp.Insert(count, meetings.Count);
                 count++;
             }
@@ -53,67 +56,66 @@ namespace BookingForm
 
 
 
-        [HttpPost(Name = "ChangePassword")]
-        public async Task<IActionResult> ChangePassword([Bind("ID)")] int id, [Bind("rnp)")] string pw)
-        {
-            var tmp = await _context.sale.FindAsync(id);
-            if (tmp != null)
-            {
-                tmp.pass = pw;
-                _context.Update(tmp);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(ViewProfile), sale.ID);
-            }
-            return RedirectToAction(nameof(ViewProfile), sale.ID);
-        }
+        //[HttpPost(Name = "ChangePassword")]
+        //public async Task<IActionResult> ChangePassword([Bind("ID)")] int id, [Bind("rnp)")] string pw)
+        //{
+        //    var tmp = await _context.sale.FindAsync(id);
+        //    if (tmp != null)
+        //    {
+        //        tmp.pass = pw;
+        //        _context.Update(tmp);
+        //        await _context.SaveChangesAsync();
+        //        return RedirectToAction(nameof(ViewProfile), sale.ID);
+        //    }
+        //    return RedirectToAction(nameof(ViewProfile), sale.ID);
+        //}
 
-    public async Task<FileResult> GetPhoto(int? id)
+        public async Task<FileResult> GetPhoto(int? id)
         {
             var s = await _context.sale.FindAsync(id);
-            if (s.portrait != null)
+            if (s.Portrait != null)
             {
-                return File(s.portrait, "img/png");
+                return File(s.Portrait, "img/png");
             }
             var image = System.IO.File.OpenRead("~image//Profile//photo.jpg");
             return File(image, "image/jpg");
         }
 
-        [HttpPost]
-        public async Task<IActionResult> SaveProfile([Bind("ID, name, phone, info, display, birthday, gender, portrait, address")] Sale sale, IFormFile portrait)
-        {
-            var tmp = await _context.sale.FindAsync(sale.ID);
-            tmp.name = sale.name;
-            tmp.phone = sale.phone;
-            tmp.info = sale.info;
-            tmp.display = sale.display;
-            tmp.gender = sale.gender;
-            tmp.address = sale.address;
-            tmp.birthday = sale.birthday;
-            var newFileName = string.Empty;
-            var filePath = Path.GetTempFileName();
-            //if (HttpContext.Request.Form.Files != null)
-            //{
-            //var fileName = string.Empty;
-            //string PathDB = string.Empty;
-            //var files = HttpContext.Request.Form.Files;
-            long size = portrait.Length;
-            if (size > 0)
-            {
-                using (var stream = new FileStream(filePath, FileMode.Create))
-                {
-                    await portrait.CopyToAsync(stream);
-                }
-                using (var memoryStream = new MemoryStream())
-                {
-                    await portrait.CopyToAsync(memoryStream);
-                    tmp.portrait = memoryStream.ToArray();
-                }
+        //[HttpPost]
+        //public async Task<IActionResult> SaveProfile([Bind("ID, name, phone, info, display, birthday, gender, portrait, address")] Sale sale, IFormFile portrait)
+        //{
+        //    var tmp = await _context.sale.FindAsync(sale.Id);
+        //    tmp.Name = sale.Name;
+        //    tmp.Info = sale.Info;
+        //    tmp.Display = sale.Display;
+        //    tmp.Gender = sale.Gender;
+        //    tmp.Address = sale.Address;
+        //    tmp.DOB = sale.DOB;
+        //    var newFileName = string.Empty;
+        //    var filePath = Path.GetTempFileName();
+        //    //if (HttpContext.Request.Form.Files != null)
+        //    //{
+        //    //var fileName = string.Empty;
+        //    //string PathDB = string.Empty;
+        //    //var files = HttpContext.Request.Form.Files;
+        //    long size = portrait.Length;
+        //    if (size > 0)
+        //    {
+        //        using (var stream = new FileStream(filePath, FileMode.Create))
+        //        {
+        //            await portrait.CopyToAsync(stream);
+        //        }
+        //        using (var memoryStream = new MemoryStream())
+        //        {
+        //            await portrait.CopyToAsync(memoryStream);
+        //            tmp.portrait = memoryStream.ToArray();
+        //        }
 
-            }
-            _context.sale.Update(tmp);
-            await _context.SaveChangesAsync();
-            return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status200OK);
-        }
+        //    }
+        //    _context.sale.Update(tmp);
+        //    await _context.SaveChangesAsync();
+        //    return StatusCode(Microsoft.AspNetCore.Http.StatusCodes.Status200OK);
+        //}
 
         //[HttpPost]
         //public IActionResult Image(IFormFile file)
@@ -130,22 +132,22 @@ namespace BookingForm
         //}
 
         // GET: Sales/Details/5
-        public async Task<IActionResult> Details(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //public async Task<IActionResult> Details(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var sale = await _context.sale
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (sale == null)
-            {
-                return NotFound();
-            }
+        //    var sale = await _context.sale
+        //        .FirstOrDefaultAsync(m => m.Id == id);
+        //    if (sale == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(sale);
-        }
+        //    return View(sale);
+        //}
 
         // GET: Sales/Create
         public IActionResult Create()
@@ -175,10 +177,9 @@ namespace BookingForm
             {
                 return NotFound();
             }
-            var sale = await _context.sale.FindAsync(id);
+            var sale = await _userManager.GetUserAsync(User);
             var meetings = _context.appoinment
-        .Where(b => b.sale.Contains(sale.email))
-        .ToList();
+        .Where(b => b.Sale == sale).ToListAsync();
             return View(meetings);
         }
 
@@ -219,70 +220,70 @@ namespace BookingForm
         // POST: Sales/Edit/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,name,phone,email,pass")] Sale sale)
-        {
-            if (id != sale.ID)
-            {
-                return NotFound();
-            }
+        //[HttpPost]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> Edit(int id, [Bind("ID,name,phone,email,pass")] Sale sale)
+        //{
+        //    if (id != sale.ID)
+        //    {
+        //        return NotFound();
+        //    }
 
-            if (ModelState.IsValid)
-            {
-                try
-                {
-                    _context.Update(sale);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!SaleExists(sale.ID))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
-            }
-            return View(sale);
-        }
+        //    if (ModelState.IsValid)
+        //    {
+        //        try
+        //        {
+        //            _context.Update(sale);
+        //            await _context.SaveChangesAsync();
+        //        }
+        //        catch (DbUpdateConcurrencyException)
+        //        {
+        //            if (!SaleExists(sale.ID))
+        //            {
+        //                return NotFound();
+        //            }
+        //            else
+        //            {
+        //                throw;
+        //            }
+        //        }
+        //        return RedirectToAction(nameof(Index));
+        //    }
+        //    return View(sale);
+        //}
 
-        // GET: Sales/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null)
-            {
-                return NotFound();
-            }
+        //// GET: Sales/Delete/5
+        //public async Task<IActionResult> Delete(int? id)
+        //{
+        //    if (id == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            var sale = await _context.sale
-                .FirstOrDefaultAsync(m => m.ID == id);
-            if (sale == null)
-            {
-                return NotFound();
-            }
+        //    var sale = await _context.sale
+        //        .FirstOrDefaultAsync(m => m.ID == id);
+        //    if (sale == null)
+        //    {
+        //        return NotFound();
+        //    }
 
-            return View(sale);
-        }
+        //    return View(sale);
+        //}
 
-        // POST: Sales/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var sale = await _context.sale.FindAsync(id);
-            _context.sale.Remove(sale);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
-        }
+        //// POST: Sales/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var sale = await _context.sale.FindAsync(id);
+        //    _context.sale.Remove(sale);
+        //    await _context.SaveChangesAsync();
+        //    return RedirectToAction(nameof(Index));
+        //}
 
-        private bool SaleExists(int id)
-        {
-            return _context.sale.Any(e => e.ID == id);
-        }
+        //private bool SaleExists(int id)
+        //{
+        //    return _context.sale.Any(e => e.ID == id);
+        //}
     }
 }

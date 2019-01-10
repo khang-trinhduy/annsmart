@@ -1106,3 +1106,541 @@ END;
 
 GO
 
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181210045957_nova')
+BEGIN
+    DECLARE @var24 sysname;
+    SELECT @var24 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[sale]') AND [c].[name] = N'portrait');
+    IF @var24 IS NOT NULL EXEC(N'ALTER TABLE [sale] DROP CONSTRAINT [' + @var24 + '];');
+    ALTER TABLE [sale] DROP COLUMN [portrait];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181210045957_nova')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20181210045957_nova', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181210050103_supernova')
+BEGIN
+    ALTER TABLE [sale] ADD [portrait] varbinary(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181210050103_supernova')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20181210050103_supernova', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    ALTER TABLE [appoinment] DROP CONSTRAINT [FK_appoinment_sale_SaleID];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    DROP TABLE [sale];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    DROP INDEX [IX_appoinment_SaleID] ON [appoinment];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    DECLARE @var25 sysname;
+    SELECT @var25 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[appoinment]') AND [c].[name] = N'SaleID');
+    IF @var25 IS NOT NULL EXEC(N'ALTER TABLE [appoinment] DROP CONSTRAINT [' + @var25 + '];');
+    ALTER TABLE [appoinment] DROP COLUMN [SaleID];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    ALTER TABLE [appoinment] ADD [SaleId] uniqueidentifier NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    CREATE TABLE [AspNetUsers] (
+        [Id] uniqueidentifier NOT NULL,
+        [UserName] nvarchar(256) NULL,
+        [NormalizedUserName] nvarchar(256) NULL,
+        [Email] nvarchar(256) NULL,
+        [NormalizedEmail] nvarchar(256) NULL,
+        [EmailConfirmed] bit NOT NULL,
+        [PasswordHash] nvarchar(max) NULL,
+        [SecurityStamp] nvarchar(max) NULL,
+        [ConcurrencyStamp] nvarchar(max) NULL,
+        [PhoneNumberConfirmed] bit NOT NULL,
+        [TwoFactorEnabled] bit NOT NULL,
+        [LockoutEnd] datetimeoffset NULL,
+        [LockoutEnabled] bit NOT NULL,
+        [AccessFailedCount] int NOT NULL,
+        [Name] nvarchar(max) NULL,
+        [DOB] nvarchar(max) NULL,
+        [PhoneNumber] nvarchar(max) NULL,
+        [Info] nvarchar(max) NULL,
+        [Display] nvarchar(max) NULL,
+        [Gender] nvarchar(max) NULL,
+        [Type] nvarchar(max) NULL,
+        [Address] nvarchar(max) NULL,
+        [Portrait] varbinary(max) NULL,
+        CONSTRAINT [PK_AspNetUsers] PRIMARY KEY ([Id])
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    CREATE TABLE [AspNetRoles] (
+        [Id] uniqueidentifier NOT NULL,
+        [Name] nvarchar(256) NULL,
+        [NormalizedName] nvarchar(256) NULL,
+        [ConcurrencyStamp] nvarchar(max) NULL,
+        CONSTRAINT [PK_AspNetRoles] PRIMARY KEY ([Id])
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    CREATE TABLE [AspNetUserClaims] (
+        [Id] int NOT NULL IDENTITY,
+        [UserId] uniqueidentifier NOT NULL,
+        [ClaimType] nvarchar(max) NULL,
+        [ClaimValue] nvarchar(max) NULL,
+        CONSTRAINT [PK_AspNetUserClaims] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_AspNetUserClaims_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    CREATE TABLE [AspNetUserLogins] (
+        [LoginProvider] nvarchar(450) NOT NULL,
+        [ProviderKey] nvarchar(450) NOT NULL,
+        [ProviderDisplayName] nvarchar(max) NULL,
+        [UserId] uniqueidentifier NOT NULL,
+        CONSTRAINT [PK_AspNetUserLogins] PRIMARY KEY ([LoginProvider], [ProviderKey]),
+        CONSTRAINT [FK_AspNetUserLogins_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    CREATE TABLE [AspNetUserTokens] (
+        [UserId] uniqueidentifier NOT NULL,
+        [LoginProvider] nvarchar(450) NOT NULL,
+        [Name] nvarchar(450) NOT NULL,
+        [Value] nvarchar(max) NULL,
+        CONSTRAINT [PK_AspNetUserTokens] PRIMARY KEY ([UserId], [LoginProvider], [Name]),
+        CONSTRAINT [FK_AspNetUserTokens_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    CREATE TABLE [AspNetRoleClaims] (
+        [Id] int NOT NULL IDENTITY,
+        [RoleId] uniqueidentifier NOT NULL,
+        [ClaimType] nvarchar(max) NULL,
+        [ClaimValue] nvarchar(max) NULL,
+        CONSTRAINT [PK_AspNetRoleClaims] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_AspNetRoleClaims_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    CREATE TABLE [AspNetUserRoles] (
+        [UserId] uniqueidentifier NOT NULL,
+        [RoleId] uniqueidentifier NOT NULL,
+        CONSTRAINT [PK_AspNetUserRoles] PRIMARY KEY ([UserId], [RoleId]),
+        CONSTRAINT [FK_AspNetUserRoles_AspNetRoles_RoleId] FOREIGN KEY ([RoleId]) REFERENCES [AspNetRoles] ([Id]) ON DELETE CASCADE,
+        CONSTRAINT [FK_AspNetUserRoles_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    CREATE INDEX [EmailIndex] ON [AspNetUsers] ([NormalizedEmail]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    CREATE UNIQUE INDEX [UserNameIndex] ON [AspNetUsers] ([NormalizedUserName]) WHERE [NormalizedUserName] IS NOT NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    CREATE INDEX [IX_AspNetRoleClaims_RoleId] ON [AspNetRoleClaims] ([RoleId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    CREATE UNIQUE INDEX [RoleNameIndex] ON [AspNetRoles] ([NormalizedName]) WHERE [NormalizedName] IS NOT NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    CREATE INDEX [IX_AspNetUserClaims_UserId] ON [AspNetUserClaims] ([UserId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    CREATE INDEX [IX_AspNetUserLogins_UserId] ON [AspNetUserLogins] ([UserId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    CREATE INDEX [IX_AspNetUserRoles_RoleId] ON [AspNetUserRoles] ([RoleId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    ALTER TABLE [appoinment] ADD CONSTRAINT [FK_appoinment_AspNetUsers_SaleId] FOREIGN KEY ([SaleId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE NO ACTION;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181215023727_identity')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20181215023727_identity', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181217104517_jupiter')
+BEGIN
+    DECLARE @var26 sysname;
+    SELECT @var26 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[appoinment]') AND [c].[name] = N'sale');
+    IF @var26 IS NOT NULL EXEC(N'ALTER TABLE [appoinment] DROP CONSTRAINT [' + @var26 + '];');
+    ALTER TABLE [appoinment] DROP COLUMN [sale];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181217104517_jupiter')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20181217104517_jupiter', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181218084753_supermoon')
+BEGIN
+    ALTER TABLE [AspNetUsers] ADD [Members] nvarchar(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181218084753_supermoon')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20181218084753_supermoon', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181219024122_bloodmoon')
+BEGIN
+    ALTER TABLE [appoinment] ADD [SEmail] nvarchar(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181219024122_bloodmoon')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20181219024122_bloodmoon', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181219075220_withdraw')
+BEGIN
+    ALTER TABLE [appoinment] ADD [WDay] datetime2 NOT NULL DEFAULT '0001-01-01T00:00:00.0000000';
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181219075220_withdraw')
+BEGIN
+    ALTER TABLE [appoinment] ADD [WMoney] float NOT NULL DEFAULT 0E0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181219075220_withdraw')
+BEGIN
+    ALTER TABLE [appoinment] ADD [WType] nvarchar(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181219075220_withdraw')
+BEGIN
+    ALTER TABLE [appoinment] ADD [WithdrawCode] nvarchar(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181219075220_withdraw')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20181219075220_withdraw', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181222022304_photon')
+BEGIN
+    ALTER TABLE [appoinment] ADD [Photo] varbinary(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181222022304_photon')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20181222022304_photon', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181225081813_feedback')
+BEGIN
+    CREATE TABLE [Feedbacks] (
+        [Id] uniqueidentifier NOT NULL,
+        [Content] nvarchar(max) NOT NULL,
+        [SaleId] uniqueidentifier NOT NULL,
+        CONSTRAINT [PK_Feedbacks] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_Feedbacks_AspNetUsers_SaleId] FOREIGN KEY ([SaleId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181225081813_feedback')
+BEGIN
+    CREATE INDEX [IX_Feedbacks_SaleId] ON [Feedbacks] ([SaleId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181225081813_feedback')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20181225081813_feedback', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181226020601_storage')
+BEGIN
+    DECLARE @var27 sysname;
+    SELECT @var27 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[appoinment]') AND [c].[name] = N'Photo');
+    IF @var27 IS NOT NULL EXEC(N'ALTER TABLE [appoinment] DROP CONSTRAINT [' + @var27 + '];');
+    ALTER TABLE [appoinment] ALTER COLUMN [Photo] nvarchar(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181226020601_storage')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20181226020601_storage', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181228063724_galileo')
+BEGIN
+    ALTER TABLE [appoinment] ADD [NSH1] int NOT NULL DEFAULT 0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181228063724_galileo')
+BEGIN
+    ALTER TABLE [appoinment] ADD [psh1] int NOT NULL DEFAULT 0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20181228063724_galileo')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20181228063724_galileo', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190104050435_andromera')
+BEGIN
+    CREATE TABLE [Request] (
+        [Id] uniqueidentifier NOT NULL,
+        [RequestName] nvarchar(max) NULL,
+        [Subject] nvarchar(max) NULL,
+        [Contents] nvarchar(max) NULL,
+        [Status] int NOT NULL,
+        [OwnerId] uniqueidentifier NULL,
+        CONSTRAINT [PK_Request] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_Request_AspNetUsers_OwnerId] FOREIGN KEY ([OwnerId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE NO ACTION
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190104050435_andromera')
+BEGIN
+    CREATE INDEX [IX_Request_OwnerId] ON [Request] ([OwnerId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190104050435_andromera')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190104050435_andromera', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190105032958_gemini')
+BEGIN
+    ALTER TABLE [Request] DROP CONSTRAINT [FK_Request_AspNetUsers_OwnerId];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190105032958_gemini')
+BEGIN
+    ALTER TABLE [Request] DROP CONSTRAINT [PK_Request];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190105032958_gemini')
+BEGIN
+    EXEC sp_rename N'[Request]', N'Requests';
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190105032958_gemini')
+BEGIN
+    EXEC sp_rename N'[Requests].[IX_Request_OwnerId]', N'IX_Requests_OwnerId', N'INDEX';
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190105032958_gemini')
+BEGIN
+    ALTER TABLE [Requests] ADD CONSTRAINT [PK_Requests] PRIMARY KEY ([Id]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190105032958_gemini')
+BEGIN
+    ALTER TABLE [Requests] ADD CONSTRAINT [FK_Requests_AspNetUsers_OwnerId] FOREIGN KEY ([OwnerId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE NO ACTION;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190105032958_gemini')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190105032958_gemini', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190105073902_Triangum')
+BEGIN
+    ALTER TABLE [AspNetUsers] ADD [NOfFeedbacks] int NOT NULL DEFAULT 0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190105073902_Triangum')
+BEGIN
+    ALTER TABLE [AspNetUsers] ADD [NOfMeetings] int NOT NULL DEFAULT 0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190105073902_Triangum')
+BEGIN
+    ALTER TABLE [AspNetUsers] ADD [NOfRequests] int NOT NULL DEFAULT 0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190105073902_Triangum')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190105073902_Triangum', N'2.1.4-rtm-31024');
+END;
+
+GO
+

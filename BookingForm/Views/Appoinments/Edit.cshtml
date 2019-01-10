@@ -11,7 +11,7 @@
         <form asp-action="Edit">
             <div class="col-md-4 row-md-4">
                 <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-                <input type="hidden" asp-for="ID" />
+                <input type="hidden" asp-for="Id" />
                 <div class="form-group">
                     <label asp-for="Customer" class="control-label"></label>
                     <input asp-for="Customer" class="form-control" />
@@ -81,14 +81,15 @@
                     </select>
                     <span asp-validation-for="Purpose" class="text-danger"></span>
                 </div>
-            </div>
-            <div class="col-md-4 row-md-4">
-                
                 <div class="form-group">
                     <label asp-for="Requires" class="control-label"></label>
                     <input asp-for="Requires" class="form-control" />
                     <span asp-validation-for="Requires" class="text-danger"></span>
                 </div>
+                
+            </div>
+            <div class="col-md-4 row-md-4">
+
                 <div class="form-group">
                     <label asp-for="Price" class="control-label"></label>
                     <input asp-for="Price" class="number" />
@@ -146,9 +147,11 @@
                     <input type="number" asp-for="NSH" class="form-control" />
                     <span asp-validation-for="NSH" class="text-danger"></span>
                 </div>
-                
-            </div>
-            <div class="col-md-4 row-md-4">
+                <div class="form-group">
+                    <label asp-for="NSH1" class="control-label"></label>
+                    <input type="number" asp-for="NSH1" class="form-control" />
+                    <span asp-validation-for="NSH1" class="text-danger"></span>
+                </div>
                 <div class="form-group">
                     <label asp-for="NSHH" class="control-label"></label>
                     <input type="number" asp-for="NSHH" class="form-control" />
@@ -164,6 +167,11 @@
                     <input asp-for="HKTT" class="form-control" />
                     <span asp-validation-for="HKTT" class="text-danger"></span>
                 </div>
+
+
+
+            </div>
+            <div class="col-md-4 row-md-4">
 
                 <div class="form-group">
                     <label asp-for="Contract" class="control-label"></label>
@@ -203,13 +211,37 @@
                     </select>
                 </div>
                 <div class="form-group">
+                    <label class="control-label">Số tiền hoàn trả</label>
+                    <input asp-for="WMoney" id="number" />
+                    <span asp-validation-for="WMoney" class="text-danger"></span>
+                </div>
+                <div>
+                    <label asp-for="WType" class="control-label">Hình thức hoàn tiền</label>
+                    <select asp-for="WType">
+                        <option value="Tiền mặt">Tiền mặt</option>
+                        <option value="Chuyển khoản">Chuyển khoản</option>
+
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Ngày rút cọc</label>
+                    <input type="date" asp-for="WDay" class="form-control" />
+                    <span asp-validation-for="WDay" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Mã phiếu thu (nếu có)</label>
+                    <input asp-for="WithdrawCode" class="form-control" />
+                    <span asp-validation-for="WithdrawCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
                     <label class="control-label">Ghi chú</label>
                     <input asp-for="Note" class="form-control" />
                     <span asp-validation-for="Note" class="text-danger"></span>
                 </div>
+
             </div>
             <div class="form-group">
-                <button type="submit">Lưu lại</button>
+                <button class="btn btn-success" type="submit">Lưu lại</button>
             </div>
         </form>
     </div>
@@ -218,7 +250,7 @@
 <div>
     <a id="home" asp-action="_Home">Quay lại</a>
 </div>
-
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script>
     $('#number').keyup(function (event) {
 

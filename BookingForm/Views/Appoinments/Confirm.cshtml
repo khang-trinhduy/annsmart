@@ -1,10 +1,10 @@
-﻿@model BookingForm.Models.AppModal
+﻿@model BookingForm.Models.Appoinment
 @{
     ViewData["Title"] = "Xác nhận -";
 }
 <img title="Annhome-logo" src="~/images/Ann_Logo.png" style="width:450px; height:228px; display:block;margin-left:auto;margin-right:auto;" alt="Annhome Logo" />
 
-<h3>Hợp đồng số: @Model.appoinment.Contract</h3>
+<h3>Hợp đồng số: @Model.Contract</h3>
 <h3>Số thứ tự ưu tiên:</h3>
 <ul>
     @{
@@ -15,88 +15,105 @@
         //{
         //    fs += "<li>" + t + "</li>";
         //}
-        if (Model.appoinment.NCH1 > 0 || Model.appoinment.NCH2 > 0 || Model.appoinment.NCH3 > 0 || Model.appoinment.NCH21 > 0)
+        if (Model.NCH1 > 0 || Model.NCH2 > 0 || Model.NCH3 > 0 || Model.NCH21 > 0)
         {
             //fs += "<li>Căn hộ: " + Model.appoinment.ph + "</li>";
-            int n = Model.appoinment.NCH1 + Model.appoinment.NCH2 + Model.appoinment.NCH3 + Model.appoinment.NCH21;
+            int n = Model.NCH1 + Model.NCH2 + Model.NCH3 + Model.NCH21;
             switch (n)
             {
                 case 1:
-                    fs += "<li>Căn hộ: " + Model.appoinment.ph + "</li>";
+                    fs += "<li>Căn hộ: " + Model.ph + "</li>";
                     break;
                 case 2:
-                    fs += "<li>Căn hộ: " + Convert.ToString(Model.appoinment.ph - 1) + " và " + Model.appoinment.ph + "</li>";
+                    fs += "<li>Căn hộ: " + Convert.ToString(Model.ph - 1) + " và " + Model.ph + "</li>";
                     break;
                 default:
-                    fs += "<li>Căn hộ: Từ " + Convert.ToString(Model.appoinment.ph - n + 1) + " đến " + Model.appoinment.ph + "</li>";
+                    fs += "<li>Căn hộ: Từ " + Convert.ToString(Model.ph - n + 1) + " đến " + Model.ph + "</li>";
                     break;
 
             }
         }
-        if (Model.appoinment.NMS > 0)
+        if (Model.NMS > 0)
         {
             //fs += "<li>Biệt thự: " + Model.appoinment.pms + "</li>";
-            switch (Model.appoinment.NMS)
+            switch (Model.NMS)
             {
                 case 1:
-                    fs += "<li>Biệt thự: " + Model.appoinment.pms + "</li>";
+                    fs += "<li>Biệt thự: " + Model.pms + "</li>";
                     break;
                 case 2:
-                    fs += "<li>Biệt thự: " + Convert.ToString(Model.appoinment.pms - 1) + " và " + Model.appoinment.pms + "</li>";
+                    fs += "<li>Biệt thự: " + Convert.ToString(Model.pms - 1) + " và " + Model.pms + "</li>";
                     break;
                 default:
-                    fs += "<li>Biệt thự: Từ " + Convert.ToString(Model.appoinment.pms - Model.appoinment.pms + 1) + " đến " + Model.appoinment.pms + "</li>";
+                    fs += "<li>Biệt thự: Từ " + Convert.ToString(Model.pms - Model.pms + 1) + " đến " + Model.pms + "</li>";
                     break;
 
             }
         }
-        if (Model.appoinment.NSH > 0)
+        if (Model.NSH > 0)
         {
             //fs += "<li>Nhà phố: " + Model.appoinment.psh + "</li>";
-            switch (Model.appoinment.NSH)
+            switch (Model.NSH)
             {
                 case 1:
-                    fs += "<li>Nhà phố: " + Model.appoinment.psh + "</li>";
+                    fs += "<li>Biệt thự đơn lập: " + Model.psh + "</li>";
                     break;
                 case 2:
-                    fs += "<li>Nhà phố: " + Convert.ToString(Model.appoinment.psh - 1) + " và " + Model.appoinment.psh + "</li>";
+                    fs += "<li>Biệt thự đơn lập: " + Convert.ToString(Model.psh - 1) + " và " + Model.psh + "</li>";
                     break;
                 default:
-                    fs += "<li>Nhà phố: Từ " + Convert.ToString(Model.appoinment.psh - Model.appoinment.NSH + 1) + " đến " + Model.appoinment.psh + "</li>";
+                    fs += "<li>Biệt thự đơn lập: Từ " + Convert.ToString(Model.psh - Model.NSH + 1) + " đến " + Model.psh + "</li>";
                     break;
 
             }
         }
-        if (Model.appoinment.NSHH > 0)
+        if (Model.NSH1 > 0)
         {
-            //fs += "<li>Shophouse: " + Model.appoinment.pshh + "</li>";
-            switch (Model.appoinment.NSHH)
+            //fs += "<li>Nhà phố: " + Model.appoinment.psh + "</li>";
+            switch (Model.NSH1)
             {
                 case 1:
-                    fs += "<li>Nhà phố thương mại (Shophouse): " + Model.appoinment.pshh + "</li>";
+                    fs += "<li>Biệt thự song lập: " + Model.psh1 + "</li>";
                     break;
                 case 2:
-                    fs += "<li>Nhà phố thương mại (Shophouse): " + Convert.ToString(Model.appoinment.pshh - 1) + " và " + Model.appoinment.pshh + "</li>";
+                    fs += "<li>Biệt thự song lập: " + Convert.ToString(Model.psh1 - 1) + " và " + Model.psh1 + "</li>";
                     break;
                 default:
-                    fs += "<li>Nhà phố thương mại (Shophouse): Từ " + Convert.ToString(Model.appoinment.pshh - Model.appoinment.NSHH + 1) + " đến " + Model.appoinment.pshh + "</li>";
+                    fs += "<li>Biệt thự song lập: Từ " + Convert.ToString(Model.psh1 - Model.NSH1 + 1) + " đến " + Model.psh1 + "</li>";
                     break;
 
             }
         }
-        if (Model.appoinment.NS > 0)
+        if (Model.NSHH > 0)
         {
             //fs += "<li>Shophouse: " + Model.appoinment.pshh + "</li>";
-            switch (Model.appoinment.NS)
+            switch (Model.NSHH)
             {
                 case 1:
-                    fs += "<li>Shop (kios chung cư): " + Model.appoinment.pns + "</li>";
+                    fs += "<li>Nhà phố thương mại (Shophouse): " + Model.pshh + "</li>";
                     break;
                 case 2:
-                    fs += "<li>Shop (kios chung cư): " + Convert.ToString(Model.appoinment.pns - 1) + " và " + Model.appoinment.pns + "</li>";
+                    fs += "<li>Nhà phố thương mại (Shophouse): " + Convert.ToString(Model.pshh - 1) + " và " + Model.pshh + "</li>";
                     break;
                 default:
-                    fs += "<li>Shop (kios chung cư): Từ " + Convert.ToString(Model.appoinment.pns - Model.appoinment.NS + 1) + " đến " + Model.appoinment.pns + "</li>";
+                    fs += "<li>Nhà phố thương mại (Shophouse): Từ " + Convert.ToString(Model.pshh - Model.NSHH + 1) + " đến " + Model.pshh + "</li>";
+                    break;
+
+            }
+        }
+        if (Model.NS > 0)
+        {
+            //fs += "<li>Shophouse: " + Model.appoinment.pshh + "</li>";
+            switch (Model.NS)
+            {
+                case 1:
+                    fs += "<li>Shop (kios chung cư): " + Model.pns + "</li>";
+                    break;
+                case 2:
+                    fs += "<li>Shop (kios chung cư): " + Convert.ToString(Model.pns - 1) + " và " + Model.pns + "</li>";
+                    break;
+                default:
+                    fs += "<li>Shop (kios chung cư): Từ " + Convert.ToString(Model.pns - Model.NS + 1) + " đến " + Model.pns + "</li>";
                     break;
 
             }
@@ -105,5 +122,5 @@
         @Html.Raw(fs)
 </ul>
 <p>Hợp đồng này sẽ thay đổi số thứ tự nếu Quý khách không nộp đủ tiền trong vòng 2 giờ làm việc.</p>
-<a asp-action="Views" asp-route-id="@Model.appoinment.ID">In hợp đồng</a>
+<a asp-action="Views" asp-route-id="@Model.Id">In hợp đồng</a>
 <a asp-action="Home">Trở về trang chính</a>

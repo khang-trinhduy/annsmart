@@ -1,9 +1,9 @@
 ﻿@model BookingForm.Models.Sale
 
 <div style="display:block; height:235px;width:235px;border-radius:50%" class="polaroid">
-    <img id="img" src=@Url.Action("GetPhoto", "Sales", new { id = Model.ID }) style="width:235px;height:235px;border-radius:50%;transition: .5s ease;backface-visibility: hidden; border:0" />
+    <img id="img" src=@Url.Action("GetPhoto", "Sales", new { id = Model.Id }) style="width:235px;height:235px;border-radius:50%;transition: .5s ease;backface-visibility: hidden; border:0" />
         <div class="container">
-    <input asp-for="portrait" type="file" id="portrait" class="inputFile" name="portrait" />
+    <input asp-for="Portrait" type="file" id="portrait" class="inputFile" name="portrait" />
     <label class="photo" style="display:block; margin-top:50px;" for="portrait">Photo</label>
 </div>
     </div>

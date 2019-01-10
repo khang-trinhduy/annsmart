@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BookingForm.Models
 {
-    public class Appoinment
+    public class Appoinment : Appointment
     {
-        public int ID { get; set; }
+        public Guid Id { get; set; }
         [Required]
         [Display(Name = "Họ & tên*", Prompt = "Nguyễn Văn Minh")]
         public string Customer { get; set; }
@@ -73,8 +74,11 @@ namespace BookingForm.Models
         [Display(Name = "SL biệt thự")]
         public int NMS { get; set; }
         [Required]
-        [Display(Name = "SL nhà phố")]
+        [Display(Name = "SL BTDL")]
         public int NSH { get; set; }
+        [Required]
+        [Display(Name = "SL BTSL")]
+        public int NSH1 { get; set; }
         [Required]
         [Display(Name = "SL shophouse*")]
         public int NSHH { get; set; }
@@ -86,8 +90,6 @@ namespace BookingForm.Models
         public string HKTT { get; set; }
         //[Required]
         //[RegularExpression(@"^([a-z0-9\.\-]+@[a-z\-]+\.[\w]+)$", ErrorMessage = "Email không tồn tại")]
-        [Display(Name = "Email sale*")]
-        public string sale { get; set; }
         [Required]
         [Display(Name = "Confirm Password*")]
         [DataType(DataType.Password)]
@@ -104,8 +106,10 @@ namespace BookingForm.Models
         public string dTime { get; set; }
         [Display(Name = "Số thứ tự ưu tiên Căn hộ")]
         public int ph { get; set; }
-        [Display(Name = "Số thứ tự ưu tiên Nhà phố")]
+        [Display(Name = "Số thứ tự ưu tiên Biệt thự ĐL")]
         public int psh { get; set; }
+        [Display(Name = "Số thứ tự ưu tiên Biệt thự SL")]
+        public int psh1 { get; set; }
         [Display(Name = "Số thứ tự ưu tiên Shophouse")]
         public int pshh { get; set; }
         [Display(Name = "Số thứ tự ưu tiên Biệt thự")]
@@ -121,9 +125,17 @@ namespace BookingForm.Models
         [Display(Name = "Số chính thức")]
         public bool Official { get; set; }
         public bool New { get; set; }
-        public bool OldContract { get; set; }
+        public bool OldContract { get; set; }                               
         public bool supporter { get; set; }
         public bool IsActive { get; set; }
+        public virtual Sale Sale { get; set; }
+        public string SEmail { get; set; }
+        [DataType(DataType.Date)]
+        public DateTime  WDay { get; set; }
+        public string WithdrawCode { get; set; }
+        public double WMoney { get; set; }
+        public string WType { get; set; }
+        public string Photo { get; set; }
         public Appoinment() { }
 
         public static implicit operator Appoinment(List<Appoinment> v)

@@ -9,9 +9,9 @@
 <span style="display:block; height:50px"></span>
 <hr />
 <div class="tab">
-    <button class="tablinks" id="setting">Cài đặt</button>
-    <button class="tablinks" onclick="openCity(event, 'Profile')" id="defaultOpen">Hồ sơ cá nhân</button>
-    <button class="tablinks" onclick="openCity(event, 'Account')">Tài khoản</button>
+    <button class="tablinks" id="setting">Setting</button>
+    <button class="tablinks" onclick="openCity(event, 'Profile')" id="defaultOpen">Profile</button>
+    <button class="tablinks" onclick="openCity(event, 'Account')">Account</button>
     <button class="tablinks" onclick="openCity(event, 'Email')">Email</button>
 </div>
 
@@ -163,7 +163,7 @@
         var curr = $("#cp").val();
         var np = $("#np").val();
         var rcp = $("#rcp").val();
-        if (@Model.pass != curr) {
+        if (@Model.PasswordHash != curr) {
             $("#warning").val() = "Mật khẩu hiện tại không đúng";
             $("#cp").val() = "";
             event.preventDefault();

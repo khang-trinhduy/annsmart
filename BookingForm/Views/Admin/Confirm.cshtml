@@ -8,7 +8,7 @@
 <div class="row">
     <div class="col-md-6">
         <form asp-action="Confirmed" method="post">
-            <input value="@Model.Contract" asp-for="Contract" type="hidden" />
+            <input value="@Model.Id" asp-for="Id" type="hidden" />
             <label class="control-label">Số tiền đã nộp</label>
             <input class="number" asp-for="Cash" />
             <label asp-for="dTime" class="control-label"></label>
@@ -24,7 +24,11 @@
         </form>
     </div>
 </div>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
 <script>
+    window.jQuery || document.write('<script src="http://mysite.com/jquery.min.js"><\/script>');
+</script>
+<script type="text/javascript" language="JavaScript">
     function add(number) {
 
         return (number < 10 ? '0' : '') + number

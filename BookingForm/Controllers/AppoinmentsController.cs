@@ -12,26 +12,41 @@ using System.IO;
 using Newtonsoft.Json;
 using System.Globalization;
 using reCAPTCHA.AspNetCore;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.FileProviders;
+using System.Net.Http.Headers;
+using MimeKit;
+using MailKit.Net.Smtp;
 
 namespace BookingForm.Controllers
 {
+    [Authorize(Roles = "Administrator, Sale, TeamLeader, Leader")]
     public class AppoinmentsController : Controller
     {
         private readonly BookingFormContext _context;
+        private readonly UserManager<Sale> _userManager;
         //private readonly List<Sale> sales;
         private IRecaptchaService _recaptcha;
         private readonly List<Admin> admins;
+        private readonly IHostingEnvironment _environment;
+        private readonly IFileProvider _fileProvider;
 
-        public AppoinmentsController(BookingFormContext context, IRecaptchaService recaptcha)
+        public AppoinmentsController(BookingFormContext context, IRecaptchaService recaptcha, UserManager<Sale> userManager, IFileProvider fileProvider, IHostingEnvironment IHostingEnvironment)
         {
+            _fileProvider = fileProvider;
+            _environment = IHostingEnvironment;
+            _userManager = userManager;
             _recaptcha = recaptcha; 
             _context = context;
-            StreamReader r = new StreamReader("sales.json");
-            string json = r.ReadToEnd();
-            //sales = JsonConvert.DeserializeObject<List<Sale>>(json);
-            StreamReader a = new StreamReader("admins.json");
-            string jsona = a.ReadToEnd();
-            admins = JsonConvert.DeserializeObject<List<Admin>>(jsona);
+            //StreamReader r = new StreamReader("sales.json");
+            //string json = r.ReadToEnd();                      select details => bool (  id + id ban ghi, operation: crud) 
+            ////sales = JsonConvert.DeserializeObject<List<Sale>>(json);
+            //StreamReader a = new StreamReader("admins.json");
+            //string jsona = a.ReadToEnd();
+            //admins = JsonConvert.DeserializeObject<List<Admin>>(jsona);
         }
         public static string So_chu(double gNum)
         {
@@ -205,21 +220,17 @@ namespace BookingForm.Controllers
         }
 
         //[HttpPost]
-        public async Task<IActionResult> Views(int? id)
+        public async Task<IActionResult> Views(Guid id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
             var appoinment = await _context.appoinment
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
+            var curUser = await _userManager.GetUserAsync(User);
             //Random rand = new Random();
             //int rd = rand.Next(100, 151);
             //ViewBag.rd = appoinment.Priority;
-            if(appoinment == null)
+            if (appoinment == null)
             {
-                appoinment = await _context.appoinment.FirstOrDefaultAsync(m => m.ID == id);
+                appoinment = await _context.appoinment.FirstOrDefaultAsync(m => m.Id == id);
             }
             ViewBag.Money_Letters = So_chu(appoinment.Money);
             string temp = (appoinment.Money).ToString("N", new CultureInfo("is-IS"));
@@ -232,8 +243,13 @@ namespace BookingForm.Controllers
             return View(appoinment);
         }
 
+        public async Task<IActionResult> Index()
+        {
+            return View();
+        }
+
         //[HttpPost]
-        public async Task<IActionResult> Draft(int id)
+        public async Task<IActionResult> Draft(Guid id)
         {
             if (id == null)
             {
@@ -241,13 +257,13 @@ namespace BookingForm.Controllers
             }
 
             var appoinment = await _context.appoinment
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             //Random rand = new Random();
             //int rd = rand.Next(100, 151);
             //ViewBag.rd = appoinment.Priority;
             if (appoinment == null)
             {
-                appoinment = await _context.appoinment.FirstOrDefaultAsync(m => m.ID == id);
+                appoinment = await _context.appoinment.FirstOrDefaultAsync(m => m.Id == id);
             }
             ViewBag.Money_Letters = So_chu(appoinment.Money);
             string temp = (appoinment.Money).ToString("N", new CultureInfo("is-IS"));
@@ -269,7 +285,7 @@ namespace BookingForm.Controllers
         }
 
         //[HttpPost]
-        public async Task<IActionResult> Print(int? id)
+        public async Task<IActionResult> Print(Guid? id)
         {
             if (id == null)
             {
@@ -277,13 +293,13 @@ namespace BookingForm.Controllers
             }
 
             var appoinment = await _context.appoinment
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             //Random rand = new Random();
             //int rd = rand.Next(100, 151);
             //ViewBag.rd = appoinment.Priority;
             if (appoinment == null)
             {
-                appoinment = await _context.appoinment.FirstOrDefaultAsync(m => m.ID == id);
+                appoinment = await _context.appoinment.FirstOrDefaultAsync(m => m.Id == id);
             }
             ViewBag.Money_Letters = So_chu(appoinment.Money);
             string temp = (appoinment.Money).ToString("N", new CultureInfo("is-IS"));
@@ -296,15 +312,9 @@ namespace BookingForm.Controllers
             return View(appoinment);
         }
 
-        // GET: Appoinments
-        public async Task<IActionResult> Index()
-        {
-
-            return View(await _context.appoinment.Where(a => a.IsActive == true).ToListAsync());
-        }
 
         // GET: Appoinments/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(Guid? id)
         {
             if (id == null)
             {
@@ -312,7 +322,7 @@ namespace BookingForm.Controllers
             }
 
             var appoinment = await _context.appoinment
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (appoinment == null)
             {
                 return NotFound();
@@ -333,22 +343,22 @@ namespace BookingForm.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Customer,Gender,Address,Phone,Email,Job,WorkPlace,Cmnd,Day,Place,Money,Purpose,Requires,Price,Details,DType,Cash,NCH1,NCH2,NCH21,NCH3,NMS,NS,NSHH,NSH,HKTT,password,Contract")] Appoinment appoinment)
+        public async Task<IActionResult> Create([Bind("Customer,Gender,Address,Phone,Email,Job,WorkPlace,Cmnd,Day,Place,Money,Purpose,Requires,Price,Details,DType,Cash,NCH1,NCH2,NCH21,NCH3,NMS,NS,NSHH,NSH,HKTT,password,Contract, NSH1")] Appoinment appoinment, List<IFormFile> files)
         {
             //if (ModelState.IsValid)
             //{
             var sales = await _context.sale.ToListAsync();
-            var cur_sale = sales.FirstOrDefault(s => s.pass == appoinment.password);
-            TempData["name"] = cur_sale.display;
-            appoinment.sale = cur_sale.email;
-            appoinment.SaleDetails = cur_sale.info;
-            string str = "";
-            if(appoinment.sale == null)
-            {
+            var curUser = await _userManager.GetUserAsync(User);
+            PasswordHasher<Sale> hasher = new PasswordHasher<Sale>();
+            PasswordVerificationResult result = hasher.VerifyHashedPassword(curUser,curUser.PasswordHash, appoinment.password);
+            if (result == PasswordVerificationResult.Failed)
                 return View();
-            }
-            var tmp = await _context.sale.FirstOrDefaultAsync(m => m.email == appoinment.sale && m.pass == appoinment.password);
-            if (tmp == null)
+            appoinment.password = hasher.HashPassword(curUser, appoinment.password);
+            appoinment.SaleDetails = curUser.Info;
+            appoinment.Sale = curUser;
+            appoinment.SEmail = curUser.Email;
+            string str = "";
+            if(appoinment.Sale == null)
             {
                 return View();
             }
@@ -372,7 +382,12 @@ namespace BookingForm.Controllers
                     if (appoinment.NSH > 0)
                     {
                         appoinment.psh = _context.appoinment.Where(a => a.IsActive == true).Max(c => c.psh) + appoinment.NSH;
-                        str += "Nhà phố: " + Convert.ToString(appoinment.psh) + "\n";
+                        str += "Biệt thự ĐL: " + Convert.ToString(appoinment.psh) + "\n";
+                    }
+                    if (appoinment.NSH1 > 0)
+                    {
+                        appoinment.psh1 = _context.appoinment.Where(a => a.IsActive == true).Max(c => c.psh1) + appoinment.NSH1;
+                        str += "Biệt thự SL: " + Convert.ToString(appoinment.psh1) + "\n";
                     }
                     if (appoinment.NSHH > 0)
                     {
@@ -397,33 +412,102 @@ namespace BookingForm.Controllers
                 appoinment.cTime = DateTime.Now.ToString("ddMMyyyy HH:mm:ss.FFFFFFF");
                 appoinment.Confirm = false;
                 appoinment.IsActive = true;
+                var newFileName = string.Empty;
+                List<string> portrait = new List<string>();
+                if (files != null)
+                {
+                    var fileName = string.Empty;
+                    string PathDB = string.Empty;
+
+                    foreach (var file in files)
+                    {
+                        if (file.Length > 0)
+                        {
+                            //Getting FileName
+                            fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+
+                            //Assigning Unique Filename (Guid)
+                            var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+
+                            //Getting file Extension
+                            var FileExtension = Path.GetExtension(fileName);
+
+                            // concating  FileName + FileExtension
+                            newFileName = myUniqueFileName + FileExtension;
+
+                            // Combines two strings into a path.
+                            fileName = Path.Combine(_environment.WebRootPath, "storage") + $@"\{newFileName}";
+
+                            // if you want to store path of folder in database                
+
+                            portrait.Add(newFileName);
+
+                            using (FileStream fs = System.IO.File.Create(fileName))
+                            {
+                                file.CopyTo(fs);
+                                fs.Flush();
+                            }
+                        }
+                    }
+                    if (portrait.Count > 1)
+                    {
+                        appoinment.Photo = portrait[0] + " " + portrait[1];
+                    }
+                    else if(portrait.Count > 0)
+                    {
+                        appoinment.Photo = portrait[0];
+                    }
+                }
+
                 _context.Add(appoinment);
-                AppModal modal = new AppModal();
-                modal.appoinment = appoinment;
-                modal.sale = cur_sale;
                 await _context.SaveChangesAsync();
-                
+
+                string contents = curUser.Name + " đã tạo một HĐ mới trên hệ thống AnnSmart" + " vào lúc " + DateTime.Now.ToString("HH:mm:ss MM-dd-yyyy");
+                SendMail("HĐ đặt chỗ", new MailboxAddress("Hương Ngô", "huong.ngo@annhome.vn"), contents);
+
                 TempData["ct"] = appoinment.Contract;
                 TempData["pt"] = str;
-                return View("Confirm",modal);
+                return RedirectToAction("Confirm", new { appoinment.Id });
             }
-            //}
-            //return NotFound();
+        }
+
+        private static void SendMail(string subject, MailboxAddress reciever, string contents)
+        {
+            var message = new MimeMessage();
+            message.To.Add(reciever);
+            message.From.Add(new MailboxAddress("AnnSmart", "annsmart@annhome.vn"));
+            message.Subject = subject;
+
+            message.Body = new TextPart("plain")
+            {
+                Text = contents
+            };
+            using (var client = new SmtpClient())
+            {
+                client.ServerCertificateValidationCallback = (s, c, h, e) => true;
+                client.Connect("smtp-mail.outlook.com", 587, false);
+
+                client.Authenticate("annsmart@annhome.vn", "kh@ng1512");//Nnhm2018
+
+                client.Send(message);
+                client.Disconnect(true);
+
+            }
         }
 
         public IActionResult Home(Sale sale)
         {
-            return RedirectToAction("Index", "Login");
+            return RedirectToAction("Dashboard", "Home");
         }
 
-        public IActionResult Confirm(AppModal app)
+        public async Task<IActionResult> Confirm(Guid ? id)
         {
-            return View(app);
+            var a = await _context.appoinment.FindAsync(id);
+            return View(a);
         }
-
 
         // GET: Appoinments/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
             if (id == null)
             {
@@ -438,6 +522,80 @@ namespace BookingForm.Controllers
             return View("Edit", appoinment);
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Passport(Guid ? id)
+        {
+            var a = await _context.appoinment.FindAsync(id);
+            if (a != null)
+            {
+                return View(a);
+            }
+            return View("Error");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Passport([Bind("Id", "Customer")] Appoinment a, List<IFormFile> files)
+        {
+            var app = await _context.appoinment.FindAsync(a.Id);
+            if (app != null)
+            {
+                var newFileName = string.Empty;
+                List<string> portrait = new List<string>();
+                if (files != null)
+                {
+                    var fileName = string.Empty;
+                    string PathDB = string.Empty;
+
+                    foreach (var file in files)
+                    {
+                        if (file.Length > 0)
+                        {
+                            //Getting FileName
+                            fileName = ContentDispositionHeaderValue.Parse(file.ContentDisposition).FileName.Trim('"');
+
+                            //Assigning Unique Filename (Guid)
+                            var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+
+                            //Getting file Extension
+                            var FileExtension = Path.GetExtension(fileName);
+
+                            // concating  FileName + FileExtension
+                            newFileName = myUniqueFileName + FileExtension;
+
+                            // Combines two strings into a path.
+                            fileName = Path.Combine(_environment.WebRootPath, "storage") + $@"\{newFileName}";
+
+                            // if you want to store path of folder in database                
+
+                            portrait.Add(newFileName);
+
+                            using (FileStream fs = System.IO.File.Create(fileName))
+                            {
+                                file.CopyTo(fs);
+                                fs.Flush();
+                            }
+                        }
+                    }
+                    if (portrait.Count > 1)
+                    {
+                        app.Photo = portrait[0] + " " + portrait[1];
+                    }
+                    else if (portrait.Count > 0)
+                    {
+                        app.Photo = portrait[0];
+                    }
+                }
+                _context.Update(app);
+                await _context.SaveChangesAsync();
+                TempData["StatusMessage"] = "Upload successful!";
+                return View();
+            }
+            else
+            {
+                TempData["StatusMessage"] = "Failed to upload!";
+            }
+            return View();
+        }
 
 
         // POST: Appoinments/Edit/5
@@ -445,7 +603,7 @@ namespace BookingForm.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("ID,Customer, Gender, Address,Phone,Email, Job, WorkPlace,Cmnd, Day, Place, Money, Purpose, Requires, Details, DType, Cash, NCH1,NCH2, NCH21, NCH3, NMS,NSH,NSHH,NS, HKTT, Contract, cTime, dTime, Deposit, Note, IsActive")]Appoinment appoinment)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Customer, Gender, Address,Phone,Email, Job, WorkPlace,Cmnd, Day, Place, Money, Purpose, Requires, Details, DType, Cash, NCH1,NCH2, NCH21, NCH3, NMS,NSH, NSH1,NSHH,NS, HKTT, Contract, cTime, dTime,Price, Deposit, Note, IsActive, WDay, WithdrawCode, WMoney, WType")]Appoinment appoinment)
         {
             //if (ModelState.IsValid)
             //{
@@ -474,14 +632,20 @@ namespace BookingForm.Controllers
                 tmp.NCH21 = appoinment.NCH21;
                 tmp.NCH3 = appoinment.NCH3;
                 tmp.NMS = appoinment.NMS;
+                tmp.Price = appoinment.Price;
                 tmp.NS = appoinment.NS;
                 tmp.NSH = appoinment.NSH;
+                tmp.NSH1 = appoinment.NSH1;
                 tmp.NSHH = appoinment.NSHH;
                 tmp.HKTT = appoinment.HKTT;
                 tmp.Contract = appoinment.Contract;
                 tmp.Deposit = appoinment.Deposit;
                 tmp.Note = appoinment.Note;
                 tmp.IsActive = appoinment.IsActive;
+                tmp.WDay = appoinment.WDay;
+                tmp.WithdrawCode = appoinment.WithdrawCode;
+                tmp.WMoney = appoinment.WMoney;
+                tmp.WType = appoinment.WType;
                 _context.Update(tmp);
                 await _context.SaveChangesAsync();
             }
@@ -489,20 +653,8 @@ namespace BookingForm.Controllers
             {
                 return NotFound();
             }
-            Admin ad = new Admin();
-            try
-            {
-                ad = admins[0];
-            }
-            catch (Exception)
-            {
+            return RedirectToAction("Dashboard", "Admin");
 
-                throw;
-            }
-
-            return RedirectToAction("_Home", "Admin");
-            //}
-            //return View();
         }
 
         private static string Extract(string time)
@@ -516,7 +668,7 @@ namespace BookingForm.Controllers
         }
 
         // GET: Appoinments/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(Guid? id)
         {
             if (id == null)
             {
@@ -524,7 +676,7 @@ namespace BookingForm.Controllers
             }
 
             var appoinment = await _context.appoinment
-                .FirstOrDefaultAsync(m => m.ID == id);
+                .FirstOrDefaultAsync(m => m.Id == id);
             if (appoinment == null)
             {
                 return NotFound();
@@ -535,10 +687,11 @@ namespace BookingForm.Controllers
 
         public async Task UpdatePriority(int id)
         {
-            var appoinments = _context.appoinment.Where(a => a.Contract > id && a.IsActive == true).OrderBy(a => a.ID).ToList();
+            var appoinments = _context.appoinment.Where(a => a.Contract > id && a.IsActive == true).OrderBy(a => a.Id).ToList();
             var tmp = await _context.appoinment.FirstOrDefaultAsync(m => m.Contract == id);
             int ph = tmp.NCH1 + tmp.NCH2 + tmp.NCH3 + tmp.NCH21;
             int psh = tmp.NSH;
+            int psh1 = tmp.NSH1;
             int pshh = tmp.NSHH;
             int pms = tmp.NMS;
             int pns = tmp.NS;
@@ -549,6 +702,7 @@ namespace BookingForm.Controllers
                 {
                     a.ph -= ph;
                     a.psh -= psh;
+                    a.psh1 -= psh1;
                     a.pshh -= pshh;
                     a.pms -= pms;
                     a.pns -= pns;
@@ -582,25 +736,26 @@ namespace BookingForm.Controllers
             var meeting = _context.appoinment.First();
             int ph = _context.appoinment.Max(m => m.ph);
             int psh = _context.appoinment.Max(m => m.psh);
+            int psh1 = _context.appoinment.Max(m => m.psh1);
             int pshh = _context.appoinment.Max(m => m.pshh);
             int pms = _context.appoinment.Max(m => m.pms);
             int pns = _context.appoinment.Max(m => m.pns);
             AdminModal modal = new AdminModal();
-            modal.admin = ad;
             modal.appoinment = meeting;
             modal.appoinments = meetings;
             modal.officials = new List<int>();
             modal.officials.Add(ph + 1);
             modal.officials.Add(psh + 1);
+            modal.officials.Add(psh1 + 1);
             modal.officials.Add(pshh + 1);
             modal.officials.Add(pms + 1);
             modal.officials.Add(pns + 1);
             return View("/Views/Admin/Home.cshtml", modal);
         }
 
-        private bool AppoinmentExists(int id)
+        private bool AppoinmentExists(Guid id)
         {
-            return _context.appoinment.Any(e => e.ID == id);
+            return _context.appoinment.Any(e => e.Id == id);
         }
     }
 }

@@ -6,15 +6,54 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Migrations\20181213083553_identity.cs" />
+    <Compile Remove="Migrations\20181213083553_identity.Designer.cs" />
+    <Compile Remove="Migrations\20181214120602_new_identit.cs" />
+    <Compile Remove="Migrations\20181214120602_new_identit.Designer.cs" />
+    <Compile Remove="Migrations\20181214120935_idniy.cs" />
+    <Compile Remove="Migrations\20181214120935_idniy.Designer.cs" />
+    <Compile Remove="Migrations\20181215021358_identity.cs" />
+    <Compile Remove="Migrations\20181215021358_identity.Designer.cs" />
+    <Compile Remove="Migrations\20181215022144_portrait.cs" />
+    <Compile Remove="Migrations\20181215022144_portrait.Designer.cs" />
+    <Compile Remove="Migrations\20181215022311_new_identity.cs" />
+    <Compile Remove="Migrations\20181215022311_new_identity.Designer.cs" />
+    <Compile Remove="Migrations\20181215022814_portrait.cs" />
+    <Compile Remove="Migrations\20181215022814_portrait.Designer.cs" />
+    <Compile Remove="Migrations\20181217063753_icollection.cs" />
+    <Compile Remove="Migrations\20181217063753_icollection.Designer.cs" />
+    <Compile Remove="Migrations\20181217093844_guid.cs" />
+    <Compile Remove="Migrations\20181217093844_guid.Designer.cs" />
+    <Compile Remove="Migrations\20181217094250_guid-meeting.cs" />
+    <Compile Remove="Migrations\20181217094250_guid-meeting.Designer.cs" />
+    <Compile Remove="Migrations\20181217094418_jupiter.cs" />
+    <Compile Remove="Migrations\20181217094418_jupiter.Designer.cs" />
+    <Compile Remove="Migrations\20181218083609_supermoon.cs" />
+    <Compile Remove="Migrations\20181218083609_supermoon.Designer.cs" />
+    <Compile Remove="Migrations\20181219023830_bloodmoon.cs" />
+    <Compile Remove="Migrations\20181219023830_bloodmoon.Designer.cs" />
+    <Compile Remove="Migrations\20181219070653_withdraw.cs" />
+    <Compile Remove="Migrations\20181219070653_withdraw.Designer.cs" />
+    <Compile Remove="Migrations\20181219071159_withdraw.cs" />
+    <Compile Remove="Migrations\20181219071159_withdraw.Designer.cs" />
+    <Compile Remove="Migrations\20181219072910_square.cs" />
+    <Compile Remove="Migrations\20181219072910_square.Designer.cs" />
+    <Compile Remove="Migrations\20181219073100_withdraw.cs" />
+    <Compile Remove="Migrations\20181219073100_withdraw.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="C:\Users\trinh\Documents\sales.json" Link="sales.json" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Chart.js" Version="2.7.3" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.8.1" />
     <PackageReference Include="DotNetCore.NPOI" Version="1.2.1" />
     <PackageReference Include="EPPlus.Core" Version="1.5.4" />
     <PackageReference Include="FontAwesome" Version="4.7.0" />
     <PackageReference Include="IdentityModel" Version="3.10.1" />
+    <PackageReference Include="MailKit" Version="2.1.1" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.1.3" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
@@ -26,6 +65,37 @@
     <Folder Include="ViewModels\" />
     <Folder Include="wwwroot\images\Profile\" />
     <Folder Include="wwwroot\Json\" />
+    <Folder Include="wwwroot\storage\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Update="Views\Admin\Cancelled.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Admin\_StatusMessage.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Appoinments\_StatusMessage.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Home\_StatusMessage.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Managers\Approve.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Managers\Employee.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Managers\Index.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Managers\Request.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
+    <Content Update="Views\Managers\_StatusMessage.cshtml">
+      <Pack>$(IncludeRazorContentInPack)</Pack>
+    </Content>
   </ItemGroup>
 
 </Project>

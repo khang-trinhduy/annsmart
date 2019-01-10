@@ -8,8 +8,6 @@
 }
 <img title="Annhome-logo" src="~/images/Ann_Logo.png" style="width:340px; height:172px; display:block;margin-left:auto;margin-right:auto;" alt="Annhome Logo" />
 
-<h2 style="text-align:right">Xin chào  @Model.manager.FullName</h2>
-
 <h6 style="font-style:italic; text-align:right">TP. Hồ Chí Minh, ngày @DateTime.Now.Day  tháng @DateTime.Now.Month năm @DateTime.Now.Year</h6>
 
 <h2 style="text-align:center; font-family:Calibri">Chỉ tiêu</h2>
@@ -51,74 +49,74 @@
                     @count
                 </td>
                 <td>
-                    @Html.DisplayFor(modelItem => item.name)
+                    @Html.DisplayFor(modelItem => item.Name)
                 </td>
                 @{
 
-                    int temp = Model.appoinments.Where(m => m.sale == item.email && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.AddMonths(-1).Month).Sum(m => m.NCH1 + m.NCH2 + m.NCH21 + m.NCH3);
+                    int temp = Model.appoinments.Where(m => m.Sale == item && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.AddMonths(-1).Month).Sum(m => m.NCH1 + m.NCH2 + m.NCH21 + m.NCH3);
                 }
                 <td>
                     @temp
                 </td>
                 @{
 
-                    int temp1 = Model.appoinments.Where(m => m.sale == item.email && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.Month).Sum(m => m.NCH1 + m.NCH2 + m.NCH21 + m.NCH3);
+                    int temp1 = Model.appoinments.Where(m => m.Sale == item && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.Month).Sum(m => m.NCH1 + m.NCH2 + m.NCH21 + m.NCH3);
                 }
                 <td>
                     @temp1
                 </td>
                 @{
 
-                    int temp2 = Model.appoinments.Where(m => m.sale == item.email && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.AddMonths(-1).Month).Sum(m => m.NMS);
+                    int temp2 = Model.appoinments.Where(m => m.Sale == item && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.AddMonths(-1).Month).Sum(m => m.NMS);
                 }
                 <td>
                     @temp2
                 </td>
                 @{
 
-                    int temp3 = Model.appoinments.Where(m => m.sale == item.email && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.Month).Sum(m => m.NMS);
+                    int temp3 = Model.appoinments.Where(m => m.Sale == item && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.Month).Sum(m => m.NMS);
                 }
                 <td>
                     @temp3
                 </td>
                 @{
 
-                    int temp4 = Model.appoinments.Where(m => m.sale == item.email && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.AddMonths(-1).Month).Sum(m => m.NSH);
+                    int temp4 = Model.appoinments.Where(m => m.Sale == item && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.AddMonths(-1).Month).Sum(m => m.NSH);
                 }
                 <td>
                     @temp4
                 </td>
                 @{
 
-                    int temp5 = Model.appoinments.Where(m => m.sale == item.email && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.Month).Sum(m => m.NSH);
+                    int temp5 = Model.appoinments.Where(m => m.Sale == item && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.Month).Sum(m => m.NSH);
                 }
                 <td>
                     @temp5
                 </td>
                 @{
 
-                    int temp6 = Model.appoinments.Where(m => m.sale == item.email && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.AddMonths(-1).Month).Sum(m => m.NSHH);
+                    int temp6 = Model.appoinments.Where(m => m.Sale == item && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.AddMonths(-1).Month).Sum(m => m.NSHH);
                 }
                 <td>
                     @temp6
                 </td>
                 @{
 
-                    int temp7 = Model.appoinments.Where(m => m.sale == item.email && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.Month).Sum(m => m.NSHH);
+                    int temp7 = Model.appoinments.Where(m => m.Sale == item && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.Month).Sum(m => m.NSHH);
                 }
                 <td>
                     @temp7
                 </td>
                 @{
 
-                    int temp8 = Model.appoinments.Where(m => m.sale == item.email && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.AddMonths(-1).Month).Sum(m => m.NS);
+                    int temp8 = Model.appoinments.Where(m => m.Sale == item && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.AddMonths(-1).Month).Sum(m => m.NS);
                 }
                 <td>
                     @temp8
                 </td>
                 @{
 
-                    int temp9 = Model.appoinments.Where(m => m.sale == item.email && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.Month).Sum(m => m.NS);
+                    int temp9 = Model.appoinments.Where(m => m.Sale == item && m.dTime != null && DateTime.ParseExact(m.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.Month).Sum(m => m.NS);
                 }
                 <td>
                     @temp9
