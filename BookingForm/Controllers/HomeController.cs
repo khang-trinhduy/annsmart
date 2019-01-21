@@ -15,11 +15,11 @@ using Microsoft.EntityFrameworkCore;
 using MimeKit;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
+using Serilog;
 using Request = BookingForm.Models.Request;
 
 namespace BookingForm.Controllers
 {
-    [Authorize(Roles = "Sale, Administrator, Manager, Leader, TeamLeader")]
     public class HomeController : Controller
     {
         private readonly UserManager<Sale> _userManager;
@@ -40,14 +40,160 @@ namespace BookingForm.Controllers
             //sales = JsonConvert.DeserializeObject<List<Sale>>(json);
         }
 
+        public async Task<bool> IsAuthorized(Sale sale, string resource, string operation)
+        {
+            var roles = await _userManager.GetRolesAsync(sale);
+            var grants = await _context.Grants.Where(g => g.Operation == operation && g.Resource == resource && g.Permission == "Allow").ToListAsync();
+            if (sale == null)
+            {
+                return false;
+            }
+            if (grants != null)
+            {
+                foreach (var grant in grants)
+                {
+                    if (roles.Contains(grant.RoleName))
+                    {
+                        return true;
+                    }
+                }
+            }
+            Log.Warning("Access denied! User " + sale.Name + " tried to " + operation + " " + resource + ".");
+            return false;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Contracts(Guid id)
+        {
+            ViewBag.plan = await _context.Plans.ToListAsync();
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Create");
+            TempData["StatusMessage"] = TempData["StatusMessage"];
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
+            var contact = await _context.Contacts.FindAsync(id);
+            if (contact == null)
+            {
+                return NotFound("Can't find any contact with id " + id);
+            }
+            TempData["Customer"] = contact.Name;
+            TempData["Phone"] = contact.Phone;
+            TempData["Email"] = contact.Email;
+            return RedirectToAction("Create", "Appoinments");
+        }
+
+        public async Task<IActionResult> AddContact()
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contacts", "Create");
+            TempData["StatusMessage"] = TempData["StatusMessage"];
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
+            ViewBag.sales = await _context.sale.Where(s => s.Type == "Internal").ToListAsync();
+            return View();
+        }
+
+        public async Task<IActionResult> Contacts()
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contacts", "List");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
+            var contacts = await _context.Contacts.Where(c => c.Provider == curUser).ToListAsync();
+            foreach (Contact contact in contacts)
+            {
+                if (contact.AppoinmentId != null)
+                {
+                    contact.Appoinment = await _context.appoinment.FindAsync(contact.AppoinmentId);
+                }
+                if (contact.SupporterId != null)
+                {
+                    contact.Supporter = await _context.sale.FindAsync(contact.SupporterId);
+                }
+                _context.Update(contact);
+            }
+            return View(contacts);
+        }
+
+        // POST: Collabor/Create
+        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
+        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> AddContact([Bind("Name,Phone,Email,Note,Condition,CNumber,PNumber,Ch,Price,Policy,Charges,Totals,PDate, q4a, q5a" +
+            ",q5b,q5c,q5d,q6a,q6b,q6c,q7a,q7b,q7c,q7d,q7e,q7f,q7g,q7h,q7i,q7j,q7k,q7l,q7m,SupporterId")] Contact contact)
+        {
+            //if (ModelState.IsValid)
+            //{
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contacts", "Create");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
+            var tmp = _context.Contacts.SingleOrDefault(m => m.Phone == contact.Phone);
+            if (tmp != null)
+            {
+                TempData["StatusMessage"] = "Khách hàng đã tồn tại trong hệ thống";
+                return RedirectToAction("AddContact");
+            }
+            contact.Signed = false;
+            contact.PDate = DateTime.Now;
+            _context.Contacts.Add(contact);
+            contact.Provider = curUser;
+            contact.Charges = 0.25;
+            TempData["StatusMessage"] = "Thêm thành công";
+            if (contact.q4a == null || (contact.q5a == false && contact.q5b == false && contact.q5c == false && contact.q5d == false)
+                || (contact.q6b == false && contact.q6c == false && contact.q6a == false) || (contact.q7l == false && contact.q7k == false &&
+                contact.q7a == false && contact.q7b == false && contact.q7e == false && contact.q7h == false && contact.q7j == false &&
+                contact.q7d == false && contact.q7c == false && contact.q7f == false && contact.q7g == false && contact.q7i == false &&
+                contact.q7m == false) || contact.Note == null)
+            {
+                contact.Charges = 0.25;
+                await _context.SaveChangesAsync();
+                return RedirectToAction("AddContact");
+            }
+            else
+            {
+                contact.Charges = 0.6;
+                await _context.SaveChangesAsync();
+                return RedirectToAction("AddContact");
+            }
+            //if (contact.note != null)
+            //{
+            //    contact.charges = 1.0;
+            //}
+            //if (contact.q6a == true || contact.q6b == true || contact.q6c == true || contact.q6d == true || contact.q6e == true ||
+            //    contact.q6f == true || contact.q6g == true || contact.q6h == true || contact.q6i == true || contact.q6j == true ||
+            //    contact.q6k == true || contact.q6l == true || contact.q6m == true)
+            //{
+            //    contact.charges = 1.0;
+            //}
+            //await _context.SaveChangesAsync();
+            //    return RedirectToAction(nameof(Home));
+            //}
+        }
+
         public IActionResult ViewProfile()
         {
             return RedirectToAction("ViewProfile", "Sales", new { cur_sale.Id });
         }
 
         [HttpGet]
-        public IActionResult Request()
+        public async Task<IActionResult> Request()
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Requests", "Create");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             return View();
         }
 
@@ -59,6 +205,12 @@ namespace BookingForm.Controllers
         [HttpPost]
         public async Task<IActionResult> Request([Bind("Subject", "Contents", "RequestName")] Request request)
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Requests", "Create");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             request.Owner = await _userManager.GetUserAsync(User);
             request.Status = Status.Pending;
             request.Contents += "-From[" + request.Owner.Name + "]";
@@ -69,9 +221,8 @@ namespace BookingForm.Controllers
             }
             _context.Requests.Add(request);
             await _context.SaveChangesAsync();
-            var curUser = await _userManager.GetUserAsync(User);
-            string contents = "Bạn nhận được một yêu cầu từ " + curUser.Name + " vào lúc " + DateTime.Now.ToString("HH:mm:ss dd-MM-yyyy");
-            SendMail(request.Subject, new MailboxAddress("Huong Ngo", "huong.ngo@annhome.vn"), contents);
+            //string contents = "Bạn nhận được một yêu cầu từ " + curUser.Name + " vào lúc " + DateTime.Now.ToString("HH:mm:ss dd-MM-yyyy");
+            //SendMail(request.Subject, new MailboxAddress("Huong Ngo", "huong.ngo@annhome.vn"), contents);
             TempData["StatusMessage"] = "Your request has been submitted.\nWe'll look into it as soon as possible.";
             return RedirectToPage("/Request");
         }
@@ -95,12 +246,6 @@ namespace BookingForm.Controllers
             ViewData["Message"] = "Secure page.";
 
             return View();
-        }
-
-        [Authorize(Roles = "Administrator")]
-        public IActionResult Admin()
-        {
-            return RedirectToAction("Dashboard", "Admin");
         }
 
         public async Task Logout()
@@ -172,11 +317,23 @@ namespace BookingForm.Controllers
         [HttpGet]
         public async Task<IActionResult> Feedback()
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Feedbacks", "Create");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             return View();
         }
 
-        public IActionResult Passport(Guid? id)
+        public async Task<IActionResult> Passport(Guid? id)
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             if (id != null)
             {
                 return RedirectToAction("Passport", "Appoinments", new { id });
@@ -187,6 +344,12 @@ namespace BookingForm.Controllers
         [HttpPost]
         public async Task<IActionResult> Feedback([Bind("SaleId, Content")] Feedback feedback)
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Feedbacks", "Create");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             if (!ModelState.IsValid)
             {
                 TempData["StatusMessage"] = "Feedback submission failed!";
@@ -194,7 +357,6 @@ namespace BookingForm.Controllers
             }
             _context.Feedbacks.Add(feedback);
             await _context.SaveChangesAsync();
-            var curUser = await _userManager.GetUserAsync(User);
             string contents = "You got a new feedback from " + curUser.Name + " at " + DateTime.Now.ToString("MM-dd-yyyy HH:mm:ss");
             SendMail("Feedback", new MailboxAddress("Duy Khang", "khang.trinh@annhome.vn"), contents);
             TempData["StatusMessage"] = "Your information has been submitted..\nThank you for having taken your time to provide us with your valuable feedback!";
@@ -277,6 +439,12 @@ namespace BookingForm.Controllers
             //    var result = res.Content.ReadAsStringAsync().Result;
             //    Console.WriteLine(result);
             //}
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "List");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             var sale = await _userManager.GetUserAsync(User);
             await Badge();
             if (sale != null)
@@ -300,37 +468,55 @@ namespace BookingForm.Controllers
             
         }
 
+        public bool DatesAreInTheSameWeek(DateTime date1, DateTime date2)
+        {
+            var cal = System.Globalization.DateTimeFormatInfo.CurrentInfo.Calendar;
+            var da1 = date1.Date.AddDays(-1 * (int)cal.GetDayOfWeek(date1));
+            var da2 = date2.Date.AddDays(-1 * (int)cal.GetDayOfWeek(date2));
+
+            return da1 == da2;
+        }
+
         [Authorize(Roles = "Leader, Administrator, TeamLeader")]
         public async Task<IActionResult> Manager(int? id)
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "List");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             var meetings = await _context.appoinment.Where(m => m.New == true).ToListAsync();
             DateTime dt = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
             if (id == 0)
             {
-                meetings = await _context.appoinment.Where(m => m.cTime != null && DateTime.ParseExact(m.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF",
-                                     System.Globalization.CultureInfo.InvariantCulture).Day == DateTime.Now.Day && m.Confirm == true).ToListAsync();
+                meetings = await _context.appoinment.Where(m => m.IsActive == true && m.Confirm == true && m.cTime.Substring(0,8).Contains(DateTime.Now.ToString("ddMMyyyy"))).ToListAsync();
             }
             else if (id == 1)
             {
-                meetings = await _context.appoinment.Where(m => m.cTime != null && DateTime.ParseExact(m.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF",
-                                     System.Globalization.CultureInfo.InvariantCulture).Day >= dt.Day && DateTime.ParseExact(m.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF",
-                                     System.Globalization.CultureInfo.InvariantCulture).Day <= dt.Day + 6 && DateTime.ParseExact(m.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF",
-                                     System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.Month && m.Confirm == true).ToListAsync();
+                meetings = await _context.appoinment.Where(m => m.Confirm == true && m.IsActive == true && DatesAreInTheSameWeek(DateTime.Now.Date, DateTime.ParseExact(m.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null))).ToListAsync();
             }
             else if (id == 2)
             {
-                meetings = await _context.appoinment.Where(m => m.cTime != null && DateTime.ParseExact(m.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF",
-                                     System.Globalization.CultureInfo.InvariantCulture).Month == DateTime.Now.Month && m.Confirm == true).ToListAsync();
+                meetings = await _context.appoinment.Where(m => m.IsActive == true && m.Confirm == true && m.cTime.Substring(2,6).Contains(DateTime.Now.ToString("MMyyyy"))).ToListAsync();
+            }
+            else if(id == 3)
+            {
+                meetings = await _context.appoinment.Where(m => m.Confirm == true && m.IsActive == true && m.cTime.Substring(4,4).Contains(DateTime.Now.ToString("yyyy"))).ToListAsync();
             }
             else
             {
-                meetings = await _context.appoinment.Where(m => m.cTime != null && DateTime.ParseExact(m.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF",
-                                     System.Globalization.CultureInfo.InvariantCulture).Year == DateTime.Now.Year && m.Confirm == true).ToListAsync();
+                meetings = await _context.appoinment.Where(m => m.Confirm == true && m.IsActive == true).ToListAsync();
             }
             Management manager = new Management();
-            manager.sales = await get(Convert.ToString(TempData["sale"]));
+            manager.sales = new List<Sale>();
+            string[] Ids = curUser.Members.Split(";");
+            foreach (string guid in Ids)
+            {
+                manager.sales.Add(await _context.sale.FindAsync(new Guid(guid)));
+            }
             manager.appoinments = meetings;
-            manager.manager = _context.sale.FirstOrDefault(m => m.Email == Convert.ToString(TempData["sale"]));
+            manager.manager = curUser;
             return View("Manager", manager);
         }
 
@@ -386,11 +572,16 @@ namespace BookingForm.Controllers
 
         public async Task<IActionResult> AppDetails(Guid? id)
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             if (id == null)
             {
                 return NotFound();
             }
-            var curUser = await _userManager.GetUserAsync(User);
             Appoinment a = await _context.appoinment
        .FirstOrDefaultAsync(b => b.Id == id);
             //PasswordHasher<Sale> hasher = new PasswordHasher<Sale>();
@@ -416,6 +607,11 @@ namespace BookingForm.Controllers
                 return NotFound();
             }
             var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             Appoinment a = await _context.appoinment
        .FirstOrDefaultAsync(b => b.Id == id);
             //PasswordHasher<Sale> hasher = new PasswordHasher<Sale>();

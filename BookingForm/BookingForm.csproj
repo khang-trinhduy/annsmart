@@ -40,6 +40,36 @@
     <Compile Remove="Migrations\20181219072910_square.Designer.cs" />
     <Compile Remove="Migrations\20181219073100_withdraw.cs" />
     <Compile Remove="Migrations\20181219073100_withdraw.Designer.cs" />
+    <Compile Remove="Migrations\20190110042537_rigel.cs" />
+    <Compile Remove="Migrations\20190110042537_rigel.Designer.cs" />
+    <Compile Remove="Migrations\20190110043309_rigel.cs" />
+    <Compile Remove="Migrations\20190110043309_rigel.Designer.cs" />
+    <Compile Remove="Migrations\20190110043432_rigel.cs" />
+    <Compile Remove="Migrations\20190110043432_rigel.Designer.cs" />
+    <Compile Remove="Migrations\20190110043659_Rigel.cs" />
+    <Compile Remove="Migrations\20190110043659_Rigel.Designer.cs" />
+    <Compile Remove="Migrations\20190115102331_mirach.cs" />
+    <Compile Remove="Migrations\20190115102331_mirach.Designer.cs" />
+    <Compile Remove="Migrations\20190116025655_Mirach.cs" />
+    <Compile Remove="Migrations\20190116025655_Mirach.Designer.cs" />
+    <Compile Remove="Migrations\20190116085049_Neptune.cs" />
+    <Compile Remove="Migrations\20190116085049_Neptune.Designer.cs" />
+    <Compile Remove="Migrations\20190116103632_Polaris.cs" />
+    <Compile Remove="Migrations\20190116103632_Polaris.Designer.cs" />
+    <Compile Remove="Migrations\20190117074402_Sirius.cs" />
+    <Compile Remove="Migrations\20190117074402_Sirius.Designer.cs" />
+    <Compile Remove="Migrations\20190117074533_Sirius.cs" />
+    <Compile Remove="Migrations\20190117074533_Sirius.Designer.cs" />
+    <Compile Remove="Migrations\20190118034752_Whirlwind.cs" />
+    <Compile Remove="Migrations\20190118034752_Whirlwind.Designer.cs" />
+    <Compile Remove="Migrations\20190118041128_Whirlwind.cs" />
+    <Compile Remove="Migrations\20190118041128_Whirlwind.Designer.cs" />
+    <Compile Remove="Migrations\20190118041319_Whirlwind.cs" />
+    <Compile Remove="Migrations\20190118041319_Whirlwind.Designer.cs" />
+    <Compile Remove="Migrations\20190118041610_Whirlwind.cs" />
+    <Compile Remove="Migrations\20190118041610_Whirlwind.Designer.cs" />
+    <Compile Remove="Migrations\20190118044156_Pluto.cs" />
+    <Compile Remove="Migrations\20190118044156_Pluto.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
@@ -59,6 +89,11 @@
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.1" />
     <PackageReference Include="PagedList.Mvc" Version="4.5.0" />
     <PackageReference Include="reCAPTCHA.AspNetCore" Version="2.1.0" />
+    <PackageReference Include="Serilog.AspNetCore" Version="2.1.1" />
+    <PackageReference Include="Serilog.Extensions.Hosting" Version="2.0.0" />
+    <PackageReference Include="Serilog.Settings.Configuration" Version="3.0.1" />
+    <PackageReference Include="Serilog.Sinks.Console" Version="3.1.1" />
+    <PackageReference Include="Serilog.Sinks.RollingFile" Version="3.3.0" />
   </ItemGroup>
 
   <ItemGroup>

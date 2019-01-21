@@ -24,13 +24,27 @@
     <div class="col-md-12 col-xs-12">
         @*<div class="col-md-4 row-md-4"></div>
             <div class="col-md-4 col-xs-4">*@
-        <form asp-action="Create" enctype="multipart/form-data">
+        <form asp-action="Create" enctype="multipart/form-data" class="was-validated">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <partial name="_StatusMessage" model="@TempData["StatusMessage"]" />
+                <span></span>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Dự án</label>
+                <select asp-for="PlanId" required id="plan" class="form-control">
+                    <option value="">--Chọn dự án--</option>
+                    @foreach (Plan plan in ViewBag.plan)
+                    {
+                        <option value="@plan.Id">@plan.Name</option>
+                    }
 
+                </select>
+            </div>
 
             <div class="form-group">
                 <label asp-for="Customer" class="control-label"></label>
-                <input asp-for="Customer" class="form-control" placeholder="Nguyễn Văn A" />
+                <input value="@TempData["Customer"]" asp-for="Customer" class="form-control" placeholder="Nhập tên khách hàng" required />
                 <span asp-validation-for="Customer" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -41,17 +55,17 @@
             </div>
             <div class="form-group">
                 <label asp-for="Address" class="control-label"></label>
-                <input asp-for="Address" class="form-control" placeholder="755 Ba Tháng Hai, Phường 7, Quận 10, Hồ Chí Minh" />
+                <input asp-for="Address" class="form-control" placeholder="755 Ba Tháng Hai, Phường 7, Quận 10, Hồ Chí Minh" required />
                 <span asp-validation-for="Address" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Phone" class="control-label"></label>
-                <input asp-for="Phone" class="form-control" placeholder="0909898787" />
+                <input value="@TempData["Phone"]" asp-for="Phone" class="form-control" placeholder="0909898787" required />
                 <span asp-validation-for="Phone" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Email" class="control-label"></label>
-                <input asp-for="Email" class="form-control" placeholder="example@mail.com" />
+                <input value="@TempData["Email"]" asp-for="Email" class="form-control" placeholder="example@mail.com" />
                 <span asp-validation-for="Email" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -66,25 +80,42 @@
             </div>
             <div class="form-group">
                 <label asp-for="HKTT" class="control-label"></label>
-                <input asp-for="HKTT" class="form-control" placeholder="755 Ba Tháng Hai, Phường 7, Quận 10, Hồ Chí Minh" />
+                <input asp-for="HKTT" class="form-control" placeholder="755 Ba Tháng Hai, Phường 7, Quận 10, Hồ Chí Minh" required />
                 <span asp-validation-for="HKTT" class="text-danger"></span>
             </div>
-
+            <div class="form-group">
+                <label class="control-label">Quốc tịch</label>
+                <select class="custom-select my-1 mr-sm-2" required asp-for="IsForeigner">
+                    <option value="">--Chọn--</option>
+                    <option value="false">Việt Nam</option>
+                    <option value="true">khác</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="control-label">Loại thẻ</label>
+                <select class="custom-select my-1 mr-sm-2" required asp-for="IdType">
+                    <option value="">--Chọn--</option>
+                    <option value="Cmnd">CMND/CMT</option>
+                    <option value="Passport">Hộ chiếu (Passport)</option>
+                    <option value="Military">Quân đội (Military)</option>
+                    <option value="Other">Khác</option>
+                </select>
+            </div>
             @*</div>
         <div class="col-md-4 col-xs-4">*@
             <div class="form-group">
                 <label asp-for="Cmnd" class="control-label"></label>
-                <input asp-for="Cmnd" class="form-control" placeholder="250877659" />
+                <input asp-for="Cmnd" class="form-control" placeholder="250877659" required />
                 <span asp-validation-for="Cmnd" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Day" class="control-label"></label>
-                <input asp-for="Day" class="form-control" />
+                <input asp-for="Day" class="form-control" required />
                 <span asp-validation-for="Day" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="Place" class="control-label"></label>
-                <input asp-for="Place" class="form-control" />
+                <input asp-for="Place" class="form-control" required />
                 <span asp-validation-for="Place" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -116,7 +147,7 @@
                         <input onchange="calculate()" id="sh1" value="0" asp-for="NSH1" min="0" style="text-align:left;padding-left: 0px;width: 100px;" />
                     </li>
                     <li>
-                        <label class="control-label" style="width: 150px;">Nhà phố thương mại:</label>
+                        <label class="control-label" style="width: 150px;">Shophouse (NPTM):</label>
                         <input onchange="calculate()" id="shh" value="0" asp-for="NSHH" min="0" style="text-align:left;padding-left: 0px;width: 100px;" />
                     </li>
 
@@ -125,14 +156,14 @@
                         <input onchange="calculate()" id="ns" value="0" asp-for="NS" min="0" style="text-align:left;padding-left: 0px;width: 100px;" />
                     </li>
                     <li>
-                        <label class="control-label" style="width: 150px;">Biệt thự:</label>
+                        <label class="control-label" style="width: 150px;">Dinh thự:</label>
                         <input onchange="calculate()" id="ms" value="0" asp-for="NMS" min="0" style="text-align:left;padding-left: 0px;width: 100px;" />
                     </li>
                 </ul>
             </div>
             <div class="form-group">
                 <label asp-for="Money" class="control-label"></label>
-                <input id="Money" asp-for="Money" class="form-control number" readonly="readonly" />
+                <input id="Money" asp-for="Money" class="form-control number" readonly="readonly" required />
                 <span asp-validation-for="Money" class="text-danger"></span>
             </div>
             @*</div>
@@ -155,7 +186,7 @@
             </div>
             <div class="form-group">
                 <label asp-for="Cash" class="control-label"></label>
-                <input value="0" asp-for="Cash" class="form-control number" />
+                <input asp-for="Cash" class="form-control number" required />
                 <span asp-validation-for="Cash" class="text-danger"></span>
             </div>
             <hr />
@@ -169,6 +200,28 @@
                 <input asp-for="Requires" class="form-control" />
                 <span asp-validation-for="Requires" class="text-danger"></span>
             </div>
+
+            @if (User.IsInRole("Collaborator"))
+            {
+                <div class="form-group" hidden>
+                    <select asp-for="supporter">
+                        <option id="true" value="true">Yes</option>
+                        <option selected id="false" value="false">No</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label class="control-label">Bạn có cần người hỗ trợ không</label>
+                    <div class="custom-control custom-radio">
+                        <input value="true" type="radio" class="custom-control-input" id="sp1" name="radio-stacked" required>
+                        <label class="custom-control-label" for="sp1">Có</label>
+                    </div>
+                    <div class="custom-control custom-radio mb-3">
+                        <input checked value="false" type="radio" class="custom-control-input" id="sp2" name="radio-stacked" required>
+                        <label class="custom-control-label" for="sp2">Không</label>
+                        <div class="invalid-feedback">Bạn chưa chọn cần hỗ trợ</div>
+                    </div>
+                </div>
+            }
             @*<div class="form-group">
             <label asp-for="sale" class="control-label"></label>
             <input asp-for="sale" class="form-control" value="@TempData["email"]" />
@@ -176,7 +229,7 @@
         </div>*@
             <div class="form-group">
                 <label asp-for="password" class="control-label"></label>
-                <input asp-for="password" class="form-control" />
+                <input asp-for="password" class="form-control" required />
                 <span asp-validation-for="password" class="text-danger"></span>
             </div>
             <div class="form-group">
@@ -199,6 +252,14 @@
 
 </div>
 <script>
+    $("#sp1").on("click", function (e) {
+        $("#true").prop('selected', 'selected');
+    })
+
+    $("#sp2").on("click", function (e) {
+        $("#false").prop('selected', 'selected');
+    })
+
     function calculate() {
         var value = document.getElementById("c1").value * 30000000 +
             document.getElementById("c2").value * 30000000 +

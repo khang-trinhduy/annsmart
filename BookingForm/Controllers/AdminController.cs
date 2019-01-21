@@ -18,15 +18,18 @@ using Newtonsoft.Json;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using OfficeOpenXml;
+using System.Security.Claims;
+using Serilog;
+using System.Text.RegularExpressions;
 
 namespace BookingForm.Controllers
 {
-    [Authorize(Roles = "Administrator, Manager")]
     public class AdminController : Controller
     {
         private readonly UserManager<Sale> _userManager;
         private readonly IHostingEnvironment _environment;
         private readonly BookingFormContext _context;
+        
         public AdminController(BookingFormContext context, IHostingEnvironment hostingEnvironment, UserManager<Sale> userManager)
         {
             _userManager = userManager;
@@ -39,8 +42,36 @@ namespace BookingForm.Controllers
             return View();
         }
 
+        public async Task<bool> IsAuthorized(Sale sale, string resource, string operation)
+        {
+            var roles = await _userManager.GetRolesAsync(sale);
+            var grants = await _context.Grants.Where(g => g.Operation == operation && g.Resource == resource && g.Permission == "Allow").ToListAsync();
+            if (sale == null)
+            {
+                return false;
+            }
+            if (grants != null)
+            {
+                foreach (var grant in grants)
+                {
+                    if (roles.Contains(grant.RoleName))
+                    {
+                        return true;
+                    }
+                }
+            }
+            Log.Warning("Access denied! User " + sale.Name + " tried to " + operation + " " + resource + ".");
+            return false;
+        }
+
         public async Task<IActionResult> GetRequest()
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Requests", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             var requests = await _context.Requests.ToListAsync();
             if (requests != null)
             {
@@ -50,10 +81,15 @@ namespace BookingForm.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Approve(Guid? id)
         {
             var request = await _context.Requests.FindAsync(id);
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Requests", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             if (request == null)
             {
                 return NotFound("Can't find request with Id: " + id);
@@ -62,13 +98,18 @@ namespace BookingForm.Controllers
         }
 
         [HttpPost]
-        [Authorize(Roles = "Administrator")]
         public async Task<IActionResult> Approve([Bind("Id, Status", "Contents", "RequestName", "Subject")] Request request)
         {
             if (!ModelState.IsValid)
             {
                 TempData["StatusMessage"] = "Can't find request!";
                 return View();
+            }
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Requests", "Update");
+            if (!authorized)
+            {
+                return View("AccessDenied");
             }
             if (request.Status == Status.Accepted)
             {
@@ -78,8 +119,8 @@ namespace BookingForm.Controllers
             TempData["StatusMessage"] = "Request has been updated!";
             if (request.Status == Status.Approved)
             {
-                string contents = "Có một yêu cầu mới cần được thông qua.";
-                SendMail(request.Subject, new MailboxAddress("Hằng Lê", "hang.le@annhome.vn"), contents);     
+                //string contents = "Có một yêu cầu mới cần được thông qua.";
+                //SendMail(request.Subject, new MailboxAddress("Hằng Lê", "hang.le@annhome.vn"), contents);     
             }
             var tmp = await _context.Requests.FindAsync(request.Id);
             tmp.Status = request.Status;
@@ -110,6 +151,92 @@ namespace BookingForm.Controllers
                 client.Disconnect(true);
 
             }
+        }
+
+        public async Task<IActionResult> Export()
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
+            string sWebRootFolder = _environment.WebRootPath;
+            //string fname = @"Thông tin đặt giữ chỗ dự án Vincity" + DateTime.Now.ToString("dd-MM-yyyy") + ".xlsx";
+            string sFileName = @"Form thông tin Khách hàng Book căn VinCity" + ".xlsx";
+            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+            var memory = new MemoryStream();
+            using (var fs = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Create, FileAccess.Write))
+            {
+                IWorkbook workbook;
+                workbook = new XSSFWorkbook();
+                ISheet excelSheet = workbook.CreateSheet("INDIVIDUAL CUSTOMER");
+                IRow row = excelSheet.CreateRow(0);
+
+                row.CreateCell(0).SetCellValue("Customer Name");
+                row.CreateCell(1).SetCellValue("Nationality");
+                row.CreateCell(2).SetCellValue("Gender");
+                row.CreateCell(3).SetCellValue("Birthday<YYYYMMDD>");
+                row.CreateCell(4).SetCellValue("ID Type");
+                row.CreateCell(5).SetCellValue("ID NO.");
+                
+                var appoinments = await _context.appoinment.Where(ap => ap.IsActive == true && ap.Confirm == true).OrderBy(a => a.Contract).ToListAsync();
+                int count = 1;
+                foreach (var appoinment in appoinments)
+                {
+                    row = excelSheet.CreateRow(count);
+
+                    row.CreateCell(0).SetCellValue(appoinment.Customer);
+                    row.CreateCell(1).SetCellValue("01<Native>");
+                    string gender = appoinment.Gender;
+                    if (gender != "")
+                    {
+                        if (gender == "Anh" || gender == "Nam")
+                        {
+                            row.CreateCell(2).SetCellValue("10<Male>");
+                        }
+                        else if (gender == "Chị" || gender == "Nữ")
+                        {
+                            row.CreateCell(2).SetCellValue("20<Female>");
+                        }
+                        else
+                        {
+                            row.CreateCell(2).SetCellValue("30<Other>");
+                        }
+                    }
+                    row.CreateCell(3).SetCellValue("");
+                    string IdType = "";
+                    if (appoinment.Cmnd != null)
+                    {
+                        if (appoinment.Cmnd.Length == 9 || appoinment.Cmnd.Length == 12)
+                        {
+                            IdType = "10<CCCD/CMTND>";
+                        }
+                        else if ( Regex.IsMatch(appoinment.Cmnd.Substring(0, 1), @"^[a-zA-Z]+$") && appoinment.Cmnd.Length == 8)
+                        {
+                            IdType = "30<Passport>";
+                        }
+                        else
+                        {
+                            IdType = "40<Other>";
+                        }
+                    }
+                    row.CreateCell(4).SetCellValue(IdType);
+
+                    row.CreateCell(5).SetCellValue("'" + appoinment.Cmnd);
+                    
+                    count++;
+                }
+
+                workbook.Write(fs);
+            }
+            using (var stream = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Open))
+            {
+                await stream.CopyToAsync(memory);
+            }
+            memory.Position = 0;
+            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", sFileName);
         }
 
         public async Task<IActionResult> _export(int? id)
@@ -430,6 +557,12 @@ namespace BookingForm.Controllers
 
         public async Task<IActionResult> Summary()
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Summary");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             DateTime start = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day - 1, 19, 00, 00, 0000000);
             DateTime end = new DateTime(DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day, 19, 00, 00, 0000000);
             var done_appoinments = await _context.appoinment.Where(m => m.OldContract == false && m.Official == true && m.IsActive == true).OrderBy(m => m.Id).ToListAsync();
@@ -558,7 +691,6 @@ namespace BookingForm.Controllers
             return RedirectToAction("Dashboard");
         }
 
-        [Authorize(Roles = "Administrator")]
         public IActionResult Sale()
         {
             return RedirectToAction("Dashboard", "Home");
@@ -582,6 +714,12 @@ namespace BookingForm.Controllers
         [HttpGet]
         public async Task<IActionResult> Contracts(string type)
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Filter");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             if (type == "")
             {
                 return NotFound();
@@ -651,6 +789,12 @@ namespace BookingForm.Controllers
         [HttpGet]
         public async Task<IActionResult> Type(string type)
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Search");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             if (type == "date")
             {
                 return PartialView("Date");
@@ -679,6 +823,12 @@ namespace BookingForm.Controllers
         public async Task<IActionResult> Withdraw(Guid id)
         {
             var meeting = await _context.appoinment.FindAsync(id);
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             if (meeting.Cash > 0)
             {
                 ViewBag.money = So_chu(meeting.Cash);
@@ -696,6 +846,12 @@ namespace BookingForm.Controllers
             if(id == null)
             {
                 return NotFound("Can't find any id");
+            }
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
             }
             var meeting = await _context.appoinment.FindAsync(id);
             if (meeting == null)
@@ -741,6 +897,12 @@ namespace BookingForm.Controllers
                 TempData["StatusMessage"] = "Failed to sent request!";
                 return View();
             }
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Requests", "Create");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             request.Status = Status.Pending;
             request.Owner = await _userManager.GetUserAsync(User);
             await _context.Requests.AddAsync(request);
@@ -753,6 +915,12 @@ namespace BookingForm.Controllers
         [HttpGet]
         public async Task<IActionResult> Filter(string type, string context)
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Filter");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             if (type == "customer")
             {
                 string[] name = context.Split("_");
@@ -838,6 +1006,12 @@ namespace BookingForm.Controllers
 
         public async Task<IActionResult> Dashboard()
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "List");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             var admin = await _userManager.GetUserAsync(User);
             var meetings = await _context.appoinment.Where(m => m.IsActive == true).OrderBy(m => m.Contract).ToListAsync();
             var meeting = _context.appoinment.First();
@@ -860,8 +1034,15 @@ namespace BookingForm.Controllers
             await Badge();
             return View(modal);
         }
+
         public async Task<IActionResult> AppDetails(Guid? id)
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -881,6 +1062,12 @@ namespace BookingForm.Controllers
 
         public async Task<IActionResult> Draft(Guid? id)
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -898,8 +1085,14 @@ namespace BookingForm.Controllers
             return RedirectToAction("Draft", "Appoinments", new { id });
         }
 
-        public IActionResult Edit(Guid? id)
+        public async Task<IActionResult> Edit(Guid? id)
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Edit");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -909,6 +1102,12 @@ namespace BookingForm.Controllers
 
         public async Task<IActionResult> Confirm(Guid? id)
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Update");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             if (id == null)
             {
                 return NotFound();
@@ -969,6 +1168,12 @@ namespace BookingForm.Controllers
 
         public async Task<IActionResult> Passport(Guid? id)
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Requests", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             if (id == null)
             {
                 return View("NotFound");
@@ -1007,6 +1212,12 @@ namespace BookingForm.Controllers
 
         public async Task<IActionResult> Confirmed(Appoinment a)
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Update");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             if (a == null)
             {
                 return NotFound();

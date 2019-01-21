@@ -71,7 +71,11 @@ namespace BookingForm.Models
         public DbSet<Sale> sale { get; set; }
         public DbSet<Logger> Loggers { get; set; }
         public DbSet<Feedback> Feedbacks { get; set; }
-        public DbSet<Request> Requests { get; set; }    
+        public DbSet<Request> Requests { get; set; }
+        public DbSet<Plan> Plans { get; set; }
+        public DbSet<Product> Products { get; set; }
+        public DbSet<Grant> Grants { get; set; }
+        public DbSet<Contact> Contacts { get; set; }
     }
 
     public class ApplicationContextDbFactory : IDesignTimeDbContextFactory<BookingFormContext>

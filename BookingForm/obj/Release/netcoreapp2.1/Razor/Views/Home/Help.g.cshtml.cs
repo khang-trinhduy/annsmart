@@ -59,7 +59,7 @@ using BookingForm.Models;
             WriteLiteral("<div class=\"container\">\r\n    <div class=\"form-group was-validated\">\r\n        <label class=\"control-label\">Hướng dẫn</label>\r\n        <select class=\"custom-select\" id=\"Type\">\r\n            ");
             EndContext();
             BeginContext(311, 47, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4c244c6e1388483cbb77692d2a894150", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "94e9b1acf6624a21bba20e2381f314fb", async() => {
                 BeginContext(335, 14, true);
                 WriteLiteral("Tạo HĐ đặt chỗ");
                 EndContext();
@@ -81,7 +81,7 @@ using BookingForm.Models;
             WriteLiteral("\r\n            ");
             EndContext();
             BeginContext(372, 44, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "a7975ca49b454c52a9f288bc9830b3d0", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "932aff282baf46b184c489e8307412c3", async() => {
                 BeginContext(396, 11, true);
                 WriteLiteral("Tạo yêu cầu");
                 EndContext();
@@ -103,7 +103,7 @@ using BookingForm.Models;
             WriteLiteral("\r\n            ");
             EndContext();
             BeginContext(430, 46, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "56311fb0ce9f4257ac5143d23a490aba", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("option", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "d084ccd633714788ac5bf514184b7810", async() => {
                 BeginContext(455, 12, true);
                 WriteLiteral("Tạo feedback");
                 EndContext();

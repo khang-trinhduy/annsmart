@@ -136,6 +136,7 @@ namespace BookingForm.Models
         public double WMoney { get; set; }
         public string WType { get; set; }
         public string Photo { get; set; }
+        public bool IsForeigner { get; set; }
         public Appoinment() { }
 
         public static implicit operator Appoinment(List<Appoinment> v)

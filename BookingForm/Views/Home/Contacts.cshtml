@@ -1,0 +1,123 @@
+﻿@model IEnumerable<BookingForm.Models.Contact>
+
+<span style="display:inline-block; height: 15px;"></span>
+<h6 style="font-style:italic; text-align:right">TP. Hồ Chí Minh, ngày @DateTime.Now.Day  tháng @DateTime.Now.Month năm @DateTime.Now.Year</h6>
+<span style="display:inline-block; height: 15px;"></span>
+<h4 style="text-align:center;font-family:Calibri">Danh sách khách hàng</h4>
+<div class="container">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    STT
+                </th>
+                <th>
+                    Họ & tên
+                </th>
+                <th>
+                    Ngày cung cấp
+                </th>
+                <th>
+                    Tình trạng
+                </th>
+
+                <th>
+                    Sales chăm sóc
+                </th>
+
+                <th>
+                    Hoa hồng dự kiến*
+                </th>
+                <th>
+                    Hoa hồng thực tế**
+                </th>
+                @*<th>
+                        Mức phí
+                    </th>*@
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @{int count = 1; }
+            @foreach (Contact item in Model)
+            {
+                <tr>
+                    <td>@count</td>
+                    <td style="text-align:left">
+                        @Html.DisplayFor(modelItem => item.Name)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.phone)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.email)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.note)
+                        </td>*@
+                    <td>
+                        @Html.DisplayFor(modelItem => item.PDate)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Condition)
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.cNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.pNumber)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ch)
+                        </td>*@
+                    <td style="text-align:left">
+                        @if (item.SupporterId != null)
+                        {
+                            /**/
+                            @Html.DisplayFor(modelItem => item.Supporter.Name)
+                        }
+                        else
+                        {
+                            <p>Công ty sắp xếp</p>
+                        }
+                    </td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.price)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.policy)
+                        </td>*@
+                    <td>
+                        @String.Format("{0:0.00}", item.Charges)%
+                    </td>
+                    <td></td>
+                    @*<td>
+                            @Html.DisplayFor(modelItem => item.totals)
+                        </td>*@
+                    <td id="hh">
+                        @if (item.AppoinmentId != null)
+	                    {
+                            <a style="" id="hd" asp-action="Views" asp-route-id="@item.AppoinmentId">Xem HĐ</a>
+                        }
+                        else
+                        {
+                            <a style="" id="hd" asp-action="Contracts" asp-route-id="@item.Id">Tạo HĐ</a>
+                        }                       
+                        @*<a asp-action="Details" asp-route-id="@item.ID">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.ID">Delete</a>*@
+                    </td>
+                </tr>
+                count++;
+            }
+        </tbody>
+    </table>
+
+
+    <h5 style="color:red; font-style:italic">Lưu ý:</h5>
+    <ul style="list-style:circle">
+        <li style="color:red; font-style:italic">(*)Mức hoa hồng dự kiến: là tỷ lệ hoa hồng được ghi nhận trước cho CTV ngay khi cung cấp thông tin. Tỷ lệ này có thể bị thay đổi khi CTV cung cấp thông tin không chính xác và sẽ được chuyển thành tỷ lệ hoa hồng thực tế sau khi KH giao dịch thành công.</li>
+        <li style="color:red; font-style:italic">(**)Mức hoa hồng thực tế: là tỷ lệ hoa hồng sẽ được chi trả cho CTV sau khi khách hàng giao dịch thành công.</li>
+        <li style="color:red; font-style:italic">Giao dịch thành công: Khi KH do CTV cung cấp đã kí hợp đồng mua bán căn hộ và thanh toán tối thiểu 30% GTCH theo quy định của CĐT.</li>
+
+    </ul>
+</div>

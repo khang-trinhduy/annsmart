@@ -55,7 +55,11 @@ namespace BookingForm.Migrations
                     b.Property<string>("HKTT")
                         .IsRequired();
 
+                    b.Property<string>("IdType");
+
                     b.Property<bool>("IsActive");
+
+                    b.Property<bool>("IsForeigner");
 
                     b.Property<string>("Job");
 
@@ -93,6 +97,8 @@ namespace BookingForm.Migrations
                     b.Property<string>("Photo");
 
                     b.Property<string>("Place");
+
+                    b.Property<Guid?>("PlanId");
 
                     b.Property<double>("Price");
 
@@ -140,9 +146,105 @@ namespace BookingForm.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("PlanId");
+
                     b.HasIndex("SaleId");
 
                     b.ToTable("appoinment");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.Contact", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid?>("AppoinmentId");
+
+                    b.Property<int>("CNumber");
+
+                    b.Property<string>("Ch");
+
+                    b.Property<double>("Charges");
+
+                    b.Property<string>("Condition");
+
+                    b.Property<string>("Email");
+
+                    b.Property<string>("Name")
+                        .IsRequired();
+
+                    b.Property<string>("Note");
+
+                    b.Property<DateTime>("PDate");
+
+                    b.Property<int>("PNumber");
+
+                    b.Property<string>("Phone")
+                        .IsRequired();
+
+                    b.Property<string>("Policy");
+
+                    b.Property<double>("Price");
+
+                    b.Property<Guid?>("ProviderId");
+
+                    b.Property<bool>("Signed");
+
+                    b.Property<Guid?>("SupporterId");
+
+                    b.Property<double>("Totals");
+
+                    b.Property<string>("q4a");
+
+                    b.Property<bool>("q5a");
+
+                    b.Property<bool>("q5b");
+
+                    b.Property<bool>("q5c");
+
+                    b.Property<bool>("q5d");
+
+                    b.Property<bool>("q6a");
+
+                    b.Property<bool>("q6b");
+
+                    b.Property<bool>("q6c");
+
+                    b.Property<bool>("q7a");
+
+                    b.Property<bool>("q7b");
+
+                    b.Property<bool>("q7c");
+
+                    b.Property<bool>("q7d");
+
+                    b.Property<bool>("q7e");
+
+                    b.Property<bool>("q7f");
+
+                    b.Property<bool>("q7g");
+
+                    b.Property<bool>("q7h");
+
+                    b.Property<bool>("q7i");
+
+                    b.Property<bool>("q7j");
+
+                    b.Property<bool>("q7k");
+
+                    b.Property<bool>("q7l");
+
+                    b.Property<bool>("q7m");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppoinmentId");
+
+                    b.HasIndex("ProviderId");
+
+                    b.HasIndex("SupporterId");
+
+                    b.ToTable("Contacts");
                 });
 
             modelBuilder.Entity("BookingForm.Models.Feedback", b =>
@@ -160,6 +262,28 @@ namespace BookingForm.Migrations
                     b.HasIndex("SaleId");
 
                     b.ToTable("Feedbacks");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.Grant", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Operation");
+
+                    b.Property<string>("Permission");
+
+                    b.Property<string>("Resource");
+
+                    b.Property<Guid?>("RoleId");
+
+                    b.Property<string>("RoleName");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("RoleId");
+
+                    b.ToTable("Grants");
                 });
 
             modelBuilder.Entity("BookingForm.Models.Logger", b =>
@@ -202,6 +326,54 @@ namespace BookingForm.Migrations
                     b.HasKey("ID");
 
                     b.ToTable("Manager");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.Plan", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Location");
+
+                    b.Property<string>("Name");
+
+                    b.Property<int>("State");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Plans");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.Product", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<string>("Name");
+
+                    b.Property<double>("Price");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.ProductPlan", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd();
+
+                    b.Property<Guid?>("PlanId");
+
+                    b.Property<Guid?>("ProductId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("PlanId");
+
+                    b.HasIndex("ProductId");
+
+                    b.ToTable("ProductPlan");
                 });
 
             modelBuilder.Entity("BookingForm.Models.Request", b =>
@@ -327,6 +499,8 @@ namespace BookingForm.Migrations
 
                     b.Property<bool>("TwoFactorEnabled");
 
+                    b.Property<string>("Type");
+
                     b.Property<string>("UserName")
                         .HasMaxLength(256);
 
@@ -450,9 +624,28 @@ namespace BookingForm.Migrations
 
             modelBuilder.Entity("BookingForm.Models.Appoinment", b =>
                 {
+                    b.HasOne("BookingForm.Models.Plan", "Plan")
+                        .WithMany("Appointments")
+                        .HasForeignKey("PlanId");
+
                     b.HasOne("BookingForm.Models.Sale", "Sale")
                         .WithMany("Meetings")
                         .HasForeignKey("SaleId");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.Contact", b =>
+                {
+                    b.HasOne("BookingForm.Models.Appoinment", "Appoinment")
+                        .WithMany()
+                        .HasForeignKey("AppoinmentId");
+
+                    b.HasOne("BookingForm.Models.Sale", "Provider")
+                        .WithMany()
+                        .HasForeignKey("ProviderId");
+
+                    b.HasOne("BookingForm.Models.Sale", "Supporter")
+                        .WithMany()
+                        .HasForeignKey("SupporterId");
                 });
 
             modelBuilder.Entity("BookingForm.Models.Feedback", b =>
@@ -461,6 +654,24 @@ namespace BookingForm.Migrations
                         .WithMany("Feedbacks")
                         .HasForeignKey("SaleId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("BookingForm.Models.Grant", b =>
+                {
+                    b.HasOne("BookingForm.Models.Role", "Role")
+                        .WithMany()
+                        .HasForeignKey("RoleId");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.ProductPlan", b =>
+                {
+                    b.HasOne("BookingForm.Models.Plan", "Plan")
+                        .WithMany("ProductPlans")
+                        .HasForeignKey("PlanId");
+
+                    b.HasOne("BookingForm.Models.Product", "Product")
+                        .WithMany("ProductPlans")
+                        .HasForeignKey("ProductId");
                 });
 
             modelBuilder.Entity("BookingForm.Models.Request", b =>

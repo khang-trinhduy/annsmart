@@ -15,7 +15,9 @@ body {
 
 @media print {
     footer {
-        text-align: right;
+        display: block;
+        text-align: left;
+        padding-top: 200px;
         position: fixed;
         bottom: 0;
         color: #ff0000;

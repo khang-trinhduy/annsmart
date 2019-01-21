@@ -15,6 +15,7 @@ namespace BookingForm.Models
 
     public class ProductPlan
     {
+        public Guid Id { get; set; }
         public virtual Product Product { get; set; }
         public virtual Plan Plan { get; set; }
     }

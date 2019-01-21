@@ -1,6 +1,8 @@
 ﻿@model ErrorViewModel
 @{
-    ViewData["Title"] = "Error";
+    ViewData["Title"] = "Access denied";
 }
-<h1 class="text-danger">Error.</h1>
-<h2 class="text-danger">An error occurred while processing your request. You don't have permission to access</h2>
+<header>
+    <h1 class="text-danger">@ViewData["Title"]</h1>
+    <p class="text-danger">You do not have access to this resource.</p>
+</header>

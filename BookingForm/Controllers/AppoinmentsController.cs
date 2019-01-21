@@ -20,17 +20,17 @@ using Microsoft.Extensions.FileProviders;
 using System.Net.Http.Headers;
 using MimeKit;
 using MailKit.Net.Smtp;
+using Serilog;
 
 namespace BookingForm.Controllers
 {
-    [Authorize(Roles = "Administrator, Sale, TeamLeader, Leader")]
+
     public class AppoinmentsController : Controller
     {
         private readonly BookingFormContext _context;
         private readonly UserManager<Sale> _userManager;
         //private readonly List<Sale> sales;
         private IRecaptchaService _recaptcha;
-        private readonly List<Admin> admins;
         private readonly IHostingEnvironment _environment;
         private readonly IFileProvider _fileProvider;
 
@@ -48,6 +48,30 @@ namespace BookingForm.Controllers
             //string jsona = a.ReadToEnd();
             //admins = JsonConvert.DeserializeObject<List<Admin>>(jsona);
         }
+
+        public async Task<bool> IsAuthorized(Sale sale, string resource, string operation)
+        {
+            var roles = await _userManager.GetRolesAsync(sale);
+            var grants = await _context.Grants.Where(g => g.Operation == operation && g.Resource == resource && g.Permission == "Allow").ToListAsync();
+            if (sale == null)
+            {
+                return false;
+            }
+
+            if (grants != null)
+            {
+                foreach (var grant in grants)
+                {
+                    if (roles.Contains(grant.RoleName))
+                    {
+                        return true;
+                    }
+                }
+            }
+            Log.Warning("Access denied! User " + sale.Name + " tried to " + operation + " " + resource + ".");
+            return false;
+        }
+
         public static string So_chu(double gNum)
         {
             if (gNum == 0)
@@ -225,9 +249,11 @@ namespace BookingForm.Controllers
             var appoinment = await _context.appoinment
                 .FirstOrDefaultAsync(m => m.Id == id);
             var curUser = await _userManager.GetUserAsync(User);
-            //Random rand = new Random();
-            //int rd = rand.Next(100, 151);
-            //ViewBag.rd = appoinment.Priority;
+            var authorized = await IsAuthorized(curUser, "Contracts", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             if (appoinment == null)
             {
                 appoinment = await _context.appoinment.FirstOrDefaultAsync(m => m.Id == id);
@@ -255,7 +281,12 @@ namespace BookingForm.Controllers
             {
                 return NotFound();
             }
-
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             var appoinment = await _context.appoinment
                 .FirstOrDefaultAsync(m => m.Id == id);
             //Random rand = new Random();
@@ -291,7 +322,12 @@ namespace BookingForm.Controllers
             {
                 return NotFound();
             }
-
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             var appoinment = await _context.appoinment
                 .FirstOrDefaultAsync(m => m.Id == id);
             //Random rand = new Random();
@@ -333,34 +369,72 @@ namespace BookingForm.Controllers
 
         // GET: Appoinments/Create
         [HttpGet]
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
+            ViewBag.plan = await _context.Plans.ToListAsync();
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Create");
+            TempData["StatusMessage"] = TempData["StatusMessage"];
+            TempData["Customer"] = TempData["Customer"];
+            TempData["Phone"] = TempData["Phone"];
+            TempData["Email"] = TempData["Email"];
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             return View();
         }
-        
+
         // POST: Appoinments/Create
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Customer,Gender,Address,Phone,Email,Job,WorkPlace,Cmnd,Day,Place,Money,Purpose,Requires,Price,Details,DType,Cash,NCH1,NCH2,NCH21,NCH3,NMS,NS,NSHH,NSH,HKTT,password,Contract, NSH1")] Appoinment appoinment, List<IFormFile> files)
+        public async Task<IActionResult> Create([Bind("Customer,Gender,Address,Phone,Email,Job,WorkPlace,Cmnd,Day,Place,Money,Purpose,Requires,Price,Details,DType,Cash,NCH1,NCH2,NCH21,NCH3,NMS,NS,NSHH,NSH,HKTT,password,Contract, NSH1, PlanId, supporter, IdType, IsForeigner")] Appoinment appoinment, List<IFormFile> files)
         {
             //if (ModelState.IsValid)
             //{
-            var sales = await _context.sale.ToListAsync();
+            var contact = await _context.Contacts.FirstOrDefaultAsync(c => c.Phone == appoinment.Phone);
+            if (contact != null)
+            {
+                contact.Appoinment = appoinment;
+                _context.Update(contact);
+            }
             var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Create");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
+            if (curUser != null)
+            {
+                var roles = await _userManager.GetRolesAsync(curUser);
+                if (roles.Contains("Collaborator"))
+                {
+                    if (contact != null)
+                    {
+                        contact.Charges = appoinment.supporter == true ? 1.0 : 1.3;
+                        _context.Update(contact);
+                    }
+                }
+            }
             PasswordHasher<Sale> hasher = new PasswordHasher<Sale>();
             PasswordVerificationResult result = hasher.VerifyHashedPassword(curUser,curUser.PasswordHash, appoinment.password);
             if (result == PasswordVerificationResult.Failed)
-                return View();
+            {
+                TempData["StatusMessage"] = "Sai mật khẩu xác nhận";
+                return RedirectToAction("Create");
+            }
             appoinment.password = hasher.HashPassword(curUser, appoinment.password);
             appoinment.SaleDetails = curUser.Info;
             appoinment.Sale = curUser;
             appoinment.SEmail = curUser.Email;
+            ViewBag.plan = await _context.Plans.ToListAsync();
             string str = "";
             if(appoinment.Sale == null)
             {
-                return View();
+                TempData["StatusMessage"] = "Bạn chưa đăng nhập vào hệ thống";
+                return RedirectToAction("Create");
             }
             else
             {
@@ -406,12 +480,18 @@ namespace BookingForm.Controllers
                     }
 
                 }                
-                appoinment.supporter = false;
+                //appoinment.supporter = false;
                 appoinment.New = true;
                 appoinment.Official = false;
                 appoinment.cTime = DateTime.Now.ToString("ddMMyyyy HH:mm:ss.FFFFFFF");
                 appoinment.Confirm = false;
                 appoinment.IsActive = true;
+                //var p = await _context.Plans.SingleOrDefaultAsync(pl => pl.Id == plan);
+                //if (p == null)
+                //{
+                //    TempData["StatusMessage"] = "Bạn chưa chọn dự án";
+                //    return View();
+                //}
                 var newFileName = string.Empty;
                 List<string> portrait = new List<string>();
                 if (files != null)
@@ -462,8 +542,8 @@ namespace BookingForm.Controllers
                 _context.Add(appoinment);
                 await _context.SaveChangesAsync();
 
-                string contents = curUser.Name + " đã tạo một HĐ mới trên hệ thống AnnSmart" + " vào lúc " + DateTime.Now.ToString("HH:mm:ss MM-dd-yyyy");
-                SendMail("HĐ đặt chỗ", new MailboxAddress("Hương Ngô", "huong.ngo@annhome.vn"), contents);
+                //string contents = curUser.Name + " đã tạo một HĐ mới trên hệ thống AnnSmart" + " vào lúc " + DateTime.Now.ToString("HH:mm:ss MM-dd-yyyy");
+                //SendMail("HĐ đặt chỗ", new MailboxAddress("Hương Ngô", "huong.ngo@annhome.vn"), contents);
 
                 TempData["ct"] = appoinment.Contract;
                 TempData["pt"] = str;
@@ -495,14 +575,49 @@ namespace BookingForm.Controllers
             }
         }
 
-        public IActionResult Home(Sale sale)
+        [HttpGet]
+        public async Task<IActionResult> SelectPlan()
         {
+            var plans = await _context.Plans.ToListAsync();
+            if (plans != null)
+            {
+                return View(plans);
+            }
+            return NotFound("Can't find any plans");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SelectPlan([Bind("Id")] Plan p)
+        {
+            Plan plan = await _context.Plans.FindAsync(p.Id);
+            if (plan == null)
+            {
+                return NotFound("Can't find plan with id: " + p.Id);
+            }
+            ViewBag.plan = plan.Name;
+            return View("Create", plan);
+        }
+
+        public async Task<IActionResult> Home(Sale sale)
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "List");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             return RedirectToAction("Dashboard", "Home");
         }
 
         public async Task<IActionResult> Confirm(Guid ? id)
         {
             var a = await _context.appoinment.FindAsync(id);
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             return View(a);
         }
 
@@ -512,6 +627,12 @@ namespace BookingForm.Controllers
             if (id == null)
             {
                 return NotFound();
+            }
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Edit");
+            if (!authorized)
+            {
+                return View("AccessDenied");
             }
 
             var appoinment = await _context.appoinment.FindAsync(id);
@@ -525,6 +646,12 @@ namespace BookingForm.Controllers
         [HttpGet]
         public async Task<IActionResult> Passport(Guid ? id)
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             var a = await _context.appoinment.FindAsync(id);
             if (a != null)
             {
@@ -536,6 +663,12 @@ namespace BookingForm.Controllers
         [HttpPost]
         public async Task<IActionResult> Passport([Bind("Id", "Customer")] Appoinment a, List<IFormFile> files)
         {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Update");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             var app = await _context.appoinment.FindAsync(a.Id);
             if (app != null)
             {
@@ -607,6 +740,12 @@ namespace BookingForm.Controllers
         {
             //if (ModelState.IsValid)
             //{
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Update");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
             try
             {
                 var tmp = await _context.appoinment.FindAsync(id);
@@ -711,47 +850,47 @@ namespace BookingForm.Controllers
             await _context.SaveChangesAsync();
         }
 
-        // POST: Appoinments/Delete/5
-        [HttpPost, ActionName("Delete")]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
-        {
-            var a = await _context.appoinment.FirstOrDefaultAsync(m => m.Contract == id);
-            await UpdatePriority(a.Contract);
-            a.IsActive = false;
-            _context.appoinment.Update(a);
+        //// POST: Appoinments/Delete/5
+        //[HttpPost, ActionName("Delete")]
+        //[ValidateAntiForgeryToken]
+        //public async Task<IActionResult> DeleteConfirmed(int id)
+        //{
+        //    var a = await _context.appoinment.FirstOrDefaultAsync(m => m.Contract == id);
+        //    await UpdatePriority(a.Contract);
+        //    a.IsActive = false;
+        //    _context.appoinment.Update(a);
             
-            await _context.SaveChangesAsync();
-            Admin ad = new Admin();
-            try
-            {
-                ad = admins[0];
-            }
-            catch (Exception)
-            {
+        //    await _context.SaveChangesAsync();
+        //    Admin ad = new Admin();
+        //    try
+        //    {
+        //        ad = admins[0];
+        //    }
+        //    catch (Exception)
+        //    {
 
-                throw;
-            }
-            var meetings = await _context.appoinment.Where(ap => ap.IsActive == true).ToListAsync();
-            var meeting = _context.appoinment.First();
-            int ph = _context.appoinment.Max(m => m.ph);
-            int psh = _context.appoinment.Max(m => m.psh);
-            int psh1 = _context.appoinment.Max(m => m.psh1);
-            int pshh = _context.appoinment.Max(m => m.pshh);
-            int pms = _context.appoinment.Max(m => m.pms);
-            int pns = _context.appoinment.Max(m => m.pns);
-            AdminModal modal = new AdminModal();
-            modal.appoinment = meeting;
-            modal.appoinments = meetings;
-            modal.officials = new List<int>();
-            modal.officials.Add(ph + 1);
-            modal.officials.Add(psh + 1);
-            modal.officials.Add(psh1 + 1);
-            modal.officials.Add(pshh + 1);
-            modal.officials.Add(pms + 1);
-            modal.officials.Add(pns + 1);
-            return View("/Views/Admin/Home.cshtml", modal);
-        }
+        //        throw;
+        //    }
+        //    var meetings = await _context.appoinment.Where(ap => ap.IsActive == true).ToListAsync();
+        //    var meeting = _context.appoinment.First();
+        //    int ph = _context.appoinment.Max(m => m.ph);
+        //    int psh = _context.appoinment.Max(m => m.psh);
+        //    int psh1 = _context.appoinment.Max(m => m.psh1);
+        //    int pshh = _context.appoinment.Max(m => m.pshh);
+        //    int pms = _context.appoinment.Max(m => m.pms);
+        //    int pns = _context.appoinment.Max(m => m.pns);
+        //    AdminModal modal = new AdminModal();
+        //    modal.appoinment = meeting;
+        //    modal.appoinments = meetings;
+        //    modal.officials = new List<int>();
+        //    modal.officials.Add(ph + 1);
+        //    modal.officials.Add(psh + 1);
+        //    modal.officials.Add(psh1 + 1);
+        //    modal.officials.Add(pshh + 1);
+        //    modal.officials.Add(pms + 1);
+        //    modal.officials.Add(pns + 1);
+        //    return View("/Views/Admin/Home.cshtml", modal);
+        //}
 
         private bool AppoinmentExists(Guid id)
         {

@@ -124,8 +124,11 @@ C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Debug\netcore
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Debug\netcoreapp2.1\Razor\Views\Home\Help.g.cshtml.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Debug\netcoreapp2.1\Razor\Views\Admin\Additional.g.cshtml.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Debug\netcoreapp2.1\Razor\Views\Admin\_Request.g.cshtml.cs
-C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Debug\netcoreapp2.1\Razor\Views\Managers\Monthly.g.cshtml.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Debug\netcoreapp2.1\Razor\Views\Managers\Chart.g.cshtml.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Debug\netcoreapp2.1\Razor\Views\Managers\Profit.g.cshtml.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Debug\netcoreapp2.1\Razor\Views\Managers\_Profit.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Debug\netcoreapp2.1\Razor\Views\Appoinments\Plan.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Debug\netcoreapp2.1\UserSecretsAssemblyInfo.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Debug\netcoreapp2.1\Razor\Views\Home\AddContact.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Debug\netcoreapp2.1\Razor\Views\Home\Contacts.g.cshtml.cs

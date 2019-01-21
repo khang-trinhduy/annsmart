@@ -333,7 +333,7 @@ WriteAttributeValue("", 1284, src, 1284, 4, false);
             WriteLiteral(" vnđ.</p>\r\n                        ");
             EndContext();
             BeginContext(6141, 87, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "8bf13275d16041448159c91e0ca652e9", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "29130e6e04104d6c9f5a6c33f790e2c2", async() => {
                 BeginContext(6216, 8, true);
                 WriteLiteral("Chi tiết");
                 EndContext();

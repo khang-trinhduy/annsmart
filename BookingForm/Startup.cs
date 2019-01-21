@@ -19,6 +19,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Authorization;
+using Serilog;
+using Microsoft.Extensions.Logging;
 
 namespace BookingForm
 {
@@ -27,6 +29,7 @@ namespace BookingForm
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
+            Log.Logger = new Serilog.LoggerConfiguration().ReadFrom.Configuration(configuration).CreateLogger();
         }
 
         public IConfiguration Configuration { get; }
@@ -110,7 +113,7 @@ namespace BookingForm
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IServiceProvider serviceProvider, ILoggerFactory loggerFactory)
         {
             //if (env.IsDevelopment())
             //{
@@ -123,6 +126,7 @@ namespace BookingForm
             //}
             //app.UseExceptionHandler("/Error");
             //app.UseHsts();
+            loggerFactory.AddSerilog();
             app.UseDeveloperExceptionPage();
             app.UseHttpsRedirection();
             app.UseStaticFiles();

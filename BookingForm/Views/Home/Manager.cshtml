@@ -18,7 +18,7 @@
 <hr />
 @*<p style="font-style:italic;">Lưu ý: Hệ thống chỉ hiện các hợp đồng đã có số chính thức và có thời gian lập hợp đồng chính xác</p>
 <div style="text-align:right"><a id="home" @*asp-action="Chart" >Sơ đồ</a></div>
-<span style="display:block; height:30px;"></span>
+<span style="display:block; height:30px;"></span>*@
 <div style=" text-align:left">
     <p style="display:inline-block">Hiện trong: </p>
     <a id="new" asp-action="Manager" asp-route-id="0">Ngày </a>
@@ -31,16 +31,19 @@
     <span style="display:inline-block; width:2px;"></span>
     <span style="display:inline-block; width:2px;"></span>
     <a id="new" asp-action="Manager" asp-route-id="3">Năm</a>
-</div>*@
+    <span style="display:inline-block; width:2px;"></span>
+    <span style="display:inline-block; width:2px;"></span>
+    <a id="new" asp-action="Manager" asp-route-id="4">Tất cả</a>
+</div>
 <span style="display:block; height:30px"></span>
-<table @*id="sales" *@ class="table">
+<table class="table" >
     <thead>
         <tr>
-            <th colspan="1">Sale</th>
-            <th colspan="5">SL các loại (Đvị: căn)</th>
+            <th colspan="1" style="text-align: center">Sale</th>
+            <th style="text-align: center" colspan="6">SL các loại (Đvị: căn)</th>
         </tr>
         <tr>
-            <th>Họ & tên</th>
+            <th style="text-align: center">Họ & tên</th>
             <th>Căn hộ</th>
             <th>Biệt thự</th>
             <th>BTĐL</th>
@@ -50,26 +53,26 @@
         </tr>
 
     </thead>
-    <tbody>
+    <tbody >
         @foreach (var sale in Model.sales)
         {
         <tr>
             <td>@sale.Name</td>
             @*</tr>
         <tr>*@
-            <td>@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NCH1 + m.NCH2 + m.NCH3 + m.NCH21)</td>
-            <td>@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NMS)</td>
-            <td>@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NSH)</td>
-            <td>@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NSH1)</td>
-            <td>@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NSHH)</td>
-            <td>@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NS)</td>
+            <td style="text-align: center">@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NCH1 + m.NCH2 + m.NCH3 + m.NCH21)</td>
+            <td style="text-align: center">@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NMS)</td>
+            <td style="text-align: center">@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NSH)</td>
+            <td style="text-align: center">@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NSH1)</td>
+            <td style="text-align: center">@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NSHH)</td>
+            <td style="text-align: center">@Model.appoinments.Where(m => m.Sale == sale).Sum(m => m.NS)</td>
         </tr>
         }
 
     </tbody>
 </table>
 
-<style>
+@*<style>
     table, td, th {
         border: 1px solid #ddd;
         text-align: left;
@@ -155,4 +158,4 @@
             width: 100%;
             z-index: -1;
         }
-</style>
+</style>*@

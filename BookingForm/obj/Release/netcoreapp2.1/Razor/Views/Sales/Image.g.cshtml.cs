@@ -67,7 +67,7 @@ WriteAttributeValue("", 146, Url.Action("GetPhoto", "Sales", new { id = Model.Id
             WriteLiteral(" style=\"width:235px;height:235px;border-radius:50%;transition: .5s ease;backface-visibility: hidden; border:0\" />\r\n        <div class=\"container\">\r\n    ");
             EndContext();
             BeginContext(353, 88, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "7243de2794f144a095ccbb07bfc6c19b", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("input", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "fdc84a68fe774b5d9d0080137f3e8cb9", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_TagHelpers_InputTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.InputTagHelper>();

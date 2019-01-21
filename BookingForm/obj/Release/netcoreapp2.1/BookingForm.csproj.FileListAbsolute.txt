@@ -129,3 +129,6 @@ C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netco
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Managers\Monthly.g.cshtml.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Managers\Profit.g.cshtml.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Managers\_Profit.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Appoinments\Plan.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\AddContact.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\Contacts.g.cshtml.cs

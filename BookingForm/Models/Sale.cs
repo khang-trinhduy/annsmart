@@ -28,6 +28,7 @@ namespace BookingForm.Models
         [Display(Name = "Nơi ở hiện tại")]
         public string Address { get; set; }
         public string Members { get; set; }
+        public string Type { get; set; }
         public int NOfRequests { get; set; }
         public int NOfFeedbacks { get; set; }
         public int NOfMeetings { get; set; }

@@ -10,8 +10,9 @@ namespace BookingForm.Models
         public Guid Id { get; set; }
         public string Name { get; set; }
         public string Location { get; set; }
-        public Enum State { get; set; }
+        public State State { get; set; }
         public ICollection<ProductPlan> ProductPlans { get; set; }
+        public ICollection<Appoinment> Appointments { get; set; }
     }
 
     public enum State

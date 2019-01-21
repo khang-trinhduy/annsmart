@@ -438,7 +438,7 @@ using Microsoft.AspNetCore.Identity;
             WriteLiteral("\r\n                            </td>\r\n                            <td>\r\n                                ");
             EndContext();
             BeginContext(13487, 52, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "27c9530ca3bb40369f620ddeac7b6f09", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "87220fcdaafc41c6a2cd7de8db477daf", async() => {
                 BeginContext(13533, 2, true);
                 WriteLiteral("HĐ");
                 EndContext();
@@ -473,7 +473,7 @@ using Microsoft.AspNetCore.Identity;
             WriteLiteral(" | ");
             EndContext();
             BeginContext(13542, 57, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "2f135925b5d945ba954460bedaeca761", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "7dcdc185aa7e4ed1a48be11c74235662", async() => {
                 BeginContext(13591, 4, true);
                 WriteLiteral("CMND");
                 EndContext();

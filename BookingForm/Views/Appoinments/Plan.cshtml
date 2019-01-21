@@ -1,0 +1,26 @@
+﻿@model IEnumerable<BookingForm.Models.Plan>
+
+<div class="container">
+    
+    <form class="" asp-action="SelectPlan">
+        <div class="row">
+            <div class="col">
+                <div class="form-group">
+                    <label class="control-label">Dự án</label>
+                    <select id="Id" class="form-control">
+                        <option value="">--Chọn dự án--</option>
+                        @foreach (Plan plan in Model)
+                        {
+                            <option value="@plan.Id">@plan.Name</option>                           
+                        }
+
+                    </select>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <button type="submit" class="btn btn-primary">Tiếp tục</button>
+        </div>
+    </form>
+     
+</div>
