@@ -71,7 +71,7 @@ namespace BookingForm.Models
         [Display(Name = "SL Căn 3pn")]
         public int NCH3 { get; set; }
         [Required]
-        [Display(Name = "SL biệt thự")]
+        [Display(Name = "SL dinh thự")]
         public int NMS { get; set; }
         [Required]
         [Display(Name = "SL BTDL")]

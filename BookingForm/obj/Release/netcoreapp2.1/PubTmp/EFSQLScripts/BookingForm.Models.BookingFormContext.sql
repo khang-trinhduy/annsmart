@@ -2069,3 +2069,205 @@ END;
 
 GO
 
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190121225048_SagitTarius')
+BEGIN
+    ALTER TABLE [appoinment] ADD [Avatar] nvarchar(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190121225048_SagitTarius')
+BEGIN
+    ALTER TABLE [appoinment] ADD [DOB] datetime2 NOT NULL DEFAULT '0001-01-01T00:00:00.0000000';
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190121225048_SagitTarius')
+BEGIN
+    ALTER TABLE [appoinment] ADD [HouseholdPhoto] nvarchar(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190121225048_SagitTarius')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190121225048_SagitTarius', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190123025707_Mercury')
+BEGIN
+    ALTER TABLE [Requests] ADD [ContractNumber] int NOT NULL DEFAULT 0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190123025707_Mercury')
+BEGIN
+    ALTER TABLE [Requests] ADD [Customer] nvarchar(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190123025707_Mercury')
+BEGIN
+    ALTER TABLE [Requests] ADD [DOB] datetime2 NOT NULL DEFAULT '0001-01-01T00:00:00.0000000';
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190123025707_Mercury')
+BEGIN
+    ALTER TABLE [Requests] ADD [Email] nvarchar(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190123025707_Mercury')
+BEGIN
+    ALTER TABLE [Requests] ADD [LoanStatus] int NOT NULL DEFAULT 0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190123025707_Mercury')
+BEGIN
+    ALTER TABLE [Requests] ADD [MaritalStatus] int NOT NULL DEFAULT 0;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190123025707_Mercury')
+BEGIN
+    ALTER TABLE [Requests] ADD [Nationality] nvarchar(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190123025707_Mercury')
+BEGIN
+    ALTER TABLE [Requests] ADD [Note] nvarchar(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190123025707_Mercury')
+BEGIN
+    ALTER TABLE [Requests] ADD [PhoneNumber] nvarchar(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190123025707_Mercury')
+BEGIN
+    ALTER TABLE [Requests] ADD [Product] nvarchar(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190123025707_Mercury')
+BEGIN
+    ALTER TABLE [Requests] ADD [Purpose] nvarchar(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190123025707_Mercury')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190123025707_Mercury', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190123110609_46P-Wirtanen')
+BEGIN
+    ALTER TABLE [Requests] ADD [CompleteTime] datetime2 NOT NULL DEFAULT '0001-01-01T00:00:00.0000000';
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190123110609_46P-Wirtanen')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190123110609_46P-Wirtanen', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190123111158_Scorpius')
+BEGIN
+    ALTER TABLE [Requests] ADD [SubmitTime] datetime2 NOT NULL DEFAULT '0001-01-01T00:00:00.0000000';
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190123111158_Scorpius')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190123111158_Scorpius', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190128014715_Sun')
+BEGIN
+    ALTER TABLE [Grants] ADD [UserId] uniqueidentifier NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190128014715_Sun')
+BEGIN
+    CREATE INDEX [IX_Grants_UserId] ON [Grants] ([UserId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190128014715_Sun')
+BEGIN
+    ALTER TABLE [Grants] ADD CONSTRAINT [FK_Grants_AspNetUsers_UserId] FOREIGN KEY ([UserId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE NO ACTION;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190128014715_Sun')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190128014715_Sun', N'2.1.4-rtm-31024');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190129100910_EagleNebula')
+BEGIN
+    ALTER TABLE [Requests] ADD [ContractId] uniqueidentifier NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190129100910_EagleNebula')
+BEGIN
+    CREATE INDEX [IX_Requests_ContractId] ON [Requests] ([ContractId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190129100910_EagleNebula')
+BEGIN
+    ALTER TABLE [Requests] ADD CONSTRAINT [FK_Requests_appoinment_ContractId] FOREIGN KEY ([ContractId]) REFERENCES [appoinment] ([Id]) ON DELETE NO ACTION;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190129100910_EagleNebula')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190129100910_EagleNebula', N'2.1.4-rtm-31024');
+END;
+
+GO
+

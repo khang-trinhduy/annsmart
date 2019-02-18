@@ -181,7 +181,8 @@
             <div class="form-group">
                 @Html.RadioButton("DType", "Tiền mặt", true)Tiền mặt
                 @Html.RadioButton("DType", "Chuyển khoản", new { style = "margin-left: 25px;" })Chuyển khoản
-                @Html.RadioButton("DType", "Cả hai", new { style = "margin-left: 25px;" })Cả hai
+                @Html.RadioButton("DType", "Thẻ", true)Thẻ
+                @Html.RadioButton("DType", "Tiền mặt + Chuyển khoản", new { style = "margin-left: 25px;" })Tiền mặt + Chuyển khoản
                 <span asp-validation-for="DType" class="text-danger"></span>
             </div>
             <div class="form-group">

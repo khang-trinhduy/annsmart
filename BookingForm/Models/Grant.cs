@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -14,6 +15,9 @@ namespace BookingForm.Models
         public string Permission { get; set; }
         //public Guid Role { get; set; }
         public virtual Role Role { get; set; }
+        public Guid? UserId { get; set; }
+        [ForeignKey(name: "UserId")]
+        public Sale User { get; set; }
     }
 }
 

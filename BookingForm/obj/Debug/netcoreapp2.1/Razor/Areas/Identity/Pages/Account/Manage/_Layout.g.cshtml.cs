@@ -80,7 +80,7 @@ using BookingForm.Areas.Identity.Pages.Account.Manage;
             WriteLiteral("    <hr />\r\n    <div class=\"row\">\r\n        <div class=\"col-md-3\">\r\n            ");
             EndContext();
             BeginContext(223, 29, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("partial", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "9a716ed1826845d7a6f80a85d4159384", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("partial", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "a65c8129da9a443eb8ed99b449188ea6", async() => {
             }
             );
             __Microsoft_AspNetCore_Mvc_TagHelpers_PartialTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.PartialTagHelper>();

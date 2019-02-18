@@ -76,7 +76,7 @@ Write(ViewData["Title"]);
             WriteLiteral("</h2>\r\n<h3>User claims</h3>\r\n<div>\r\n    ");
             EndContext();
             BeginContext(149, 73, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "90470d9a838b46d4a00e99492c3f2e29", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "6545d6e5e9f14b768c0ea1b5a9685d36", async() => {
                 BeginContext(193, 25, true);
                 WriteLiteral("Call API using user token");
                 EndContext();
@@ -98,7 +98,7 @@ Write(ViewData["Title"]);
             WriteLiteral("\r\n</div>\r\n<div>\r\n    ");
             EndContext();
             BeginContext(243, 85, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "916396958f044379a3c3a34dbb72e89e", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "6ce38e5641e04f69bdcec976ce3eed60", async() => {
                 BeginContext(289, 35, true);
                 WriteLiteral("Call API using application identity");
                 EndContext();

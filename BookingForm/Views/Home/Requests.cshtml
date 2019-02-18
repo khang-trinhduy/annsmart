@@ -1,0 +1,52 @@
+﻿@model IEnumerable<BookingForm.Models.Request>
+@{ int count = 1;}
+<h4>Danh sách yêu cầu</h4>
+<div class="container">
+    <table class="table">
+        <thead>
+
+            <tr>
+                <td>STT</td>
+                <td>Trạng thái hiện tại</td>
+                <td>Người đảm nhận</td>
+                <td>Thời gian hoàn tất</td>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Request item in Model)
+            {
+            <tr>
+                <td>@count</td>
+                <td>
+                    @if (item.LoanStatus == LoanStatus.Canceled)
+                    {
+                        <p>
+                            Đã hủy
+                        </p>
+                    }
+                    else if (item.LoanStatus == LoanStatus.Completed)
+                    {
+                        <p>Hoàn tất</p>
+                    }
+                    else if (item.LoanStatus == LoanStatus.Contacting)
+                    {
+                        <p>Đang tư vấn</p>
+                    }
+                    else if (item.LoanStatus == LoanStatus.Processing)
+                    {
+                        <p>Đang chờ xác nhận</p>
+                    }   
+                </td>
+                <td>
+                    Tư vấn tín dụng Bankexpress
+                </td>
+                <td>
+                    @item.CompleteTime
+                </td>
+            </tr>
+                count++;
+            }
+        </tbody>
+    </table>
+</div>

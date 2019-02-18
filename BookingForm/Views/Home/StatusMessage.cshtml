@@ -1,0 +1,13 @@
+﻿@model string
+
+@if (!String.IsNullOrEmpty(Model))
+{
+    var statusMessageClass = Model.StartsWith("Không") ? "danger" : "success";
+    if(Model == "Bạn không có quyền thực hiện tác vụ này!"){
+        statusMessageClass = "danger";
+    }
+<div class="alert alert-@statusMessageClass alert-dismissible" role="alert">
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+    @Model
+</div>
+}

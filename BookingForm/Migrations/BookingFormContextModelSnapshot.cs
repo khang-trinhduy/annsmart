@@ -27,6 +27,8 @@ namespace BookingForm.Migrations
                     b.Property<string>("Address")
                         .IsRequired();
 
+                    b.Property<string>("Avatar");
+
                     b.Property<double>("Cash");
 
                     b.Property<string>("Cmnd");
@@ -37,6 +39,8 @@ namespace BookingForm.Migrations
 
                     b.Property<string>("Customer")
                         .IsRequired();
+
+                    b.Property<DateTime>("DOB");
 
                     b.Property<string>("DType")
                         .IsRequired();
@@ -54,6 +58,8 @@ namespace BookingForm.Migrations
 
                     b.Property<string>("HKTT")
                         .IsRequired();
+
+                    b.Property<string>("HouseholdPhoto");
 
                     b.Property<string>("IdType");
 
@@ -279,9 +285,13 @@ namespace BookingForm.Migrations
 
                     b.Property<string>("RoleName");
 
+                    b.Property<Guid?>("UserId");
+
                     b.HasKey("Id");
 
                     b.HasIndex("RoleId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Grants");
                 });
@@ -381,9 +391,35 @@ namespace BookingForm.Migrations
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
 
+                    b.Property<DateTime>("CompleteTime");
+
                     b.Property<string>("Contents");
 
+                    b.Property<Guid?>("ContractId");
+
+                    b.Property<int>("ContractNumber");
+
+                    b.Property<string>("Customer");
+
+                    b.Property<DateTime>("DOB");
+
+                    b.Property<string>("Email");
+
+                    b.Property<int>("LoanStatus");
+
+                    b.Property<int>("MaritalStatus");
+
+                    b.Property<string>("Nationality");
+
+                    b.Property<string>("Note");
+
                     b.Property<Guid?>("OwnerId");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<string>("Product");
+
+                    b.Property<string>("Purpose");
 
                     b.Property<string>("RequestName");
 
@@ -391,7 +427,11 @@ namespace BookingForm.Migrations
 
                     b.Property<string>("Subject");
 
+                    b.Property<DateTime>("SubmitTime");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ContractId");
 
                     b.HasIndex("OwnerId");
 
@@ -661,6 +701,10 @@ namespace BookingForm.Migrations
                     b.HasOne("BookingForm.Models.Role", "Role")
                         .WithMany()
                         .HasForeignKey("RoleId");
+
+                    b.HasOne("BookingForm.Models.Sale", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("BookingForm.Models.ProductPlan", b =>
@@ -676,6 +720,10 @@ namespace BookingForm.Migrations
 
             modelBuilder.Entity("BookingForm.Models.Request", b =>
                 {
+                    b.HasOne("BookingForm.Models.Appoinment", "Appoinment")
+                        .WithMany()
+                        .HasForeignKey("ContractId");
+
                     b.HasOne("BookingForm.Models.Sale", "Owner")
                         .WithMany("Requests")
                         .HasForeignKey("OwnerId");

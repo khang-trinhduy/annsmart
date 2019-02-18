@@ -1,0 +1,81 @@
+﻿@model BookingForm.Models.Request
+<div class="row">
+    <div class="col-6">
+        <label class="control-label">Tên khách hàng</label>
+        <select class="custom-select" required asp-for="Customer">
+            <option value="">--Chọn--</option>
+        </select>
+    </div>
+    <div class="col-6">
+        <label class="control-label" >Số HĐ</label>
+        <select required asp-for="ContractNumber" class="custom-select">
+            <option value="">--Chọn--</option>
+        </select>
+
+    </div>
+   
+
+</div>
+<div class="row">
+    <div class="col-3">
+        <label class="control-label">Số điện thoại</label>
+        <input required class="form-control" asp-for="PhoneNumber" />
+    </div>
+    <div class="col-3">
+        <label class="control-label">Email</label>
+        <input class="form-control" asp-for="Email" />
+    </div>
+    <div class="col-6">
+        <label class="control-label">Loại hình SP</label>
+        <input asp-for="Product" required class="form-control" value="@ViewBag.Product" id="Product" />
+
+    </div>
+    
+</div>
+<div class="row">
+
+    <div class="col-2">
+        <label class="control-label">Ngày sinh</label>
+        <input type="date" required asp-for="DOB" class="form-control" />
+    </div>
+    <div class="col-2">
+        <label class="control-label">Tình trạng hôn nhân</label>
+        <select asp-for="MaritalStatus" class="custom-select">
+            <option value="1">Độc thân</option>
+            <option value="2">Đã kết hôn</option>
+            <option value="3">Ly thân</option>
+            <option value="4">Góa</option>
+        </select>
+    </div>
+    <div class="col-2">
+        <label class="control-label">Quốc tịch</label>
+        <select required asp-for="Nationality" class="custom-select">
+            <option value="VietNam">Việt Nam</option>
+            <option value="Others">Khác</option>
+        </select>
+    </div>
+    <div class="col-6">
+        <label class="control-label">Mục đích</label>
+        <input required class="form-control" asp-for="Purpose" />
+
+    </div>
+
+</div>
+<div class="row">
+    <div class="col">
+        <div class="form-group">
+            <label class="control-label" asp-for="Note">Lưu ý</label>
+            <textarea required rows="3" class="form-control" id="Note"></textarea>
+        </div>
+
+    </div>
+</div>
+<div class="row">
+    <div class="col">
+        <div class="custom-control custom-checkbox my-1 mr-sm-2">
+            <input type="checkbox" class="custom-control-input" id="customControlInline" required>
+            <label class="custom-control-label" for="customControlInline">Xác nhận những thông tin bên trên là hoàn toàn chính xác (Yêu cầu sẽ được công ty kiểm tra lại, và bị hủy nếu như thông tin không chính xác).</label>
+        </div>
+    </div>
+</div>
+<button type="submit" class="btn btn-light">Xác nhận</button>

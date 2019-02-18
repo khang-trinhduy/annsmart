@@ -1,0 +1,196 @@
+﻿@model IEnumerable<BookingForm.Models.Request>
+@{ int count = 1;}
+<div class="container">
+    <div class="form-group">
+        <partial name="StatusMessage" model="@TempData["StatusMessage"]" />
+        <span></span>
+    </div>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>STT</td>
+                <td>Trạng thái yêu cầu</td>
+                <td>Người cung cấp</td>
+                <td>Thời gian cung cấp</td>
+                <td>Thao tác</td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (Request item in Model)
+            {
+            <tr>
+                <td>@count</td>
+                <td>
+                    @if (item.LoanStatus == LoanStatus.Canceled)
+                    {
+                        <p>
+                            Đã hủy
+                        </p>
+                    }
+                    else if (item.LoanStatus == LoanStatus.Completed)
+                    {
+                        <p>Hoàn tất</p>
+                    }
+                    else if (item.LoanStatus == LoanStatus.Contacting)
+                    {
+                        <p>Đang tư vấn</p>
+                    }
+                    else if (item.LoanStatus == LoanStatus.Processing)
+                    {
+                        <p>Đang chờ xác nhận</p>
+                    }
+                    @*@item.LoanStatus*@
+                </td>
+                <td>
+                    @if (item.OwnerId != null)
+                    {
+                        @item.Owner.Name
+                    }
+                    <p hidden>@item.Id</p>
+                </td>
+                <td>
+                    @item.SubmitTime
+                </td>
+                <td>
+                    <a asp-action="RequestDetails" asp-route-id="@item.Id">Chi tiết</a> - <a data-toggle="modal" data-target="#ConfirmModal" asp-action="ConfirmRequest" data-id="@item.Id" id="Confirm">Xác nhận</a> - <a id="Complete" data-toggle="modal" data-target="#CompleteModal" asp-action="CompleteRequest" data-id="@item.Id">Hoàn tất</a> - <a id="Cancel" data-toggle="modal" data-target="#CancelModal" asp-action="CancelRequest" data-id="@item.Id">Hủy bỏ</a>
+                    @if (item.LoanStatus == LoanStatus.Completed)
+                    {
+                        <a asp-action="Template" asp-route-id="@item.ContractId"> - Biểu mẫu</a>
+                    }
+                </td>
+            </tr>
+            count++;
+            }
+        </tbody>
+    </table>
+</div>
+                        
+<!-- Modal -->
+<div class="modal fade" id="ConfirmModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Xác nhận yêu cầu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có muốn nhận yêu cầu này?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-light" data-dismiss="modal" id="confirm-btn">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="CompleteModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Hoàn tất yêu cầu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có muốn chuyển trạng thái của yêu cầu sang hoàn tất?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-light" id="complete-btn" data-dismiss="modal">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal fade" id="CancelModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Hủy yêu cầu</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Bạn có muốn hủy bỏ yêu cầu này?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Hủy</button>
+                <button type="button" class="btn btn-caution" id="cancel-btn" data-dismiss="modal">Xác nhận</button>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    $(document).on("click", "#Confirm", function () {
+        var editId = $(this).data('id'); //get the id with this
+        var success = false; //open modal only if success=true
+        //url should match your server function so I will assign url as below:
+        //var url = "/ConfirmRequest?id=" + editId; //this is the server function you are calling
+        var url = '@Url.Action("ConfirmRequest", "Home")' + "?id=" + editId;       
+        var data = JSON.stringify({ "id": editId });
+        $("#confirm-btn").on("click", function myfunction() {
+            $.ajax({ //To execute some other functionality once ajax call is done
+                type: 'post',
+                url: url,
+                data: data, //better to pass it with data
+                dataType: 'json',//type of data you are returning from server
+                success: function (data) {
+                    window.location.href = window.location.href;
+                },
+                error: function () {
+                    //handle error
+                    window.location.href = window.location.href;
+                },
+            });
+        });         
+    });
+    $(document).on("click", "#Cancel", function () {
+        var editId = $(this).data('id'); //get the id with this
+        var success = false; //open modal only if success=true
+        //url should match your server function so I will assign url as below:
+        //var url = "/ConfirmRequest?id=" + editId; //this is the server function you are calling
+        var url = '@Url.Action("CancelRequest", "Home")' + "?id=" + editId;       
+        var data = JSON.stringify({ "id": editId });
+        $("#cancel-btn").on("click", function myfunction() {
+            $.ajax({ //To execute some other functionality once ajax call is done
+                type: 'post',
+                url: url,
+                data: data, //better to pass it with data
+                dataType: 'json',//type of data you are returning from server
+                success: function (data) {
+                    window.location.href = window.location.href;
+                },
+                error: function () {
+                    //handle erro
+                    window.location.href = window.location.href;
+                },
+            });
+        });         
+    });
+    $(document).on("click", "#Complete", function () {
+        var editId = $(this).data('id'); //get the id with this
+        var success = false; //open modal only if success=true
+        //url should match your server function so I will assign url as below:
+        //var url = "/ConfirmRequest?id=" + editId; //this is the server function you are calling
+        var url = '@Url.Action("CompleteRequest", "Home")' + "?id=" + editId;       
+        var data = JSON.stringify({ "id": editId });
+        $("#complete-btn").on("click", function myfunction() {
+            $.ajax({ //To execute some other functionality once ajax call is done
+                type: 'post',
+                url: url,
+                data: data, //better to pass it with data
+                dataType: 'json',//type of data you are returning from server
+                success: function (data) {
+                    window.location.href = window.location.href;
+                },
+                error: function () {
+                    window.location.href = window.location.href;
+                    //handle error
+                },
+            });
+        });         
+    });
+</script>

@@ -16,15 +16,16 @@
                         <option value="">Loại yêu cầu</option>
                         <option value="Withdraw">Hoàn tiền giữ chỗ</option>
                         <option value="Reserve">Số thứ tự</option>
+                        <option value="Loan">Tư vấn vay</option>
                     </select>
                     <div class="invalid-feedback">Vui lòng chọn loại yêu cầu</div>
                 </div>
-                <div class="form-group" hidden>
+                <div hidden class="form-group">
                     <label class="control-label" asp-for="RequestName">Yêu cầu</label>
                     <input required asp-for="RequestName" class="form-control" />
                     <span asp-validation-for="RequestName" class="text-danger"></span>
                 </div>
-                <div class="form-group" hidden>
+                <div hidden class="form-group">
                     <label class="control-label" asp-for="Contents"></label>
                     <input required asp-for="Contents" class="form-control" />
                     <span asp-validation-for="Contents" class="text-danger"></span>
@@ -37,7 +38,7 @@
     </form>
 </div>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+@*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*@
 <script type="text/javascript" language="JavaScript">
     $("#Subject").change(function (e) {
         var sbj = $(this).val();
@@ -46,6 +47,60 @@
             $('#partial').fadeIn('slow');
         });
     })
+    $("#Subject").change(function () {
+        var options = {};
+        options.url = "/Home/GetCustomers";
+        options.type = "GET";
+        options.dataType = "json";
+        options.success = function (data) {
+            $("#Customer").empty().append("<option value=\"\">--Chọn--</option>");
+            data.forEach(function (element) {
+                $("#Customer").append("<option value=\"" + element + "\">"
+                    + element + "</option>");
+            });
+        };
+        options.error = function () {
+            $("#msg").html("Error while making Ajax call!");
+    };
+        $.ajax(options);
+    });
+    $(document).on("change", "#Customer", function () {
+        var options = {};
+        options.url = "/Home/GetContracts?customer_name=" + $("#Customer").val();
+        options.type = "GET";
+        options.dataType = "json";
+        options.success = function (data) {
+            $("#ContractNumber").empty().append("<option value=\"\">--Chọn--</option>");
+            data.forEach(function (element) {
+                $("#ContractNumber").append("<option value=\"" + element + "\">"
+                    + element + "</option>");
+            });
+        };
+        options.error = function () {
+            $("#msg").html("Error while making Ajax call!");
+        };
+        $.ajax(options);
+    });
+    $(document).on("change", "#ContractNumber", function () {
+        var options = {};
+        var array = $("#Customer").val().split(" ");
+        var str = array.join("_");
+        options.url = "/Home/GetInfo?customer_name=" + str + "&contract=" + $("#ContractNumber").val();
+        options.type = "GET";
+        options.dataType = "json";
+        options.success = function (data) {
+            $("#Email").val(data.email);       
+            $("#Nationality").val(data.nationality);
+            $("#Purpose").val(data.purpose);
+            $("#Product").val(data.products);
+            $("#PhoneNumber").val(data.phoneNumber);
+        };
+        options.error = function () {
+            $("#msg").html("Error while making Ajax call!");
+        };
+        $.ajax(options);
+
+    });
     $(document).on("click", "button", function (e) {
         if ($("#Subject").val() == "Withdraw") {
             var customer = $("#Customer").val();
@@ -80,10 +135,14 @@
             str += ". HTTT: " + ht + ". Số tiền: " + $("#Money").val().toString() + ". Lý do: " + $("#Reason").val().toString() + ".";
             $("#Contents").val(str);
         }
-        else {
+        else if ($("#Subject").val() == "Reserve"){
             $("#RequestName").val("Giữ số thứ tự");
             var str = "STT: " + $("#Priority").val().toString() + ". Thời gian: " + $("#Duration").val().toString() + " ngày" + ". Lý do: " + $("#Reason").val().toString() + ".";
             $("#Contents").val(str);
+        }
+        else {
+            $("#RequestName").val("Tư vấn vay");
+            $("#Contents").val("Vay mua căn hộ");
         }
         
     })

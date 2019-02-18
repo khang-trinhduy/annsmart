@@ -42,12 +42,13 @@ namespace BookingForm.Controllers
 
         public async Task<bool> IsAuthorized(Sale sale, string resource, string operation)
         {
-            var roles = await _userManager.GetRolesAsync(sale);
-            var grants = await _context.Grants.Where(g => g.Operation == operation && g.Resource == resource && g.Permission == "Allow").ToListAsync();
             if (sale == null)
             {
                 return false;
             }
+            var roles = await _userManager.GetRolesAsync(sale);
+            var grants = await _context.Grants.Where(g => g.Operation == operation && g.Resource == resource && g.Permission == "Allow").ToListAsync();
+
             if (grants != null)
             {
                 foreach (var grant in grants)
@@ -60,6 +61,178 @@ namespace BookingForm.Controllers
             }
             Log.Warning("Access denied! User " + sale.Name + " tried to " + operation + " " + resource + ".");
             return false;
+        }
+
+        public async Task<IActionResult> RequestsControl()
+        {
+            //var curUser = await _userManager.GetUserAsync(User);
+            //var authorized = await IsAuthorized(curUser, "Contracts", "Create");
+            //TempData["StatusMessage"] = TempData["StatusMessage"];
+            //if (!authorized)
+            //{
+            //    return View("AccessDenied");
+            //}
+            var requests = await _context.Requests.Where(r => r.Subject == "Loan").ToListAsync();
+            if (requests == null)
+            {
+                return NotFound("Can't find any requests");
+            }
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Requests", "List");
+            TempData["StatusMessage"] = TempData["StatusMessage"];
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
+            foreach (Request request in requests)
+            {
+                if (request.OwnerId != null)
+                {
+                    request.Owner = await _context.sale.FirstAsync(s => s.Id == request.OwnerId);
+                }             
+                _context.Update(request);
+            }
+            return View(requests);
+        }
+
+        public async Task<IActionResult> Requests()
+        {
+            //var curUser = await _userManager.GetUserAsync(User);
+            //var authorized = await IsAuthorized(curUser, "Contracts", "Create");
+            //TempData["StatusMessage"] = TempData["StatusMessage"];
+            //if (!authorized)
+            //{
+            //    return View("AccessDenied");
+            //}
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Requests", "Read");
+            TempData["StatusMessage"] = TempData["StatusMessage"];
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
+            var requests = await _context.Requests.Where(r => r.Subject == "Loan" && r.OwnerId == curUser.Id).ToListAsync();
+            if (requests == null)
+            {
+                return NotFound("Can't find any requests");
+            }
+            
+            foreach (Request request in requests)
+            {
+                if (request.OwnerId != null)
+                {
+                    request.Owner = await _context.sale.FirstAsync(s => s.Id == request.OwnerId);
+                }
+                _context.Update(request);
+            }
+            return View(requests);
+        }
+
+        public async Task<IActionResult> RequestDetails(Guid? id)
+        {
+            var request = await _context.Requests.FindAsync(id);
+            
+            if (request == null)
+            {
+                return NotFound("Can't find request with id " + Convert.ToString(id));
+            }
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Requests", "Read");
+            TempData["StatusMessage"] = TempData["StatusMessage"];
+            if (!authorized)
+            {
+                TempData["StatusMessage"] = "Bạn không có quyền thực hiện tác vụ này!";
+                return View("AccessDenied");
+            }
+            var owner = await _context.sale.FindAsync(request.OwnerId);
+            ViewBag.Owner = owner.Name;
+            return View(request);
+        }
+
+        public async Task<IActionResult> ConfirmRequest(Guid? id)
+        {
+            var request = await _context.Requests.FindAsync(id);
+            if (request == null)
+            {
+                TempData["StatusMessage"] = "Không thể xác nhận yêu cầu!";
+                return Json("");
+            }
+            if (request.LoanStatus == LoanStatus.Completed || request.LoanStatus == LoanStatus.Contacting || request.LoanStatus == LoanStatus.Canceled)
+            {
+                TempData["StatusMessage"] = "Không thể xác nhận yêu cầu!";
+                return Json("");
+            }
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Requests", "Update");
+            TempData["StatusMessage"] = TempData["StatusMessage"];
+            if (!authorized)
+            {
+                TempData["StatusMessage"] = "Bạn không có quyền thực hiện tác vụ này!";
+                return View("AccessDenied");
+            }
+            request.LoanStatus = LoanStatus.Contacting;
+            _context.Update(request);
+            await _context.SaveChangesAsync();
+            TempData["StatusMessage"] = "Xác nhận yêu cầu thành công";
+            return Json("");
+        }
+
+        public async Task<IActionResult> CompleteRequest(Guid? id)
+        {
+            var request = await _context.Requests.FindAsync(id);
+            if (request == null)
+            {
+                TempData["StatusMessage"] = "Không thể hoàn tất yêu cầu!";
+                return NotFound("Can't find request with id " + Convert.ToString(id));
+            }
+            if (request.LoanStatus == LoanStatus.Completed || request.LoanStatus == LoanStatus.Canceled || request.LoanStatus == LoanStatus.Processing)
+            {
+                TempData["StatusMessage"] = "Không thể hoàn tất yêu cầu!";
+                return NotFound("Can't find request with id " + Convert.ToString(id));
+            }
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Requests", "Update");
+            TempData["StatusMessage"] = TempData["StatusMessage"];
+            if (!authorized)
+            {
+                TempData["StatusMessage"] = "Bạn không có quyền thực hiện tác vụ này!";
+                return View("AccessDenied");
+            }
+            request.LoanStatus = LoanStatus.Completed;
+            request.CompleteTime = DateTime.Now;
+            _context.Update(request);
+            await _context.SaveChangesAsync();
+            TempData["StatusMessage"] = "Yêu cầu hoàn tất";
+            return Json("");
+        }
+
+        public async Task<IActionResult> CancelRequest(Guid? id)
+        {
+            var request = await _context.Requests.FindAsync(id);
+
+            if (request == null)
+            {
+                TempData["StatusMessage"] = "Không thể hủy yêu cầu!";
+                return NotFound("Can't find request with id " + Convert.ToString(id));
+            }
+            if (request.LoanStatus == LoanStatus.Completed || request.LoanStatus == LoanStatus.Canceled)
+            {
+                TempData["StatusMessage"] = "Không thể hủy yêu cầu!";
+                return NotFound("Can't find request with id " + Convert.ToString(id));
+            }
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Requests", "Update");
+            TempData["StatusMessage"] = TempData["StatusMessage"];
+            if (!authorized)
+            {
+                TempData["StatusMessage"] = "Bạn không có quyền thực hiện tác vụ này!";
+                return View("AccessDenied");
+            }
+            request.LoanStatus = LoanStatus.Canceled;
+            _context.Update(request);
+            await _context.SaveChangesAsync();
+            TempData["StatusMessage"] = "Yêu cầu đã bị hủy";
+            return Json("");
         }
 
         [HttpGet]
@@ -202,8 +375,32 @@ namespace BookingForm.Controllers
             return View();
         }
 
+        public async Task<IActionResult> Template(Guid? Id)
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Requests", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
+            var meeting = await _context.appoinment.FindAsync(Id);
+            if (meeting == null || meeting.Confirm == false || meeting.IsActive == false || meeting.PlanId == null)
+            {
+                return NotFound();
+            }
+            var plan = await _context.Plans.FindAsync(meeting.PlanId);
+            if (plan == null)
+            {
+                return NotFound();
+            }
+            meeting.Plan = plan;
+            _context.Update(meeting);
+            await _context.SaveChangesAsync();
+            return View(meeting);
+        }
+
         [HttpPost]
-        public async Task<IActionResult> Request([Bind("Subject", "Contents", "RequestName")] Request request)
+        public new async Task<IActionResult> Request([Bind("Subject", "Contents", "RequestName", "Customer", "PhoneNumber", "Nationality", "ContractNumber", "DOB", "Email", "MaritalStatus", "Purpose", "Product", "Note", "LoanStatus")] Request request)
         {
             var curUser = await _userManager.GetUserAsync(User);
             var authorized = await IsAuthorized(curUser, "Requests", "Create");
@@ -214,6 +411,17 @@ namespace BookingForm.Controllers
             request.Owner = await _userManager.GetUserAsync(User);
             request.Status = Status.Pending;
             request.Contents += "-From[" + request.Owner.Name + "]";
+            request.SubmitTime = DateTime.Now;
+            if (request.Subject == "Loan")
+            {
+                var meetings = await _context.appoinment.Where(m => m.Contract == request.ContractNumber && m.Customer == request.Customer && m.IsActive == true && m.Confirm == true).ToListAsync();
+                if (meetings.Count == 1)
+                {
+                    request.Appoinment = meetings[0];
+                }
+                request.LoanStatus = LoanStatus.Processing;
+
+            }
             if (!ModelState.IsValid)
             {
                 TempData["StatusMessage"] = "Request submission failed!";
@@ -227,6 +435,79 @@ namespace BookingForm.Controllers
             return RedirectToPage("/Request");
         }
 
+        public async Task<IActionResult> GetCustomers()
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+            if (curUser == null)
+            {
+                return NotFound("You haven't logged in");
+            }
+            var customers = await _context.appoinment.Where(a => a.Sale == curUser && a.Confirm == true && a.IsActive == true).ToListAsync();
+            List<string> data = new List<string>();
+            foreach (Appoinment customer in customers)
+            {
+                data.Add(customer.Customer);
+            }
+            return new JsonResult(data);
+        }
+
+        public async Task<IActionResult> GetContracts(string customer_name)
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+            if (curUser == null)
+            {
+                return NotFound("You haven't logged in");
+            }
+            var customers = await _context.appoinment.Where(a => a.Sale == curUser && a.Confirm == true && a.IsActive == true && a.Customer == customer_name).ToListAsync();
+            List<int> data = new List<int>();
+            foreach (Appoinment customer in customers)
+            {
+                data.Add(customer.Contract);
+            }
+            return new JsonResult(data);
+        }
+
+        public async Task<IActionResult> GetInfo(string customer_name, int contract)
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+            if (curUser == null)
+            {
+                return NotFound("You haven't logged in");
+            }
+            string[] tmp = customer_name.Split("_");
+            string new_name = String.Join(" ", tmp);
+            var app = await _context.appoinment.FirstAsync(a => a.Sale == curUser && a.Confirm == true && a.IsActive == true && a.Customer == new_name && a.Contract == contract);
+            Customer customer = new Customer();
+            customer.Name = app.Customer;
+            customer.Nationality = app.IsForeigner != false ? "Others" : "VietNam";
+            customer.PhoneNumber = app.Phone;
+            customer.Email = app.Email;
+            customer.Purpose = app.Purpose;
+            string product = "";
+            if (app.NCH1 + app.NCH2 + app.NCH21 + app.NCH3 > 0)
+            {
+                product += Convert.ToString(app.NCH1 + app.NCH2 + app.NCH21 + app.NCH3) + " Căn hộ ";
+            }
+            if (app.NSH + app.NSH1 > 0)
+            {
+                product += Convert.ToString(app.NSH + app.NSH1) + " Biệt thự ";
+            }
+            if (app.NSHH > 0)
+            {
+                product += Convert.ToString(app.NSHH) + " Shophouse (NPTM) ";
+            }
+            if (app.NS>0)
+            {
+                product += Convert.ToString(app.NS) + " Shop (Kios) ";
+            }
+            if (app.NMS>0)
+            {
+                product += Convert.ToString(app.NMS) + " Dinh thự ";
+            }
+            customer.Products = product;  
+            return new JsonResult(customer);
+        }
+
         public IActionResult ChangeRequest(string type)
         {
             if (type == "Withdraw")
@@ -236,6 +517,10 @@ namespace BookingForm.Controllers
             else if(type == "Reserve")
             {
                 return PartialView("Reserve");
+            }
+            else if (type == "Loan")
+            {
+                return PartialView("Loan");
             }
             return PartialView("Index");
         }

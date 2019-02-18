@@ -1,0 +1,120 @@
+﻿@model BookingForm.Models.Request
+
+<div>
+    <h4>Yêu cầu</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            Tên yêu cầu
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.RequestName)
+        </dd>
+        <dt>
+            Loại yêu cầu
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Subject)
+        </dd>
+        @*<dt>
+            @Html.DisplayNameFor(model => model.Contents)
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Contents)
+        </dd>*@
+        @*<dt>
+           Tình trạng
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>*@
+        <dt>
+            Người gửi yêu cầu
+        </dt>
+        <dd>
+            @ViewBag.Owner
+        </dd>
+        <dt>
+            Tên khách hàng
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Customer)
+        </dd>
+        <dt>
+           SĐT
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.PhoneNumber)
+        </dd>
+        <dt>
+            Quốc tịch
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Nationality)
+        </dd>
+        <dt>
+            Số hợp đồng
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.ContractNumber)
+        </dd>
+        <dt>
+            Ngày sinh
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.DOB)
+        </dd>
+        <dt>
+            Email
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Email)
+        </dd>
+        <dt>
+           Tình trạng hôn nhân
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.MaritalStatus)
+        </dd>
+        <dt>
+            Mục đích
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Purpose)
+        </dd>
+        <dt>
+            Sản phẩm
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Product)
+        </dd>
+        <dt>
+           Lưu ý
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.Note)
+        </dd>
+        <dt>
+           Tình trạng
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.LoanStatus)
+        </dd>
+        <dt>
+           Thời gian hoàn thành
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.CompleteTime)
+        </dd>
+        <dt>
+            Thời gian nhận yêu cầu
+        </dt>
+        <dd>
+            @Html.DisplayFor(model => model.SubmitTime)
+        </dd>
+    </dl>
+</div>
+<div>
+    <a asp-action="ConfirmRequest" asp-route-id="@Model.Id">Xác nhận</a> |
+    <a asp-action="RequestsControl">Trở lại</a>
+</div>

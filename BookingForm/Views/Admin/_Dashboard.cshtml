@@ -1,0 +1,506 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject UserManager<Sale> UserManager
+@model IEnumerable<BookingForm.Models.Appoinment>
+
+@*@{
+    ViewData["Title"] = "Administrator -";
+    string officials = "";
+    try
+    {
+        officials = "Số hiện tại: Căn hộ - " + Model.officials[0] + "; Dinh thự - " + Model.officials[1] + "; Biệt thự đơn lập - " + Model.officials[2] + "; Biệt thự song lập - " + Model.officials[3] + "; Shophouse (NPTM) - " + Model.officials[4] + "; Kios chung cư - " + Model.officials[5];
+    }
+    catch (Exception e) { }
+}*@
+@*<img src="~/images/Ann_Logo.png" style="width:340px; height:172px; display:block;margin-left:auto;margin-right:auto;" alt="Annhome Logo" title="Annhome-logo" />*@
+<span style="display:block; height:50px"></span>
+<h6 style="font-style:italic; text-align:right">TP. Hồ Chí Minh, ngày @DateTime.Now.Day  tháng @DateTime.Now.Month năm @DateTime.Now.Year</h6>
+
+@*<div style="display:block; text-align:right"><a id="home" asp-action="Tutor">Xem hướng dẫn</a></div>
+    <span style="display:block; height:25px"></span>
+    @*<div style="display:block; text-align:right"><a asp-action="ImportCustomer">Import</a></div>
+    <div style="display:block; text-align:right"><a id="new" asp-action="_export">Xuất file excel</a></div>
+    <span style="display:block; height:25px"></span>
+    <div style="display:block; text-align:right"><a id="new" asp-action="_loans">Khách có nhu cầu vay</a></div>
+    <span style="display:block; height:25px"></span>
+    <div style="display:block; text-align:right"><a id="hd" asp-action="Summary">Tổng kết</a></div>
+    <span style="display:block; height:26px"></span>
+    <div style="display:block; text-align:right"><a id="hd" asp-action="Sale">Sale</a></div>
+    <span style="display:block; height:25px"></span>*@
+@*<div style="display:block; text-align:right"><p style="color:#ec2924; font-size: large">@officials</p></div>*@
+<div style="display:block; text-align:right"><p style="font-style:italic;color:#090909; font-size: large">Màu vàng: HĐ chưa xác nhận tiền - Màu xanh: HĐ đã xác nhận tiền - Màu xám: HĐ hết hiệu lực. TG quy định hiện tại (2h làm việc kể từ khi ký HĐ)</p></div>
+<div style=" text-align:left">
+    <label style="display:inline-block; font-size: large">Hiện danh sách HĐ theo: </label>
+    <select id="contracts">
+        <option value="Today">Trong ngày</option>
+        <option value="All">Tất cả</option>
+        <option value="Cancel">HĐ hủy</option>
+        <option value="Withdraws">HĐ hoàn cọc</option>
+        <option value="Loans">N/c Vay</option>
+    </select>
+    <label style="display:inline-block; font-size: large">Tìm kiếm: </label>
+    <select style="display:inline-block" id="filter">
+        <option value="choose">-- Loại --</option>
+        <option value="sale">Sale</option>
+        <option value="customer">KH</option>
+        <option value="address">Nơi sinh sống</option>
+        <option value="place">HKTT</option>
+        <option value="purpose">Mục đích</option>
+        <option value="product">Loại sản phẩm</option>
+        <option value="date">Ngày tháng</option>
+    </select>
+    <div class="card">
+        <article class="card-group-item">
+            <header class="card-header">
+                <h6 class="title">Hiện HĐ theo </h6>
+            </header>
+            <div class="filter-content">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                    <label class="form-check-label" for="exampleRadios1">
+                        Trong ngày
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                    <label class="form-check-label" for="exampleRadios2">
+                        Tất cả
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                    <label class="form-check-label" for="exampleRadios2">
+                        HĐ hoàn cọc
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                    <label class="form-check-label" for="exampleRadios2">
+                        HĐ hủy
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                    <label class="form-check-label" for="exampleRadios2">
+                        N/C vay
+                    </label>
+                </div>
+            </div>
+        </article>
+        <article class="card-group-item">
+            <header class="card-header">
+                <h6 class="title">Tìm kiếm</h6>
+            </header>
+            <div class="filter-content">
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios1" value="option1" checked>
+                    <label class="form-check-label" for="exampleRadios1">
+                        Trong ngày
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                    <label class="form-check-label" for="exampleRadios2">
+                        Tất cả
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                    <label class="form-check-label" for="exampleRadios2">
+                        HĐ hoàn cọc
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                    <label class="form-check-label" for="exampleRadios2">
+                        HĐ hủy
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="radio" name="exampleRadios" id="exampleRadios2" value="option2">
+                    <label class="form-check-label" for="exampleRadios2">
+                        N/C vay
+                    </label>
+                </div>
+            </div>
+        </article>
+    </div>
+    @*<a style="display:inline-block" asp-action="Contracts" asp-route-id="0">Ngày </a>
+        <span style="display:inline-block; width:2px;"></span>
+        <p style="display:inline-block"> / </p>
+        <span style="display:inline-block; width:2px;"></span>
+        <a asp-action="Contracts" asp-route-id="1">Tất cả</a>
+        <span style="display:inline-block; width:2px;"></span>
+        <p style="display:inline-block"> / </p>
+        <span style="display:inline-block; width:2px;"></span>
+        <a asp-action="Contracts" asp-route-id="2">Đã xác nhận tiền vào(trong ngày)</a>
+        <span style="display:inline-block; width:2px;"></span>
+        <p style="display:inline-block"> / </p>
+        <span style="display:inline-block; width:2px;"></span>
+        <a asp-action="Contracts" asp-route-id="3">Chưa xác nhận  tiền vào(trong ngày)</a>
+        <span style="display:inline-block; width:2px;"></span>
+        <p style="display:inline-block"> / </p>
+        <span style="display:inline-block; width:2px;"></span>
+        <a asp-action="Contracts" asp-route-id="4">Các hợp đồng cũ</a>*@
+</div>
+@*<a asp-action="Download">download</a>*@
+@*<div style="text-align:right">
+        <a asp-action="AddMeeting" asp-route-id="@Model.ID">Xếp số hợp đồng</a>
+    </div>*@
+<hr />
+<h3 style="text-align:center">Danh sách hợp đồng xếp chỗ </h3>
+<table style="border:solid #ddd 1px;white-space:nowrap; overflow:hidden" class="table">
+    <colgroup>
+        <col span="11">
+    </colgroup>
+    <thead>
+        <tr style="background-color:#3fa5ea; color:#ffffff">
+            <th rowspan="2" style="vertical-align:middle; text-align:center"> STT </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Họ tên KH
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                TT Sale
+            </th>
+            @*<th>
+                    Email
+                </th>*@
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Số HĐ
+            </th>
+            <th colspan="6">
+                STT từng loại
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Tiền đặt chỗ
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                TG đặt chỗ
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                HTTT
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Đã nộp
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Thời gian nộp
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Phiếu thu
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Vay
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Yêu cầu khác
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">
+                Xác nhận
+            </th>
+            <th rowspan="2" style="vertical-align:middle; text-align: center">Thao tác</th>
+        </tr>
+        <tr style="background-color:#1f96e7; color:#ffffff">
+            <th>CH</th>
+            <th>
+                DT
+            </th>
+            <th>
+                BTĐL
+            </th>
+            <th>
+                BTSL
+            </th>
+            <th>
+                NPTM
+            </th>
+            <th>
+                Kios
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        @{ int count = 1;}
+        @foreach (var item in Model)
+        {
+            var statusClass = "Yellow";
+            if (item.IsActive == false)
+            {
+                statusClass = "White";
+            }
+            else if (item.Confirm == true)
+            {
+                statusClass = "Green";
+            }
+
+        <tr class="@statusClass">
+            <td style="white-space:nowrap">@count</td>
+            @{ count++; }
+            <td style="white-space: nowrap; text-align:left">
+                @Html.DisplayFor(modelItem => item.Customer)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Sale.Email) -
+                @Html.DisplayFor(modelItem => item.SaleDetails)
+
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Contract)
+            </td>
+            @*<td>
+                    @Html.DisplayFor(modelItem => item.sale)
+                </td>*@
+            @{
+                    string fs = "";
+                    if (item.NCH1 > 0 || item.NCH2 > 0 || item.NCH3 > 0 || item.NCH21 > 0)
+                    {
+                        //fs += "<li>Căn hộ: " + Model.appoinment.ph + "</li>";
+                        int n = item.NCH1 + item.NCH2 + item.NCH3 + item.NCH21;
+                        switch (n)
+                        {
+                            case 1:
+                                fs += "<td>" + item.ph + "</td>";
+                                break;
+                            case 2:
+                                fs += "<td>" + Convert.ToString(item.ph - 1) + " & " + item.ph + "</td>";
+                                break;
+                            default:
+                                fs += "<td>" + Convert.ToString(item.ph - n + 1) + " đến " + item.ph + "</td>";
+                                break;
+
+                        }
+                    }
+                    else
+                    {
+                        fs += "<td></td>";
+                    }
+                    if (item.NMS > 0)
+                    {
+                        //fs += "<li>Biệt thự: " + Model.appoinment.pms + "</li>";
+                        switch (item.NMS)
+                        {
+                            case 1:
+                                fs += "<td>" + item.pms + "</td>";
+                                break;
+                            case 2:
+                                fs += "<td>" + Convert.ToString(item.pms - 1) + " & " + item.pms + "</td>";
+                                break;
+                            default:
+                                fs += "<td>" + Convert.ToString(item.pms - item.pms + 1) + " đến " + item.pms + "</td>";
+                                break;
+
+                        }
+                    }
+                    else
+                    {
+                        fs += "<td></td>";
+                    }
+                    if (item.NSH > 0)
+                    {
+                        //fs += "<li>Nhà phố: " + Model.appoinment.psh + "</li>";
+                        switch (item.NSH)
+                        {
+                            case 1:
+                                fs += "<td>" + item.psh + "</p>";
+                                break;
+                            case 2:
+                                fs += "<td>" + Convert.ToString(item.psh - 1) + " & " + item.psh + "</p>";
+                                break;
+                            default:
+                                fs += "<td>" + Convert.ToString(item.psh - item.NSH + 1) + " đến " + item.psh + "</td>";
+                                break;
+
+                        }
+                    }
+                    else
+                    {
+                        fs += "<td></td>";
+                    }
+                    if (item.NSH1 > 0)
+                    {
+                        //fs += "<li>Nhà phố: " + Model.appoinment.psh + "</li>";
+                        switch (item.NSH1)
+                        {
+                            case 1:
+                                fs += "<td>" + item.psh1 + "</p>";
+                                break;
+                            case 2:
+                                fs += "<td>" + Convert.ToString(item.psh1 - 1) + " & " + item.psh1 + "</p>";
+                                break;
+                            default:
+                                fs += "<td>" + Convert.ToString(item.psh1 - item.NSH1 + 1) + " đến " + item.psh1 + "</td>";
+                                break;
+
+                        }
+                    }
+                    else
+                    {
+                        fs += "<td></td>";
+                    }
+                    if (item.NSHH > 0)
+                    {
+                        //fs += "<li>Shophouse: " + Model.appoinment.pshh + "</li>";
+                        switch (item.NSHH)
+                        {
+                            case 1:
+                                fs += "<td>" + item.pshh + "</td>";
+                                break;
+                            case 2:
+                                fs += "<td>" + Convert.ToString(item.pshh - 1) + " & " + item.pshh + "</td>";
+                                break;
+                            default:
+                                fs += "<td>" + Convert.ToString(item.pshh - item.NSHH + 1) + " đến " + item.pshh + "</td>";
+                                break;
+
+                        }
+                    }
+                    else
+                    {
+                        fs += "<td></td>";
+                    }
+                    if (item.NS > 0)
+                    {
+                        //fs += "<li>Shophouse: " + Model.appoinment.pshh + "</li>";
+                        switch (item.NS)
+                        {
+                            case 1:
+                                fs += "<td>" + item.pns + "</td>";
+                                break;
+                            case 2:
+                                fs += "<td>" + Convert.ToString(item.pns - 1) + " & " + item.pns + "</td>";
+                                break;
+                            default:
+                                fs += "<td>" + Convert.ToString(item.pns - item.NS + 1) + " đến " + item.pns + "</td>";
+                                break;
+
+                        }
+                    }
+                    else
+                    {
+                        fs += "<td></td>";
+                    }
+            }
+            @Html.Raw(fs)
+            <td>
+                @*@Html.DisplayFor(modelItem => item.Money)*@
+                @String.Format("{0:N0}", item.Money)
+            </td>
+            @{
+                    string day, month, year, hour, minute, second, millisecond = "";
+                    try
+                    {
+                        DateTime d = DateTime.ParseExact(item.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF",
+                                         System.Globalization.CultureInfo.InvariantCulture);
+                        day = Convert.ToString(d.Day);
+                        month = Convert.ToString(d.Month);
+                        year = Convert.ToString(d.Year);
+                        hour = Convert.ToString(d.Hour);
+                        minute = Convert.ToString(d.Minute);
+                        second = Convert.ToString(d.Second);
+                        millisecond = Convert.ToString(d.Millisecond);
+                    }
+                    catch (Exception)
+                    {
+
+                        day = "--";
+                        month = "--";
+                        year = "----";
+                        hour = "--";
+                        minute = "--";
+                        second = "--";
+                        millisecond = "-------";
+
+                    }
+                <td>
+                    @day/@month/@year @hour:@minute:@second
+                </td>
+            }
+            <td>
+                @Html.DisplayFor(modelItem => item.DType)
+            </td>
+
+            <td>
+                @String.Format("{0:N0}", item.Cash)
+            </td>
+            @{
+                    //string day, month, year, hour, minute, second, millisecond = "";
+                    try
+                    {
+                        DateTime d = DateTime.ParseExact(item.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF",
+                                         System.Globalization.CultureInfo.InvariantCulture);
+                        day = Convert.ToString(d.Day);
+                        month = Convert.ToString(d.Month);
+                        year = Convert.ToString(d.Year);
+                        hour = Convert.ToString(d.Hour);
+                        minute = Convert.ToString(d.Minute);
+                        second = Convert.ToString(d.Second);
+                        millisecond = Convert.ToString(d.Millisecond);
+                    }
+                    catch (Exception)
+                    {
+
+                        day = "--";
+                        month = "--";
+                        year = "----";
+                        hour = "--";
+                        minute = "--";
+                        second = "--";
+                        millisecond = "-------";
+
+                    }
+                <td>
+                    @day/@month/@year @hour:@minute:@second
+                </td>
+                <td></td>
+            }
+            <td>
+                @{
+                        string tmp = "";
+                        if (item.Price > 0)
+                        {
+                            tmp = "<input type =\"checkbox\" name=\"ph\" value=\"Boat\" checked disabled> " + @String.Format("{0:N0}", item.Price);
+                        }
+                        else
+                        {
+                            tmp = "<input type =\"checkbox\" name=\"ph\" value=\"Boat\" disabled>";
+                        }
+                }
+                @Html.Raw(tmp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Requires)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Confirm)
+            </td>
+            <td>
+                @*<a asp-action="AppDetails" asp-route-id="@item.Id">HĐ</a>|*@
+                <a asp-action="Confirm" asp-route-id="@item.Id">Xác nhận tiền vào</a>|
+                <a asp-action="Draft" asp-route-id="@item.Id">HĐ(bản in)</a>|
+                <a asp-action="Edit" asp-route-id="@item.Id">Sửa</a> |
+                <a asp-action="Withdraw" asp-route-id="@item.Id">Đơn hoàn tiền</a> |
+                <a asp-action="Passport" asp-route-id="@item.Id">CMND</a> |
+                <a asp-action="Additional" asp-route-id="@item.Id">Bổ sung thông tin</a>
+                @*<a asp-action="Details" asp-route-id="@item.Contract">Details</a> |
+                    <a asp-action="Delete" asp-route-id="@item.Contract">Delete</a>*@
+            </td>
+        </tr>
+        }
+
+    </tbody>
+</table>
+@{
+    //string new_money = Convert.ToString(money);
+    double money = Model.Sum(m => m.Cash);
+    string new_money = String.Format("{0:N0}", money);
+
+}
+<label style="display:block; text-align:right;font-family:'Times New Roman'; font-style:italic; font-size:x-large">Tổng tiền: @new_money VNĐ</label>
+<label style="font-family:'Times New Roman'; font-size: x-large">Tổng số căn: </label>
+<ul style="font-family:'Times New Roman'; list-style: square; font-size: x-large">
+    <li>Căn hộ: @Model.Sum(m => m.NCH1 + m.NCH2 + m.NCH21 + m.NCH3)</li>
+    <li>Biệt thự: @Model.Sum(m => m.NMS)</li>
+    <li>Biệt thự ĐL: @Model.Sum(m => m.NSH)</li>
+    <li>Biệt thự SL: @Model.Sum(m => m.NSH1)</li>
+    <li>Nhà phố thương mại: @Model.Sum(m => m.NSHH)</li>
+    <li>Shop khối đế: @Model.Sum(m => m.NS)</li>
+</ul>

@@ -158,7 +158,13 @@ $(document).ready(function () {
                 $('#search_field').fadeIn('slow');
             });
         });
-
+        $(function () {
+            if (('localStorage' in window) && window['localStorage'] !== null) {
+                if ('table' in localStorage && window.location.hash) {
+                    $("table").html(localStorage.getItem('table'));
+                }
+            }
+        })
 
     $(document).on('change','#context', function (e) {
             var type = $(this).val();
@@ -197,7 +203,7 @@ $(document).ready(function () {
         console.log(context);
         $("#partial_list").load(url, function () {
             $('#partial_list').fadeIn('slow');
-        });
+        });    
     });
 
 
@@ -207,7 +213,16 @@ $(document).ready(function () {
             console.log("It worked");
             $('#partial_list').fadeIn('slow');
         });
-    });
+        });
+        
+
+        // Save the search result table when leaving the page.
+        $(window).unload(function () {
+            if (('localStorage' in window) && window['localStorage'] !== null) {
+                var form = $("table").html();
+                localStorage.setItem('table', form);
+            }
+        });
     </script>
 }
 

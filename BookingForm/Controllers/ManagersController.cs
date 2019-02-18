@@ -29,12 +29,13 @@ namespace BookingForm.Controllers
 
         public async Task<bool> IsAuthorized(Sale sale, string resource, string operation)
         {
-            var roles = await _userManager.GetRolesAsync(sale);
-            var grants = await _context.Grants.Where(g => g.Operation == operation && g.Resource == resource && g.Permission == "Allow").ToListAsync();
             if (sale == null)
             {
                 return false;
             }
+            var roles = await _userManager.GetRolesAsync(sale);
+            var grants = await _context.Grants.Where(g => g.Operation == operation && g.Resource == resource && g.Permission == "Allow").ToListAsync();
+
             if (grants != null)
             {
                 foreach (var grant in grants)

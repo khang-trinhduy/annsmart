@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace BookingForm.Models
 {
-    public class Request
+    public class Request : Loan
     {
         public Guid Id { get; set; }
         [Display(Name = "Yêu cầu")]
@@ -18,7 +19,10 @@ namespace BookingForm.Models
         [Display(Name = "Tình trạng")]
         public Status Status { get; set; }
         [Display(Name = "Người yêu cầu")]
-        public virtual Sale Owner { get; set; }
+        public Guid? OwnerId { get; set; }
+        [ForeignKey(name: "OwnerId")]
+        public Sale Owner { get; set; }
+       
     }
 
     public enum Status

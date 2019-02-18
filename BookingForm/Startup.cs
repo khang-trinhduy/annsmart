@@ -86,30 +86,30 @@ namespace BookingForm
 
             JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 
-            //services.AddAuthentication(options =>
-            //{
-            //    options.DefaultScheme = "Cookies";
-            //    options.DefaultChallengeScheme = "oidc";
-            //})
-            //    .AddCookie("Cookies")
-            //    .AddOpenIdConnect("oidc", options =>
-            //    {
-            //        options.SignInScheme = "Cookies";
+            services.AddAuthentication(options =>
+            {
+                options.DefaultScheme = "Cookies";
+                options.DefaultChallengeScheme = "oidc";
+            })
+                .AddCookie("Cookies")
+                .AddOpenIdConnect("oidc", options =>
+                {
+                    options.SignInScheme = "Cookies";
 
-            //        options.Authority = "https://id.annhome.vn/";
-            //        options.RequireHttpsMetadata = false;
+                    options.Authority = "https://id.annhome.vn/";
+                    options.RequireHttpsMetadata = true;
 
-            //        options.ClientId = "mvc";
-            //        options.SaveTokens = true;
-            //        options.ClientSecret = "secret";
-            //        options.ResponseType = "code id_token";
+                    options.ClientId = "mvc";
+                    options.SaveTokens = true;
+                    options.ClientSecret = "secret";
+                    options.ResponseType = "code id_token";
 
-            //        options.SaveTokens = true;
-            //        options.GetClaimsFromUserInfoEndpoint = true;
+                    options.SaveTokens = true;
+                    options.GetClaimsFromUserInfoEndpoint = true;
 
-            //        options.Scope.Add("booking");
-            //        options.Scope.Add("offline_access");
-            //    });
+                    options.Scope.Add("booking");
+                    //options.Scope.Add("offline_access");
+                });
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

@@ -99,7 +99,6 @@ C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netco
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\Tutor.g.cshtml.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Shared\AccessDenied.g.cshtml.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Shared\_LoginPartial.g.cshtml.cs
-C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Admin\Null.g.cshtml.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Admin\Index.g.cshtml.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Appoinments\Index.g.cshtml.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\Feedback.g.cshtml.cs
@@ -132,3 +131,11 @@ C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netco
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Appoinments\Plan.g.cshtml.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\AddContact.g.cshtml.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\Contacts.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Admin\_Dashboard.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\ConfirmRequest.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\Loan.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\RequestDetails.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\Requests.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\RequestsControl.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\StatusMessage.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\Template.g.cshtml.cs

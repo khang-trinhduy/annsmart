@@ -44,12 +44,13 @@ namespace BookingForm.Controllers
 
         public async Task<bool> IsAuthorized(Sale sale, string resource, string operation)
         {
-            var roles = await _userManager.GetRolesAsync(sale);
-            var grants = await _context.Grants.Where(g => g.Operation == operation && g.Resource == resource && g.Permission == "Allow").ToListAsync();
+           
             if (sale == null)
             {
                 return false;
             }
+            var roles = await _userManager.GetRolesAsync(sale);
+            var grants = await _context.Grants.Where(g => g.Operation == operation && g.Resource == resource && g.Permission == "Allow").ToListAsync();
             if (grants != null)
             {
                 foreach (var grant in grants)
@@ -726,62 +727,62 @@ namespace BookingForm.Controllers
             }
             else if (type == "All")
             {
-                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true).OrderBy(ap => ap.Contract).ToListAsync());
+                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.Confirm == true).OrderBy(ap => DateTime.ParseExact(ap.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync());
             }
             else if (type == "Today")
             {
                 string str = DateTime.Now.Day.ToString("00") + DateTime.Now.Month.ToString("00") + DateTime.Now.Year.ToString("00");
-                var meetings = await _context.appoinment.Where(a => a.cTime.Contains(str)).OrderBy(ap => ap.Contract).ToListAsync();
+                var meetings = await _context.appoinment.Where(a => a.cTime.Contains(str)).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync();
                 return PartialView("List", meetings);
             }
             else if (type == "Loans")
             {
-                var meetings = await _context.appoinment.Where(a => a.Price > 0).OrderBy(m => m.Contract).ToListAsync();
+                var meetings = await _context.appoinment.Where(a => a.Price > 0 && a.Confirm == true && a.IsActive == true).OrderBy(ap => DateTime.ParseExact(ap.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync();
                 return PartialView("List", meetings);
             }
             else if (type == "Cancel")
             {
-                return PartialView("Cancelled", await _context.appoinment.Where(a => a.IsActive == false && a.Confirm == false).OrderBy(ap => ap.Contract).ToListAsync());
+                return PartialView("Cancelled", await _context.appoinment.Where(a => a.IsActive == false && a.Confirm == false).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync());
             }
             else if (type == "Withdraws")
             {
-                return PartialView("Cancelled", await _context.appoinment.Where(a => a.IsActive == false && a.Confirm == true).OrderBy(ap => ap.Contract).ToListAsync());
+                return PartialView("Cancelled", await _context.appoinment.Where(a => a.IsActive == false && a.Confirm == true).OrderBy(ap => DateTime.ParseExact(ap.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync());
             }
             else if (type == "ph1")
             {
-                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NCH1 > 0).OrderBy(ap => ap.Contract).ToListAsync());
+                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NCH1 > 0).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync());
             }
             else if (type == "ph21")
             {
-                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NCH21 > 0).OrderBy(ap => ap.Contract).ToListAsync());
+                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NCH21 > 0).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync());
             }
             else if (type == "ph2")
             {
-                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NCH2 > 0).OrderBy(ap => ap.Contract).ToListAsync());
+                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NCH2 > 0).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync());
             }
             else if (type == "ph3")
             {
-                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NCH3 > 0).OrderBy(ap => ap.Contract).ToListAsync());
+                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NCH3 > 0).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync());
             }
             else if (type == "psh")
             {
-                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NSH > 0).OrderBy(ap => ap.Contract).ToListAsync());
+                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NSH > 0).OrderBy(ap => DateTime.ParseExact(ap.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync());
             }
             else if (type == "psh1")
             {
-                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NSH1 > 0).OrderBy(ap => ap.Contract).ToListAsync());
+                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NSH1 > 0).OrderBy(ap => DateTime.ParseExact(ap.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync());
             }
             else if (type == "pshh")
             {
-                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NSHH > 0).OrderBy(ap => ap.Contract).ToListAsync());
+                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NSHH > 0).OrderBy(ap => DateTime.ParseExact(ap.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync());
             }
             else if (type == "pns")
             {
-                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NS > 0).OrderBy(ap => ap.Contract).ToListAsync());
+                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NS > 0).OrderBy(ap => DateTime.ParseExact(ap.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync());
             }
             else if (type == "pms")
             {
-                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NMS > 0).OrderBy(ap => ap.Contract).ToListAsync());
+                return PartialView("List", await _context.appoinment.Where(a => a.IsActive == true && a.NMS > 0).OrderBy(ap => DateTime.ParseExact(ap.dTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync());
             }
             return NotFound();
         }
@@ -925,7 +926,7 @@ namespace BookingForm.Controllers
             {
                 string[] name = context.Split("_");
                 context = String.Join(" ", name);
-                var meetings = await _context.appoinment.Where(a => a.Customer.Contains(context)).OrderBy(m => m.Contract).ToListAsync();
+                var meetings = await _context.appoinment.Where(a => a.Customer.Contains(context)).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync();
                 return PartialView("List", meetings);
             }
             else if (type == "sale")
@@ -944,58 +945,58 @@ namespace BookingForm.Controllers
             {
                 string[] name = context.Split("_");
                 context = String.Join(" ", name);
-                var meetings = await _context.appoinment.Where(a => a.Purpose.Contains(context)).OrderBy(m => m.Contract).ToListAsync();
+                var meetings = await _context.appoinment.Where(a => a.Purpose.Contains(context)).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync();
                 return PartialView("List", meetings);
             }
             else if (type == "ph")
             {
-                var meetings = await _context.appoinment.Where(a => a.NCH1 + a.NCH2 + a.NCH21 + a.NCH3 > 0).OrderBy(m => m.Contract).ToListAsync();
+                var meetings = await _context.appoinment.Where(a => a.NCH1 + a.NCH2 + a.NCH21 + a.NCH3 > 0).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync();
                 return PartialView("List", meetings);
             }
             else if (type == "psh")
             {
-                var meetings = await _context.appoinment.Where(a => a.NSH > 0).OrderBy(m => m.Contract).ToListAsync();
+                var meetings = await _context.appoinment.Where(a => a.NSH > 0).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync();
                 return PartialView("List", meetings);
             }
             else if (type == "psh1")
             {
-                var meetings = await _context.appoinment.Where(a => a.NSH1 > 0).OrderBy(m => m.Contract).ToListAsync();
+                var meetings = await _context.appoinment.Where(a => a.NSH1 > 0).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync();
                 return PartialView("List", meetings);
             }
             else if (type == "pshh")
             {
-                var meetings = await _context.appoinment.Where(a => a.NSHH > 0).OrderBy(m => m.Contract).ToListAsync();
+                var meetings = await _context.appoinment.Where(a => a.NSHH > 0).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync();
                 return PartialView("List", meetings);
             }
             else if (type == "pms")
             {
-                var meetings = await _context.appoinment.Where(a => a.NMS > 0).OrderBy(m => m.Contract).ToListAsync();
+                var meetings = await _context.appoinment.Where(a => a.NMS > 0).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync();
                 return PartialView("List", meetings);
             }
             else if (type == "pns")
             {
-                var meetings = await _context.appoinment.Where(a => a.NS > 0).OrderBy(m => m.Contract).ToListAsync();
+                var meetings = await _context.appoinment.Where(a => a.NS > 0).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync();
                 return PartialView("List", meetings);
             }
             else if (type == "address")
             {
                 string[] name = context.Split("_");
                 context = String.Join(" ", name);
-                var meetings = await _context.appoinment.Where(a => a.Address.Contains(context)).OrderBy(m => m.Contract).ToListAsync();
+                var meetings = await _context.appoinment.Where(a => a.Address.Contains(context)).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync();
                 return PartialView("List", meetings);
             }
             else if (type == "place")
             {
                 string[] name = context.Split("_");
                 context = String.Join(" ", name);
-                var meetings = await _context.appoinment.Where(a => a.HKTT.Contains(context)).OrderBy(m => m.Contract).ToListAsync();
+                var meetings = await _context.appoinment.Where(a => a.HKTT.Contains(context)).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync();
                 return PartialView("List", meetings);
             }
             else if (type == "date")
             {
                 string[] date = context.Split("-");
                 string new_date = date[2] + date[1] + date[0];
-                var meetings = await _context.appoinment.Where(a => a.dTime.Contains(new_date)).OrderBy(m => m.Contract).ToListAsync();
+                var meetings = await _context.appoinment.Where(a => a.cTime.Contains(new_date)).OrderBy(ap => DateTime.ParseExact(ap.cTime, "ddMMyyyy HH:mm:ss.FFFFFFF", null)).ToListAsync();
                 return PartialView("List", meetings);
             }
             else
@@ -1033,6 +1034,42 @@ namespace BookingForm.Controllers
             modal.officials.Add(pns + 1);
             await Badge();
             return View(modal);
+        }
+
+        //public async Task<IActionResult> _Dashboard()
+        //{
+        //    return RedirectToAction("_Dashboard", new { type = "Search", context = "111" });
+        //}
+
+        public async Task<IActionResult> _Dashboard()
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "List");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
+            var admin = await _userManager.GetUserAsync(User);
+            var meetings = await _context.appoinment.Where(m => m.IsActive == true).OrderBy(m => m.Contract).ToListAsync();
+            var meeting = _context.appoinment.First();
+            int ph = _context.appoinment.Max(m => m.ph);
+            int psh = _context.appoinment.Max(m => m.psh);
+            int psh1 = _context.appoinment.Max(m => m.psh1);
+            int pshh = _context.appoinment.Max(m => m.pshh);
+            int pms = _context.appoinment.Max(m => m.pms);
+            int pns = _context.appoinment.Max(m => m.pns);
+            AdminModal modal = new AdminModal();
+            modal.appoinment = meeting;
+            modal.appoinments = meetings;
+            modal.officials = new List<int>();
+            modal.officials.Add(ph + 1);
+            modal.officials.Add(pms + 1);
+            modal.officials.Add(psh + 1);
+            modal.officials.Add(psh1 + 1);
+            modal.officials.Add(pshh + 1);
+            modal.officials.Add(pns + 1);
+            await Badge();
+            return View(meetings);
         }
 
         public async Task<IActionResult> AppDetails(Guid? id)

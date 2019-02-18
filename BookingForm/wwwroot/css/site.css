@@ -30,6 +30,11 @@ body {
         padding-right: 15px;
     }
 
+    /*body {
+        display: block;
+        align-content: center;
+    }*/
+
     /* Carousel */
     .carousel-caption p {
         font-size: 20px;

@@ -120,7 +120,7 @@ Write(ViewData["Title"]);
             WriteLiteral("        <div class=\"alert alert-danger\">\r\n            <strong>You have no recovery codes left.</strong>\r\n            <p>You must ");
             EndContext();
             BeginContext(400, 78, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "21b70c08875647618c8a786b0ef41ccf", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1da2183413304c3e9cf6ad560ca4bb3c", async() => {
                 BeginContext(438, 36, true);
                 WriteLiteral("generate a new set of recovery codes");
                 EndContext();
@@ -152,7 +152,7 @@ Write(ViewData["Title"]);
             WriteLiteral("        <div class=\"alert alert-danger\">\r\n            <strong>You have 1 recovery code left.</strong>\r\n            <p>You can ");
             EndContext();
             BeginContext(728, 78, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "756d5baa8ad34622b5c4114690708e8a", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3962c3e4f98f4586b61abcf3e3374ce7", async() => {
                 BeginContext(766, 36, true);
                 WriteLiteral("generate a new set of recovery codes");
                 EndContext();
@@ -194,7 +194,7 @@ Write(ViewData["Title"]);
             WriteLiteral(" recovery codes left.</strong>\r\n            <p>You should ");
             EndContext();
             BeginContext(1041, 78, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1303e76fe2ac4c3db795787986595ff8", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "95267cc212a040c5b3e27bbf0baa09e9", async() => {
                 BeginContext(1079, 36, true);
                 WriteLiteral("generate a new set of recovery codes");
                 EndContext();
@@ -227,7 +227,7 @@ Write(ViewData["Title"]);
             WriteLiteral("        ");
             EndContext();
             BeginContext(1202, 155, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9b704fb48e024f94b2a3ded935ea626f", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3f2c57bfe9454abb9100124e9cc1292a", async() => {
                 BeginContext(1252, 98, true);
                 WriteLiteral("\r\n            <button type=\"submit\" class=\"btn btn-default\">Forget this browser</button>\r\n        ");
                 EndContext();
@@ -260,7 +260,7 @@ Write(ViewData["Title"]);
             WriteLiteral("    ");
             EndContext();
             BeginContext(1370, 66, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4ef39513001a4fef828238421c8164fc", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f0e8cf600d3d420cb2b6722b34acb62e", async() => {
                 BeginContext(1421, 11, true);
                 WriteLiteral("Disable 2FA");
                 EndContext();
@@ -283,7 +283,7 @@ Write(ViewData["Title"]);
             WriteLiteral("\r\n    ");
             EndContext();
             BeginContext(1442, 86, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "490bb42ef2b742b1aba21ac680e49353", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4651b970f04541c8b8969d94272ff2d4", async() => {
                 BeginContext(1504, 20, true);
                 WriteLiteral("Reset recovery codes");
                 EndContext();
@@ -323,7 +323,7 @@ Write(ViewData["Title"]);
             WriteLiteral("    ");
             EndContext();
             BeginContext(1601, 111, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "c0f94931fce747ccbf826f02dbbf7e02", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "9770736ab3ec4954b4ad9c2add8600fd", async() => {
                 BeginContext(1687, 21, true);
                 WriteLiteral("Add authenticator app");
                 EndContext();
@@ -357,7 +357,7 @@ else
             WriteLiteral("    ");
             EndContext();
             BeginContext(1730, 113, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "1ef53c244d284b829402648d0060fa31", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f57275a1f0024cdfae5cdeeec7fb7476", async() => {
                 BeginContext(1816, 23, true);
                 WriteLiteral("Setup authenticator app");
                 EndContext();
@@ -381,7 +381,7 @@ else
             WriteLiteral("\r\n    ");
             EndContext();
             BeginContext(1849, 111, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "acce4dc9df1a4ffd9f68889df306079b", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "14e50ea3c8dd4a0a9b8bfa798aca785b", async() => {
                 BeginContext(1933, 23, true);
                 WriteLiteral("Reset authenticator app");
                 EndContext();
@@ -417,7 +417,7 @@ else
                 WriteLiteral("\r\n    ");
                 EndContext();
                 BeginContext(1991, 44, false);
-                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("partial", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "231e7cf414ba4c1ab40345c5c9f39ac0", async() => {
+                __tagHelperExecutionContext = __tagHelperScopeManager.Begin("partial", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.SelfClosing, "791e37f27145433b8a2c4bd227113e63", async() => {
                 }
                 );
                 __Microsoft_AspNetCore_Mvc_TagHelpers_PartialTagHelper = CreateTagHelper<global::Microsoft.AspNetCore.Mvc.TagHelpers.PartialTagHelper>();

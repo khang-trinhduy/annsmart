@@ -83,7 +83,7 @@ namespace BookingForm.Models
         BookingFormContext IDesignTimeDbContextFactory<BookingFormContext>.CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<BookingFormContext>();
-            optionsBuilder.UseSqlServer<BookingFormContext>("Server=192.168.9.5;Database=annhome.booking; Trusted_Connection = True; MultipleActiveResultSets = true");
+            optionsBuilder.UseSqlServer<BookingFormContext>("Server=khang-pc;Database=annhome.booking; Trusted_Connection = True; MultipleActiveResultSets = true");
 
             return new BookingFormContext(optionsBuilder.Options);
         }

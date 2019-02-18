@@ -12,7 +12,8 @@ namespace BookingForm.Models
         [ForeignKey("PlanId")]
         public Plan Plan { get; set; }
         public string IdType { get; set; }
-        //public DateTime DOB { get; set; }
-        //public string Avatar { get; set; }
+        public DateTime DOB { get; set; }
+        public string Avatar { get; set; }
+        public string HouseholdPhoto { get; set; }
     }
 }
