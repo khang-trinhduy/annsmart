@@ -47,6 +47,12 @@
                 <input value="@TempData["Customer"]" asp-for="Customer" class="form-control" placeholder="Nhập tên khách hàng" required />
                 <span asp-validation-for="Customer" class="text-danger"></span>
             </div>
+
+            <div class="form-group">
+                <label style="color:red" class="control-label">Ngày sinh (dd: Ngày, mm:Tháng, yyyy: Năm)</label>
+                <input required type="date" class="form-control" asp-for="DOB" />
+                <span asp-validation-for="DOB" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="Gender" class="control-label"></label>
                 @Html.RadioButton("Gender", "Nam", true, new { style = "margin-left: 25px;" })Nam
@@ -196,7 +202,31 @@
                 <input value="0" asp-for="Price" class="form-control number" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
+
+            <label class="control-label" style="">Yêu cầu cụ thể</label>
+            <hr />
             <div class="form-group">
+                <label asp-for="Floor" class="control-label"></label>
+                <input asp-for="Floor" class="form-control" />
+                <span asp-validation-for="Floor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Acreage" class="control-label"></label>
+                <input asp-for="Acreage" class="form-control" />
+                <span asp-validation-for="Acreage" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Direction" class="control-label"></label>
+                <input asp-for="Direction" class="form-control" />
+                <span asp-validation-for="Direction" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="View" class="control-label"></label>
+                <input asp-for="View" class="form-control" />
+                <span asp-validation-for="View" class="text-danger"></span>
+            </div>
+            <hr />
+            <div class="form-group" hidden>
                 <label asp-for="Requires" class="control-label"></label>
                 <input asp-for="Requires" class="form-control" />
                 <span asp-validation-for="Requires" class="text-danger"></span>
@@ -237,7 +267,7 @@
                 <label class="control-label">Ảnh Cmnd/Passport (2 mặt)</label>
                 <div class="custom-file">
                     <input name="files" type="file" class="custom-file-input" id="files" required multiple>
-                    <label class="custom-file-label" for="files">Choose file...</label>
+                    <label class="custom-file-label" for="files">Chọn file...</label>
                     @*<div class="invalid-feedback">Example invalid custom file feedback</div>*@
                 </div>
             </div>
@@ -245,7 +275,7 @@
                 @Html.Recaptcha(RecaptchaSettings?.Value)
             </div>
             <div class="form-group">
-                <button type="submit" id="new" OnClientClick="return false;">Xác nhận</button>
+                <button type="submit" id="new" OnClientClick="return false;" class="btn btn-light">Xác nhận</button>
             </div>
         </form>
     </div>

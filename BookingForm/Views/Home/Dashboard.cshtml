@@ -1,6 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @inject UserManager<Sale> UserManager
-@*<img title="Annhome-logo" src="~/images/Ann_Logo.png" style="width:450px; height:228px; display:block;margin-left:auto;margin-right:auto;" alt="Annhome Logo" />*@
+@*<img title="Annhome-logo" src="~/images/Ann_Logo.png" style="width:450px; height:228px; display:block;margin-left:auto;margin-right:auto;" alt="Annhome Logo" />*@    
 @*<img src="~/images/Ann_Logo.png" style="width:340px; height:172px; display:block;margin-left:auto;margin-right:auto;" alt="Annhome Logo" title="Annhome-logo" />*@
 
 
@@ -22,32 +22,32 @@
 <span style="display:inline-block; height: 15px;"></span>
 <h6 style="font-style:italic; text-align:right">TP. Hồ Chí Minh, ngày @DateTime.Now.Day  tháng @DateTime.Now.Month năm @DateTime.Now.Year</h6>
 @*<span style="display:block; height:21px"></span>
-<div style="text-align:right">
-    <a id="new" asp-action="Book">Xếp số hợp đồng</a>
-    @*<a asp-action="Draft" asp-route-id="@Model.sale.ID">Hợp đồng đem đi</a>
-</div>
-<span style="display:block;height:30px"></span>
-<div style="text-align:right">
-    <a id="home" asp-action="Tutor">Hướng dẫn</a>
-</div>
+    <div style="text-align:right">
+        <a id="new" asp-action="Book">Xếp số hợp đồng</a>
+        @*<a asp-action="Draft" asp-route-id="@Model.sale.ID">Hợp đồng đem đi</a>
+    </div>
+    <span style="display:block;height:30px"></span>
+    <div style="text-align:right">
+        <a id="home" asp-action="Tutor">Hướng dẫn</a>
+    </div>
 
-@{
-    if (User.IsInRole("Leader") || User.IsInRole("TeamLeader"))
-    {
-        <span style="display:block;height:30px"></span>
-        <div style="display:block;text-align:right">
-            <a id="home" asp-action="Manager">Báo cáo</a>
-        </div>
-    }
-    if (User.IsInRole("Administrator"))
-    {
-        <span style="display:block;height:30px"></span>
-        <div style="display:block;text-align:right">
-            <a id="hd" asp-action="Admin">Admin</a>
-        </div>
-    }
-    
-}*@
+    @{
+        if (User.IsInRole("Leader") || User.IsInRole("TeamLeader"))
+        {
+            <span style="display:block;height:30px"></span>
+            <div style="display:block;text-align:right">
+                <a id="home" asp-action="Manager">Báo cáo</a>
+            </div>
+        }
+        if (User.IsInRole("Administrator"))
+        {
+            <span style="display:block;height:30px"></span>
+            <div style="display:block;text-align:right">
+                <a id="hd" asp-action="Admin">Admin</a>
+            </div>
+        }
+
+    }*@
 
 <p style="font-style: italic; color: #ee1818">Lưu ý: Những hợp đồng có tình trạng "số chưa chính thức" vui lòng liên hệ admin để xác nhận tiền vào (nếu đã nộp tiền) trước 19h00' cùng ngày. Quá thời gian trên, hệ thống sẽ tự động loại bỏ những hợp đồng chưa chính thức.</p>
 <hr />
@@ -62,6 +62,9 @@
                 </th>
                 <th rowspan="2" style="vertical-align:middle; text-align: center">
                     Tên khách
+                </th>
+                <th rowspan="2" style="vertical-align:middle; text-align: center">
+                    Ngày sinh
                 </th>
                 <th rowspan="2" style="vertical-align:middle; text-align: center">
                     Số HĐ
@@ -117,6 +120,14 @@
                             <td style="text-align:left !important">
                                 @item.Customer
                             </td>
+                            @if (item.DOB.Year == 1)
+	                        {
+                            <td>Thiếu<a asp-action="AddDOB" asp-route-id="@item.Id">(click vào để bổ sung)</a></td>
+                            }
+                            else
+                            {
+                                    <td>@item.DOB.Date.ToString("dd/MM/yyyy")</td>
+                            }
                             <td>
                                 @item.Contract
                             </td>
@@ -287,7 +298,7 @@
                                 @Html.Raw(confirm)
                             </td>
                             <td>
-                                <a asp-route-id="@item.Id" asp-action="Views">HĐ</a> | <a asp-route-id="@item.Id" asp-action="Passport">CMND</a>
+                                <a asp-route-id="@item.Id" asp-action="Views">HĐ</a> | <a asp-route-id="@item.Id" asp-action="Passport">Cập nhật CMND</a>
                             </td>
                         </tr>
                         count += 1;
@@ -354,26 +365,26 @@
         background: #FEFEFE;
     }
 
-    tr td:hover {
+    /*tr td:hover {
         background: #666;
         color: #FFF;
-    }
+    }*/
 
     /*table {
         overflow: hidden;
         display: inline-block;
     }*/
 
-    tr:hover {
+    /*tr:hover {
         background-color: #faf2de;
-    }
+    }*/
 
 
     td, th {
         position: relative;
     }
 
-        td:hover::after,
+        /*td:hover::after,
         th:hover::after {
             content: "";
             position: absolute;
@@ -383,5 +394,5 @@
             height: 1000px;
             width: 100%;
             z-index: -1;
-        }
+        }*/
 </style>

@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using MimeKit;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -25,22 +26,25 @@ namespace BookingForm.Controllers
         private readonly UserManager<Sale> _userManager;
         private readonly BookingFormContext _context;
         private static Sale cur_sale;
-        //SaleAPI _api = new SaleAPI();
-        //private IdentityApiController identityApiController;
-        
-        public HomeController(BookingFormContext context, UserManager<Sale> userManager)
+        public IConfiguration Configuration { get; }
+    //SaleAPI _api = new SaleAPI();
+    //private IdentityApiController identityApiController;
+
+    public HomeController(BookingFormContext context, UserManager<Sale> userManager, IConfiguration configuration)
         {
             //HttpClient client = new HttpClient();
             //client.BaseAddress = new Uri("http://id.annhome.vn/");
             //identityApiController = new IdentityApiController(client); 
             _context = context;
             _userManager = userManager;
-            //StreamReader r = new StreamReader("sales.json");
-            //string json = r.ReadToEnd();
-            //sales = JsonConvert.DeserializeObject<List<Sale>>(json);
-        }
+            Configuration = configuration;
 
-        public async Task<bool> IsAuthorized(Sale sale, string resource, string operation)
+        //StreamReader r = new StreamReader("sales.json");
+        //string json = r.ReadToEnd();
+        //sales = JsonConvert.DeserializeObject<List<Sale>>(json);
+    }
+
+    public async Task<bool> IsAuthorized(Sale sale, string resource, string operation)
         {
             if (sale == null)
             {
@@ -93,6 +97,69 @@ namespace BookingForm.Controllers
                 _context.Update(request);
             }
             return View(requests);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Quiz()
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+            if (curUser is null)
+            {
+                return View("Error", "Bạn phải đăng nhập để thực hiện chức năng này");
+            }
+            ViewBag.score = curUser.LastScore;
+            StreamReader reader = new StreamReader(Configuration["questlist"]);
+            string contents = reader.ReadToEnd();
+            var questions = JsonConvert.DeserializeObject<List<Question>>(contents);
+            if (questions is null)
+            {
+                return View("Error", "Hệ thống không thể tải câu hỏi, vui lòng thử lại.");
+            }
+            List<Question> new_questions = new List<Question>();
+            int count = 1;
+            foreach (var question in questions)
+            {
+                List<string> baits = new List<string>();
+                foreach (var item in question.Baits)
+                {
+                    baits.Add(item);
+                }
+                baits.Add(question.Answer);
+                var shufflebaits = baits.OrderBy(a => Guid.NewGuid()).ToList();
+                Question new_question = new Question
+                {
+                    Content = question.Content,
+                    Baits = shufflebaits,
+                    Answer = question.Answer,
+                    Number = count
+                };
+                new_questions.Add(new_question);
+                count++;
+            }
+            if (new_questions is null)
+            {
+                return View("Error", "Hệ thống không thể tải câu hỏi, vui lòng thử lại.");
+            }
+            var shuffled_questions = new_questions.OrderBy(a => Guid.NewGuid());
+            return View(shuffled_questions);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Quiz(int score)
+        {
+            if (score < 0)
+            {
+                return View("Error", "Thao tác không thể thực hiện, vui lòng thử lại sau.");
+            }
+            var curUser = await _userManager.GetUserAsync(User);
+            if (curUser is null)
+            {
+                return View("Error", "Bạn phải đăng nhập để thực hiện chức năng này");
+            }
+            curUser.LastScore = score;
+            _context.Update(curUser);
+            await _context.SaveChangesAsync();
+            return Json("");
         }
 
         public async Task<IActionResult> Requests()
@@ -431,7 +498,7 @@ namespace BookingForm.Controllers
             await _context.SaveChangesAsync();
             //string contents = "Bạn nhận được một yêu cầu từ " + curUser.Name + " vào lúc " + DateTime.Now.ToString("HH:mm:ss dd-MM-yyyy");
             //SendMail(request.Subject, new MailboxAddress("Huong Ngo", "huong.ngo@annhome.vn"), contents);
-            TempData["StatusMessage"] = "Your request has been submitted.\nWe'll look into it as soon as possible.";
+            TempData["StatusMessage"] = "Yêu cầu của bạn đã được ghi nhận.\nChúng tôi sẽ giải quyết trong thời gian sớm nhất có thể.";
             return RedirectToPage("/Request");
         }
 
@@ -670,6 +737,21 @@ namespace BookingForm.Controllers
                 client.Disconnect(true);
 
             }
+        }
+
+        public async Task<IActionResult> AddDOB(Guid? id)
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
+            if (id != null)
+            {
+                return RedirectToAction("AddDOB", "Appoinments", new { id });
+            }
+            return View("Error");
         }
 
         public IActionResult Tutor()

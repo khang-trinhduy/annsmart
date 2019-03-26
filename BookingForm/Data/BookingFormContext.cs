@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using BookingForm.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
@@ -76,6 +72,7 @@ namespace BookingForm.Models
         public DbSet<Product> Products { get; set; }
         public DbSet<Grant> Grants { get; set; }
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Document> Documents { get; set; }
     }
 
     public class ApplicationContextDbFactory : IDesignTimeDbContextFactory<BookingFormContext>
@@ -83,7 +80,7 @@ namespace BookingForm.Models
         BookingFormContext IDesignTimeDbContextFactory<BookingFormContext>.CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<BookingFormContext>();
-            optionsBuilder.UseSqlServer<BookingFormContext>("Server=khang-pc;Database=annhome.booking; Trusted_Connection = True; MultipleActiveResultSets = true");
+            optionsBuilder.UseSqlServer<BookingFormContext>("Server=192.168.9.5;Database=annhome.booking; Trusted_Connection = True; MultipleActiveResultSets = true");
 
             return new BookingFormContext(optionsBuilder.Options);
         }

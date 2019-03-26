@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
 
 namespace BookingForm.Models
 {
@@ -12,8 +10,17 @@ namespace BookingForm.Models
         [ForeignKey("PlanId")]
         public Plan Plan { get; set; }
         public string IdType { get; set; }
+        [DataType(DataType.Date)]
         public DateTime DOB { get; set; }
         public string Avatar { get; set; }
         public string HouseholdPhoto { get; set; }
+        [Display(Name = "View")]
+        public string View { get; set; }
+        [Display(Name = "Hướng")]
+        public string Direction { get; set; }
+        [Display(Name = "Tầng")]
+        public int Floor { get; set; }
+        [Display(Name = "Diện tích")]
+        public double Acreage { get; set; }
     }
 }

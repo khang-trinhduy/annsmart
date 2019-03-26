@@ -1,5 +1,3 @@
-using System;
-
 namespace BookingForm.Models
 {
     public class ErrorViewModel

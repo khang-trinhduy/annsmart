@@ -89,11 +89,16 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Admin\Documents.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="C:\Users\trinh\Documents\sales.json" Link="sales.json" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Chart.js" Version="2.7.3" />
+    <PackageReference Include="DinkToPdf" Version="1.0.8" />
     <PackageReference Include="DocumentFormat.OpenXml" Version="2.8.1" />
     <PackageReference Include="DotNetCore.NPOI" Version="1.2.1" />
     <PackageReference Include="EPPlus.Core" Version="1.5.4" />
@@ -112,10 +117,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="logs\" />
     <Folder Include="ViewModels\" />
     <Folder Include="wwwroot\images\Profile\" />
     <Folder Include="wwwroot\Json\" />
-    <Folder Include="wwwroot\storage\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Admin\Documents.cshtml" />
   </ItemGroup>
 
   <ItemGroup>

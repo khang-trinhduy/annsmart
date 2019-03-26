@@ -1,0 +1,103 @@
+﻿@model IEnumerable<BookingForm.Models.Question>
+<div class="container">
+    <div class="alert alert-primary" role="alert">
+        Số điểm lần trước đạt được: @ViewBag.score
+    </div>
+    <form asp-action="Quiz" method="post" id="questionform">
+        <div class="qtn-page">
+        </div>
+        <input type="number" name="score" value="0" min="0" id="score" hidden/>
+        <input type="submit" class="btn btn-submit" name="submit" value="Xem kết quả" />
+    </form>
+</div>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    var questions = JSON.parse('@Html.Raw(Json.Serialize(Model))');
+
+    function change_answer(number, answer) {
+        var id = '#answer' + number;
+        $(id).val(answer);
+    }
+
+    function addquestion(content, baits, number) {
+        $('.qtn-page').append('<div class="row">'+
+    '<div class="col-12">'+
+        '<label class="control-label">'+
+            content +
+       '</label>'+
+        '<div class="custom-control custom-radio">'+
+            '<input type="radio" class="custom-control-input" onclick="change_answer(' + number + ', \'' + baits[0] + '\')" id="A' + number + '" name="radio-stacked' + number +' " required>' +
+            ' <label class="custom-control-label" for="A' + number + '">' + baits[0] + '</label>' +
+        '</div>'+
+        '<div class="custom-control custom-radio">'+
+            '<input type="radio" class="custom-control-input" onclick="change_answer(' + number + ', \'' + baits[1] + '\')" id="B' + number + '" name="radio-stacked' + number +' " required>' +
+            '<label class="custom-control-label" for="B' + number + '">' + baits[1] +'</label>' +
+        '</div>'+
+        '<div class="custom-control custom-radio">'+
+            '<input type="radio" class="custom-control-input" onclick="change_answer(' + number + ', \'' + baits[2] + '\')" id="C' + number + '" name="radio-stacked' + number +' " required>' +
+            '<label class="custom-control-label" for="C' + number + '">' + baits[2] +'</label>' +
+        '</div>'+
+        '<div class="custom-control custom-radio mb-3">'+
+            '<input type="radio" class="custom-control-input" onclick="change_answer(' + number + ', \'' + baits[3] + '\')" id="D' + number + '" name="radio-stacked' + number +' " required>' +
+            '<label class="custom-control-label" for="D' + number + '">' + baits[3] +'</label>' +
+            '<div class="invalid-feedback">Chọn một đáp án</div>'+
+        '</div>'+
+        '<input type="text" name="answers" value="" id="answer' + number + '" hidden />' +
+    '</div>'+
+'</div>');
+    }
+
+    $('#questionform').submit(function (event) {
+        var correct = 0;
+        for (i = 1; i <= questions.length; i++) {
+            var curid = '#answer' + i;
+            if (questions[i - 1].answer == $(curid).val()) {
+                correct += 1;
+            }
+        }
+        $('#score').val(correct * 20);
+        swal({
+            title: "Kết quả!",
+            text: correct.toString() + '/' + questions.length.toString(),
+            type: "success",
+            timer: 3000,
+            icon: "success"
+        });
+        var score = correct * 20;
+        event.preventDefault();
+        var url = '@Url.Action("Quiz", "Home")' + '?score=' + score;
+        var data = JSON.stringify({ "score": score.toString() });
+            $.ajax({ //To execute some other functionality once ajax call is done
+                type: 'post',
+                url: url,
+                data: data, //better to pass it with data
+                dataType: 'json',//type of data you are returning from server
+                success: function (data) {
+                    setTimeout(function () {
+                        window.location.href = window.location.href;
+                        }, 3000);
+                    
+                },
+                error: function () {
+                    setTimeout(function () {
+                        window.location.href = window.location.href;
+                    }, 3000);
+                },
+            });
+        });
+
+    $(document).ready(function () {
+        for (i = 0; i < questions.length; i++) {
+            addquestion(questions[i].content, questions[i].baits, questions[i].number);
+        }
+        
+    });
+
+</script>
+
+
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@

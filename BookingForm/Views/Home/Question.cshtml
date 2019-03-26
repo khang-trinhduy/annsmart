@@ -1,0 +1,28 @@
+﻿@model BookingForm.Models.Question
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+<div class="row">
+    <div class="col-12">
+        <label class="control-label">
+            @Model.Content
+        </label>
+        <div class="custom-control custom-radio">
+            <input type="radio" class="custom-control-input" id="A" name="radio-stacked" required>
+            <label class="custom-control-label" for="A">@Model.Baits[0]</label>
+        </div>
+        <div class="custom-control custom-radio">
+            <input type="radio" class="custom-control-input" id="B" name="radio-stacked" required>
+            <label class="custom-control-label" for="B">@Model.Baits[1]</label>
+        </div>
+        <div class="custom-control custom-radio">
+            <input type="radio" class="custom-control-input" id="C" name="radio-stacked" required>
+            <label class="custom-control-label" for="C">@Model.Baits[2]</label>
+        </div>
+        <div class="custom-control custom-radio mb-3">
+            <input type="radio" class="custom-control-input" id="answer" name="radio-stacked" required>
+            <label class="custom-control-label" for="@Model.Baits[3]">@Model.Baits[3]</label>
+            <div class="invalid-feedback">Chọn một đáp án</div>
+        </div>
+    </div>
+</div>

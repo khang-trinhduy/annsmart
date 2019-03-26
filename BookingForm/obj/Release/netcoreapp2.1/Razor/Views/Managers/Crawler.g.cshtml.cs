@@ -66,7 +66,7 @@ using BookingForm.Models;
 #line default
 #line hidden
             BeginContext(245, 205, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "b4756badb3bb4885833d35cde2fc36ad", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("form", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "a15d04383f7f4a67a1284126ee1eb730", async() => {
                 BeginContext(279, 48, true);
                 WriteLiteral("\r\n    <input type=\"number\" name=\"page\" id=\"page\"");
                 EndContext();

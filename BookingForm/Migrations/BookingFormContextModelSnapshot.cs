@@ -15,7 +15,7 @@ namespace BookingForm.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "2.1.4-rtm-31024")
+                .HasAnnotation("ProductVersion", "2.1.8-servicing-32085")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
@@ -23,6 +23,8 @@ namespace BookingForm.Migrations
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd();
+
+                    b.Property<double>("Acreage");
 
                     b.Property<string>("Address")
                         .IsRequired();
@@ -51,7 +53,11 @@ namespace BookingForm.Migrations
 
                     b.Property<string>("Details");
 
+                    b.Property<string>("Direction");
+
                     b.Property<string>("Email");
+
+                    b.Property<int>("Floor");
 
                     b.Property<string>("Gender")
                         .IsRequired();
@@ -118,6 +124,8 @@ namespace BookingForm.Migrations
                     b.Property<string>("SaleDetails");
 
                     b.Property<Guid?>("SaleId");
+
+                    b.Property<string>("View");
 
                     b.Property<DateTime>("WDay");
 
@@ -251,6 +259,23 @@ namespace BookingForm.Migrations
                     b.HasIndex("SupporterId");
 
                     b.ToTable("Contacts");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.Document", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Create");
+
+                    b.Property<string>("Email");
+
+                    b.Property<int>("NumberOfDocuments");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Documents");
                 });
 
             modelBuilder.Entity("BookingForm.Models.Feedback", b =>
@@ -505,6 +530,8 @@ namespace BookingForm.Migrations
                     b.Property<string>("Gender");
 
                     b.Property<string>("Info");
+
+                    b.Property<int>("LastScore");
 
                     b.Property<bool>("LockoutEnabled");
 
