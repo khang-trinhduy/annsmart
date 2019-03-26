@@ -19,6 +19,29 @@ namespace BookingForm.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("BookingForm.Models.Answer", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Answered");
+
+                    b.Property<bool>("IsNotCorrect");
+
+                    b.Property<int?>("QuestionId");
+
+                    b.Property<int?>("ResultId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.HasIndex("ResultId");
+
+                    b.ToTable("Answer");
+                });
+
             modelBuilder.Entity("BookingForm.Models.Appoinment", b =>
                 {
                     b.Property<Guid>("Id")
@@ -165,6 +188,23 @@ namespace BookingForm.Migrations
                     b.HasIndex("SaleId");
 
                     b.ToTable("appoinment");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.Bait", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Content");
+
+                    b.Property<int?>("QuestionId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("QuestionId");
+
+                    b.ToTable("Bait");
                 });
 
             modelBuilder.Entity("BookingForm.Models.Contact", b =>
@@ -411,6 +451,29 @@ namespace BookingForm.Migrations
                     b.ToTable("ProductPlan");
                 });
 
+            modelBuilder.Entity("BookingForm.Models.Question", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Answer");
+
+                    b.Property<string>("Content");
+
+                    b.Property<string>("Explain");
+
+                    b.Property<int>("Number");
+
+                    b.Property<int?>("TestId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TestId");
+
+                    b.ToTable("Question");
+                });
+
             modelBuilder.Entity("BookingForm.Models.Request", b =>
                 {
                     b.Property<Guid>("Id")
@@ -461,6 +524,25 @@ namespace BookingForm.Migrations
                     b.HasIndex("OwnerId");
 
                     b.ToTable("Requests");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.Result", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<Guid?>("SaleId");
+
+                    b.Property<int?>("TestId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("SaleId");
+
+                    b.HasIndex("TestId");
+
+                    b.ToTable("Result");
                 });
 
             modelBuilder.Entity("BookingForm.Models.Role", b =>
@@ -584,6 +666,19 @@ namespace BookingForm.Migrations
                     b.ToTable("AspNetUsers");
                 });
 
+            modelBuilder.Entity("BookingForm.Models.Test", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Name");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Tests");
+                });
+
             modelBuilder.Entity("BookingForm.Models.Transaction", b =>
                 {
                     b.Property<int>("ID")
@@ -689,6 +784,17 @@ namespace BookingForm.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("BookingForm.Models.Answer", b =>
+                {
+                    b.HasOne("BookingForm.Models.Question", "Question")
+                        .WithMany()
+                        .HasForeignKey("QuestionId");
+
+                    b.HasOne("BookingForm.Models.Result")
+                        .WithMany("Answer")
+                        .HasForeignKey("ResultId");
+                });
+
             modelBuilder.Entity("BookingForm.Models.Appoinment", b =>
                 {
                     b.HasOne("BookingForm.Models.Plan", "Plan")
@@ -698,6 +804,13 @@ namespace BookingForm.Migrations
                     b.HasOne("BookingForm.Models.Sale", "Sale")
                         .WithMany("Meetings")
                         .HasForeignKey("SaleId");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.Bait", b =>
+                {
+                    b.HasOne("BookingForm.Models.Question")
+                        .WithMany("Baits")
+                        .HasForeignKey("QuestionId");
                 });
 
             modelBuilder.Entity("BookingForm.Models.Contact", b =>
@@ -745,6 +858,13 @@ namespace BookingForm.Migrations
                         .HasForeignKey("ProductId");
                 });
 
+            modelBuilder.Entity("BookingForm.Models.Question", b =>
+                {
+                    b.HasOne("BookingForm.Models.Test")
+                        .WithMany("Questions")
+                        .HasForeignKey("TestId");
+                });
+
             modelBuilder.Entity("BookingForm.Models.Request", b =>
                 {
                     b.HasOne("BookingForm.Models.Appoinment", "Appoinment")
@@ -754,6 +874,17 @@ namespace BookingForm.Migrations
                     b.HasOne("BookingForm.Models.Sale", "Owner")
                         .WithMany("Requests")
                         .HasForeignKey("OwnerId");
+                });
+
+            modelBuilder.Entity("BookingForm.Models.Result", b =>
+                {
+                    b.HasOne("BookingForm.Models.Sale")
+                        .WithMany("Results")
+                        .HasForeignKey("SaleId");
+
+                    b.HasOne("BookingForm.Models.Test", "Test")
+                        .WithMany()
+                        .HasForeignKey("TestId");
                 });
 
             modelBuilder.Entity("BookingForm.Models.RoleClaim", b =>

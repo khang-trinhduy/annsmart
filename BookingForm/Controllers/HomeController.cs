@@ -119,12 +119,12 @@ namespace BookingForm.Controllers
             int count = 1;
             foreach (var question in questions)
             {
-                List<string> baits = new List<string>();
+                List<Bait> baits = new List<Bait>();
                 foreach (var item in question.Baits)
                 {
                     baits.Add(item);
                 }
-                baits.Add(question.Answer);
+                baits.Add(new Bait { Content = question.Answer });
                 var shufflebaits = baits.OrderBy(a => Guid.NewGuid()).ToList();
                 Question new_question = new Question
                 {

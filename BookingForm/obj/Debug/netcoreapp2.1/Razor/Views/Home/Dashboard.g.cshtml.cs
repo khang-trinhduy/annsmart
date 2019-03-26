@@ -212,7 +212,7 @@ using Microsoft.AspNetCore.Identity;
             WriteLiteral("                            <td>Thiếu");
             EndContext();
             BeginContext(4836, 73, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "19180977a01147cc99c11eac87fe554e", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "35d37a7c38954a45b9cabffa91c8c63a", async() => {
                 BeginContext(4883, 22, true);
                 WriteLiteral("(click vào để bổ sung)");
                 EndContext();
@@ -508,7 +508,7 @@ using Microsoft.AspNetCore.Identity;
             WriteLiteral("\r\n                            </td>\r\n                            <td>\r\n                                ");
             EndContext();
             BeginContext(14131, 52, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "229e8b1665724587bdff434c2c1d4917", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "4544593fb1e74d2f9a6559c9832dd06c", async() => {
                 BeginContext(14177, 2, true);
                 WriteLiteral("HĐ");
                 EndContext();
@@ -543,7 +543,7 @@ using Microsoft.AspNetCore.Identity;
             WriteLiteral(" | ");
             EndContext();
             BeginContext(14186, 66, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "174883569bf9436bb1727963cdca083b", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "612a4d4d45514cc293d6970249ee1f2a", async() => {
                 BeginContext(14235, 13, true);
                 WriteLiteral("Cập nhật CMND");
                 EndContext();

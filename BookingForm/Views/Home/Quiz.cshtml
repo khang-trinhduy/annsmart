@@ -27,21 +27,21 @@
         '<label class="control-label">'+
             content +
        '</label>'+
-        '<div class="custom-control custom-radio">'+
-            '<input type="radio" class="custom-control-input" onclick="change_answer(' + number + ', \'' + baits[0] + '\')" id="A' + number + '" name="radio-stacked' + number +' " required>' +
-            ' <label class="custom-control-label" for="A' + number + '">' + baits[0] + '</label>' +
+            '<div class="custom-control custom-radio">' +
+            '<input type="radio" class="custom-control-input" onclick="change_answer(' + number + ', \'' + baits[0].content + '\')" id="A' + number + '" name="radio-stacked' + number + ' " required>' +
+            ' <label class="custom-control-label" for="A' + number + '">' + baits[0].content + '</label>' +
         '</div>'+
         '<div class="custom-control custom-radio">'+
-            '<input type="radio" class="custom-control-input" onclick="change_answer(' + number + ', \'' + baits[1] + '\')" id="B' + number + '" name="radio-stacked' + number +' " required>' +
-            '<label class="custom-control-label" for="B' + number + '">' + baits[1] +'</label>' +
+            '<input type="radio" class="custom-control-input" onclick="change_answer(' + number + ', \'' + baits[1].content + '\')" id="B' + number + '" name="radio-stacked' + number +' " required>' +
+            '<label class="custom-control-label" for="B' + number + '">' + baits[1].content +'</label>' +
         '</div>'+
         '<div class="custom-control custom-radio">'+
-            '<input type="radio" class="custom-control-input" onclick="change_answer(' + number + ', \'' + baits[2] + '\')" id="C' + number + '" name="radio-stacked' + number +' " required>' +
-            '<label class="custom-control-label" for="C' + number + '">' + baits[2] +'</label>' +
+            '<input type="radio" class="custom-control-input" onclick="change_answer(' + number + ', \'' + baits[2].content + '\')" id="C' + number + '" name="radio-stacked' + number +' " required>' +
+            '<label class="custom-control-label" for="C' + number + '">' + baits[2].content +'</label>' +
         '</div>'+
         '<div class="custom-control custom-radio mb-3">'+
-            '<input type="radio" class="custom-control-input" onclick="change_answer(' + number + ', \'' + baits[3] + '\')" id="D' + number + '" name="radio-stacked' + number +' " required>' +
-            '<label class="custom-control-label" for="D' + number + '">' + baits[3] +'</label>' +
+            '<input type="radio" class="custom-control-input" onclick="change_answer(' + number + ', \'' + baits[3].content + '\')" id="D' + number + '" name="radio-stacked' + number +' " required>' +
+            '<label class="custom-control-label" for="D' + number + '">' + baits[3].content +'</label>' +
             '<div class="invalid-feedback">Chọn một đáp án</div>'+
         '</div>'+
         '<input type="text" name="answers" value="" id="answer' + number + '" hidden />' +
