@@ -29,7 +29,7 @@ namespace BookingForm.Migrations
 
                     b.Property<bool>("IsNotCorrect");
 
-                    b.Property<int?>("QuestionId");
+                    b.Property<int>("QuestionId");
 
                     b.Property<int?>("ResultId");
 
@@ -465,7 +465,7 @@ namespace BookingForm.Migrations
 
                     b.Property<int>("Number");
 
-                    b.Property<int?>("TestId");
+                    b.Property<int>("TestId");
 
                     b.HasKey("Id");
 
@@ -532,9 +532,9 @@ namespace BookingForm.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<Guid?>("SaleId");
+                    b.Property<Guid>("SaleId");
 
-                    b.Property<int?>("TestId");
+                    b.Property<int>("TestId");
 
                     b.HasKey("Id");
 
@@ -787,8 +787,9 @@ namespace BookingForm.Migrations
             modelBuilder.Entity("BookingForm.Models.Answer", b =>
                 {
                     b.HasOne("BookingForm.Models.Question", "Question")
-                        .WithMany()
-                        .HasForeignKey("QuestionId");
+                        .WithMany("Answers")
+                        .HasForeignKey("QuestionId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("BookingForm.Models.Result")
                         .WithMany("Answer")
@@ -862,7 +863,8 @@ namespace BookingForm.Migrations
                 {
                     b.HasOne("BookingForm.Models.Test")
                         .WithMany("Questions")
-                        .HasForeignKey("TestId");
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BookingForm.Models.Request", b =>
@@ -880,11 +882,13 @@ namespace BookingForm.Migrations
                 {
                     b.HasOne("BookingForm.Models.Sale")
                         .WithMany("Results")
-                        .HasForeignKey("SaleId");
+                        .HasForeignKey("SaleId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("BookingForm.Models.Test", "Test")
                         .WithMany()
-                        .HasForeignKey("TestId");
+                        .HasForeignKey("TestId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("BookingForm.Models.RoleClaim", b =>

@@ -145,3 +145,8 @@ C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netco
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\Error.g.cshtml.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\Question.g.cshtml.cs
 C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\Quiz.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\Answer.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\AttendTest.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\Result.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Home\Test.g.cshtml.cs
+C:\Users\trinh\source\repos\annhome-booking-master\BookingForm\obj\Release\netcoreapp2.1\Razor\Views\Managers\CollapseQ.g.cshtml.cs

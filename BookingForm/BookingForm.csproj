@@ -86,6 +86,8 @@
     <Compile Remove="Migrations\20190123093736_46P-Wirtanen.Designer.cs" />
     <Compile Remove="Migrations\20190128014441_Sun.cs" />
     <Compile Remove="Migrations\20190128014441_Sun.Designer.cs" />
+    <Compile Remove="Migrations\20190327031450_addsomething.cs" />
+    <Compile Remove="Migrations\20190327031450_addsomething.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

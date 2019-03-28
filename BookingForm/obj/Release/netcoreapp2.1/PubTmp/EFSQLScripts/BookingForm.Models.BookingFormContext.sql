@@ -2343,3 +2343,255 @@ END;
 
 GO
 
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190326083023_add-test')
+BEGIN
+    CREATE TABLE [Tests] (
+        [Id] int NOT NULL IDENTITY,
+        [Name] nvarchar(max) NULL,
+        CONSTRAINT [PK_Tests] PRIMARY KEY ([Id])
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190326083023_add-test')
+BEGIN
+    CREATE TABLE [Question] (
+        [Id] int NOT NULL IDENTITY,
+        [Content] nvarchar(max) NULL,
+        [Answer] nvarchar(max) NULL,
+        [Number] int NOT NULL,
+        [Explain] nvarchar(max) NULL,
+        [TestId] int NULL,
+        CONSTRAINT [PK_Question] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_Question_Tests_TestId] FOREIGN KEY ([TestId]) REFERENCES [Tests] ([Id]) ON DELETE NO ACTION
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190326083023_add-test')
+BEGIN
+    CREATE TABLE [Result] (
+        [Id] int NOT NULL IDENTITY,
+        [TestId] int NULL,
+        [SaleId] uniqueidentifier NULL,
+        CONSTRAINT [PK_Result] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_Result_AspNetUsers_SaleId] FOREIGN KEY ([SaleId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE NO ACTION,
+        CONSTRAINT [FK_Result_Tests_TestId] FOREIGN KEY ([TestId]) REFERENCES [Tests] ([Id]) ON DELETE NO ACTION
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190326083023_add-test')
+BEGIN
+    CREATE TABLE [Bait] (
+        [Id] int NOT NULL IDENTITY,
+        [Content] nvarchar(max) NULL,
+        [QuestionId] int NULL,
+        CONSTRAINT [PK_Bait] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_Bait_Question_QuestionId] FOREIGN KEY ([QuestionId]) REFERENCES [Question] ([Id]) ON DELETE NO ACTION
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190326083023_add-test')
+BEGIN
+    CREATE TABLE [Answer] (
+        [Id] int NOT NULL IDENTITY,
+        [QuestionId] int NULL,
+        [Answered] nvarchar(max) NULL,
+        [IsNotCorrect] bit NOT NULL,
+        [ResultId] int NULL,
+        CONSTRAINT [PK_Answer] PRIMARY KEY ([Id]),
+        CONSTRAINT [FK_Answer_Question_QuestionId] FOREIGN KEY ([QuestionId]) REFERENCES [Question] ([Id]) ON DELETE NO ACTION,
+        CONSTRAINT [FK_Answer_Result_ResultId] FOREIGN KEY ([ResultId]) REFERENCES [Result] ([Id]) ON DELETE NO ACTION
+    );
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190326083023_add-test')
+BEGIN
+    CREATE INDEX [IX_Answer_QuestionId] ON [Answer] ([QuestionId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190326083023_add-test')
+BEGIN
+    CREATE INDEX [IX_Answer_ResultId] ON [Answer] ([ResultId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190326083023_add-test')
+BEGIN
+    CREATE INDEX [IX_Bait_QuestionId] ON [Bait] ([QuestionId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190326083023_add-test')
+BEGIN
+    CREATE INDEX [IX_Question_TestId] ON [Question] ([TestId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190326083023_add-test')
+BEGIN
+    CREATE INDEX [IX_Result_SaleId] ON [Result] ([SaleId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190326083023_add-test')
+BEGIN
+    CREATE INDEX [IX_Result_TestId] ON [Result] ([TestId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190326083023_add-test')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190326083023_add-test', N'2.1.8-servicing-32085');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327031658_addsomething')
+BEGIN
+    ALTER TABLE [Question] DROP CONSTRAINT [FK_Question_Tests_TestId];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327031658_addsomething')
+BEGIN
+    DROP INDEX [IX_Question_TestId] ON [Question];
+    DECLARE @var31 sysname;
+    SELECT @var31 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Question]') AND [c].[name] = N'TestId');
+    IF @var31 IS NOT NULL EXEC(N'ALTER TABLE [Question] DROP CONSTRAINT [' + @var31 + '];');
+    ALTER TABLE [Question] ALTER COLUMN [TestId] int NOT NULL;
+    CREATE INDEX [IX_Question_TestId] ON [Question] ([TestId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327031658_addsomething')
+BEGIN
+    ALTER TABLE [Question] ADD CONSTRAINT [FK_Question_Tests_TestId] FOREIGN KEY ([TestId]) REFERENCES [Tests] ([Id]) ON DELETE CASCADE;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327031658_addsomething')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190327031658_addsomething', N'2.1.8-servicing-32085');
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327032638_addsomethingmore')
+BEGIN
+    ALTER TABLE [Answer] DROP CONSTRAINT [FK_Answer_Question_QuestionId];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327032638_addsomethingmore')
+BEGIN
+    ALTER TABLE [Result] DROP CONSTRAINT [FK_Result_AspNetUsers_SaleId];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327032638_addsomethingmore')
+BEGIN
+    ALTER TABLE [Result] DROP CONSTRAINT [FK_Result_Tests_TestId];
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327032638_addsomethingmore')
+BEGIN
+    DROP INDEX [IX_Result_TestId] ON [Result];
+    DECLARE @var32 sysname;
+    SELECT @var32 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Result]') AND [c].[name] = N'TestId');
+    IF @var32 IS NOT NULL EXEC(N'ALTER TABLE [Result] DROP CONSTRAINT [' + @var32 + '];');
+    ALTER TABLE [Result] ALTER COLUMN [TestId] int NOT NULL;
+    CREATE INDEX [IX_Result_TestId] ON [Result] ([TestId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327032638_addsomethingmore')
+BEGIN
+    DROP INDEX [IX_Result_SaleId] ON [Result];
+    DECLARE @var33 sysname;
+    SELECT @var33 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Result]') AND [c].[name] = N'SaleId');
+    IF @var33 IS NOT NULL EXEC(N'ALTER TABLE [Result] DROP CONSTRAINT [' + @var33 + '];');
+    ALTER TABLE [Result] ALTER COLUMN [SaleId] uniqueidentifier NOT NULL;
+    CREATE INDEX [IX_Result_SaleId] ON [Result] ([SaleId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327032638_addsomethingmore')
+BEGIN
+    DROP INDEX [IX_Answer_QuestionId] ON [Answer];
+    DECLARE @var34 sysname;
+    SELECT @var34 = [d].[name]
+    FROM [sys].[default_constraints] [d]
+    INNER JOIN [sys].[columns] [c] ON [d].[parent_column_id] = [c].[column_id] AND [d].[parent_object_id] = [c].[object_id]
+    WHERE ([d].[parent_object_id] = OBJECT_ID(N'[Answer]') AND [c].[name] = N'QuestionId');
+    IF @var34 IS NOT NULL EXEC(N'ALTER TABLE [Answer] DROP CONSTRAINT [' + @var34 + '];');
+    ALTER TABLE [Answer] ALTER COLUMN [QuestionId] int NOT NULL;
+    CREATE INDEX [IX_Answer_QuestionId] ON [Answer] ([QuestionId]);
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327032638_addsomethingmore')
+BEGIN
+    ALTER TABLE [Answer] ADD CONSTRAINT [FK_Answer_Question_QuestionId] FOREIGN KEY ([QuestionId]) REFERENCES [Question] ([Id]) ON DELETE CASCADE;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327032638_addsomethingmore')
+BEGIN
+    ALTER TABLE [Result] ADD CONSTRAINT [FK_Result_AspNetUsers_SaleId] FOREIGN KEY ([SaleId]) REFERENCES [AspNetUsers] ([Id]) ON DELETE CASCADE;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327032638_addsomethingmore')
+BEGIN
+    ALTER TABLE [Result] ADD CONSTRAINT [FK_Result_Tests_TestId] FOREIGN KEY ([TestId]) REFERENCES [Tests] ([Id]) ON DELETE CASCADE;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190327032638_addsomethingmore')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190327032638_addsomethingmore', N'2.1.8-servicing-32085');
+END;
+
+GO
+

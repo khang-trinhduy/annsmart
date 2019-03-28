@@ -1,0 +1,28 @@
+﻿@model BookingForm.Models.Result
+
+<div class="result-sheet">
+    @foreach (var answered in Model.Answer)
+    {
+        <partial name="Answer" model="answered" />
+    }
+</div>
+<div class="score">
+    <p>Kết quả: @ViewBag.score</p>
+    <p>Thời gian làm bài: 20'</p>
+</div>
+<style>
+    .score {
+        display: block;
+        text-align: right;
+        font-family: auto;
+        margin: 10px;
+    }
+    .result-sheet {
+        border: 1px solid gainsboro;
+        padding: 20px 20px 20px 20px;
+        background: lightblue;
+    }
+        .result-sheet :hover {
+            cursor: grabbing;
+        }
+</style>

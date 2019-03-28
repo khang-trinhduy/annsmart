@@ -3,36 +3,36 @@
     "content": "question 1",
     "answer": "correct",
     "baits": [
-      "bait 1",
-      "bait 2",
-      "bait 3"
+      { "content": "bait 1" },
+      { "content": "bait 2" },
+      { "content": "bait 3" }
     ]
   },
   {
     "content": "question 1",
     "answer": "correct",
     "baits": [
-      "bait 1",
-      "bait 2",
-      "bait 3"
+      { "content": "bait 1" },
+      { "content": "bait 2" },
+      { "content": "bait 3" }
     ]
   },
   {
     "content": "question 1",
     "answer": "correct",
     "baits": [
-      "bait 1",
-      "bait 2",
-      "bait 3"
+      { "content": "bait 1" },
+      { "content": "bait 2" },
+      { "content": "bait 3" }
     ]
   },
   {
     "content": "question 1",
     "answer": "correct",
     "baits": [
-      "bait 1",
-      "bait 2",
-      "bait 3"
+      { "content": "bait 1" },
+      { "content": "bait 2" },
+      { "content": "bait 3" }
     ]
   }
 ]

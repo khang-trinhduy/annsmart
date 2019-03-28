@@ -27,10 +27,10 @@ namespace BookingForm.Controllers
         private readonly BookingFormContext _context;
         private static Sale cur_sale;
         public IConfiguration Configuration { get; }
-    //SaleAPI _api = new SaleAPI();
-    //private IdentityApiController identityApiController;
+        //SaleAPI _api = new SaleAPI();
+        //private IdentityApiController identityApiController;
 
-    public HomeController(BookingFormContext context, UserManager<Sale> userManager, IConfiguration configuration)
+        public HomeController(BookingFormContext context, UserManager<Sale> userManager, IConfiguration configuration)
         {
             //HttpClient client = new HttpClient();
             //client.BaseAddress = new Uri("http://id.annhome.vn/");
@@ -39,12 +39,12 @@ namespace BookingForm.Controllers
             _userManager = userManager;
             Configuration = configuration;
 
-        //StreamReader r = new StreamReader("sales.json");
-        //string json = r.ReadToEnd();
-        //sales = JsonConvert.DeserializeObject<List<Sale>>(json);
-    }
+            //StreamReader r = new StreamReader("sales.json");
+            //string json = r.ReadToEnd();
+            //sales = JsonConvert.DeserializeObject<List<Sale>>(json);
+        }
 
-    public async Task<bool> IsAuthorized(Sale sale, string resource, string operation)
+        public async Task<bool> IsAuthorized(Sale sale, string resource, string operation)
         {
             if (sale == null)
             {
@@ -93,10 +93,42 @@ namespace BookingForm.Controllers
                 if (request.OwnerId != null)
                 {
                     request.Owner = await _context.sale.FirstAsync(s => s.Id == request.OwnerId);
-                }             
+                }
                 _context.Update(request);
             }
             return View(requests);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Test()
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+            if (curUser is null)
+            {
+                return View("Error", "Bạn phải đăng nhập để thực hiện chức năng này");
+            }
+            var tests = await _context.Tests.ToListAsync();
+            return View(tests);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> AttendTest(string test_name)
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+            if (curUser is null)
+            {
+                return View("Error", "Bạn phải đăng nhập để thực hiện chức năng này");
+            }
+            string[] newname = test_name.Split("_");
+            var tests = await _context.Tests.Include(t => t.Questions).ThenInclude(q => q.Baits).ToListAsync();
+            var model = tests.FirstOrDefault(t => t.Name == string.Join(" ", newname));
+            model.Questions = model.Questions.OrderBy(q => Guid.NewGuid()).ToList();
+            foreach (var question in model.Questions)
+            {
+                question.Baits.Add(new Bait { Content = question.Answer });
+                question.Baits = question.Baits.OrderBy(b => Guid.NewGuid()).ToList();
+            }
+            return View("Quiz", model);
         }
 
         [HttpGet]
@@ -145,21 +177,78 @@ namespace BookingForm.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Quiz(int score)
+        public async Task<IActionResult> Quiz([FromBody]List<AnswerList> answer_list)
         {
-            if (score < 0)
+            if (answer_list is null)
             {
-                return View("Error", "Thao tác không thể thực hiện, vui lòng thử lại sau.");
+                return NotFound("can't read the answers");
             }
+            var test = _context.Tests.FirstOrDefault(t => t.Name == answer_list[0].testname);
+            var result = new Result { Test = test, Answer = new List<Answer>() };
+            foreach (var anwser in answer_list)
+            {
+                var question = await _context.Question.FirstOrDefaultAsync(q => q.Number == anwser.question_number && q.TestId == test.Id);
+                var tmp_answer = new Answer { Answered = anwser.answer, IsNotCorrect = anwser.isnotcorrect, Question = question };
+                _context.Answer.Add(tmp_answer);
+                result.Answer.Add(tmp_answer);
+            }
+            var curUser = await _userManager.GetUserAsync(User);
+            result.SaleId = curUser.Id;
+            if (curUser is null)
+            {
+                return View("Error", "Bạn phải đăng nhập để thực hiện chức năng này");
+            }
+            _context.Result.Add(result);
+            await _context.SaveChangesAsync();
+            //
+            //if (curUser is null)
+            //{
+            //    return View("Error", "Bạn phải đăng nhập để thực hiện chức năng này");
+            //}
+            return Json(answer_list);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Result(string testname)
+        {
+            string[] testnames = testname.Split("_");
+            string newtestname = string.Join(" ", testnames);
             var curUser = await _userManager.GetUserAsync(User);
             if (curUser is null)
             {
                 return View("Error", "Bạn phải đăng nhập để thực hiện chức năng này");
             }
-            curUser.LastScore = score;
-            _context.Update(curUser);
-            await _context.SaveChangesAsync();
-            return Json("");
+            var tests = await _context.Tests.Include(t => t.Questions).ThenInclude(q => q.Answers).Include(t => t.Questions).ThenInclude(q => q.Baits).ToListAsync();
+            if (tests is null)
+            {
+                return View("Error", "Không tìm thấy kết quả nào.");
+            }
+            var test = tests.FirstOrDefault(t => t.Name == newtestname);
+            if (test is null)
+            {
+                return View("Error", $"Không tìm thấy bài kiểm tra nào có tên {newtestname} trong dữ liệu");
+            }
+            var results = await _context.Result.Include(r => r.Answer).ThenInclude(a => a.Question).ToListAsync();
+            if (results is null)
+            {
+                return View("Error", $"Không tìm thấy đáp án nào cho bài kiểm tra {newtestname} trong dữ liệu");
+            }
+            var answered = results.LastOrDefault(r => r.TestId == test.Id && r.SaleId == curUser.Id);
+            if (answered is null)
+            {
+                return View("Error", $"Không tìm thấy đáp án nào cho bài kiểm tra {newtestname} trong dữ liệu");
+            }
+            answered.Answer = answered.Answer.OrderBy(a => a.Question.Number).ToList();
+            int isnotincorrect = 0;
+            foreach (var item in answered.Answer)
+            {
+                if (!!item.IsNotCorrect)
+                {
+                    isnotincorrect += 1;
+                }
+            }
+            ViewBag.score = isnotincorrect.ToString() + "/" + answered.Answer.Count.ToString();
+            return View(answered);
         }
 
         public async Task<IActionResult> Requests()
@@ -183,7 +272,7 @@ namespace BookingForm.Controllers
             {
                 return NotFound("Can't find any requests");
             }
-            
+
             foreach (Request request in requests)
             {
                 if (request.OwnerId != null)
@@ -198,7 +287,7 @@ namespace BookingForm.Controllers
         public async Task<IActionResult> RequestDetails(Guid? id)
         {
             var request = await _context.Requests.FindAsync(id);
-            
+
             if (request == null)
             {
                 return NotFound("Can't find request with id " + Convert.ToString(id));
@@ -563,15 +652,15 @@ namespace BookingForm.Controllers
             {
                 product += Convert.ToString(app.NSHH) + " Shophouse (NPTM) ";
             }
-            if (app.NS>0)
+            if (app.NS > 0)
             {
                 product += Convert.ToString(app.NS) + " Shop (Kios) ";
             }
-            if (app.NMS>0)
+            if (app.NMS > 0)
             {
                 product += Convert.ToString(app.NMS) + " Dinh thự ";
             }
-            customer.Products = product;  
+            customer.Products = product;
             return new JsonResult(customer);
         }
 
@@ -581,7 +670,7 @@ namespace BookingForm.Controllers
             {
                 return PartialView("WithdrawForm");
             }
-            else if(type == "Reserve")
+            else if (type == "Reserve")
             {
                 return PartialView("Reserve");
             }
@@ -816,7 +905,7 @@ namespace BookingForm.Controllers
             await Badge();
             if (sale != null)
             {
-                
+
                 sale.Meetings = await _context.appoinment.Where(m => m.Sale == sale).Where(ap => ap.IsActive == true).OrderBy(a => a.Contract).ToListAsync();
                 //await _userManager.UpdateAsync(sale);
                 int count = 0;
@@ -832,7 +921,7 @@ namespace BookingForm.Controllers
             }
             return RedirectToAction("Index");
             //modal.appoinments = meetings;
-            
+
         }
 
         public bool DatesAreInTheSameWeek(DateTime date1, DateTime date2)
@@ -857,7 +946,7 @@ namespace BookingForm.Controllers
             DateTime dt = DateTime.Now.StartOfWeek(DayOfWeek.Monday);
             if (id == 0)
             {
-                meetings = await _context.appoinment.Where(m => m.IsActive == true && m.Confirm == true && m.cTime.Substring(0,8).Contains(DateTime.Now.ToString("ddMMyyyy"))).ToListAsync();
+                meetings = await _context.appoinment.Where(m => m.IsActive == true && m.Confirm == true && m.cTime.Substring(0, 8).Contains(DateTime.Now.ToString("ddMMyyyy"))).ToListAsync();
             }
             else if (id == 1)
             {
@@ -865,11 +954,11 @@ namespace BookingForm.Controllers
             }
             else if (id == 2)
             {
-                meetings = await _context.appoinment.Where(m => m.IsActive == true && m.Confirm == true && m.cTime.Substring(2,6).Contains(DateTime.Now.ToString("MMyyyy"))).ToListAsync();
+                meetings = await _context.appoinment.Where(m => m.IsActive == true && m.Confirm == true && m.cTime.Substring(2, 6).Contains(DateTime.Now.ToString("MMyyyy"))).ToListAsync();
             }
-            else if(id == 3)
+            else if (id == 3)
             {
-                meetings = await _context.appoinment.Where(m => m.Confirm == true && m.IsActive == true && m.cTime.Substring(4,4).Contains(DateTime.Now.ToString("yyyy"))).ToListAsync();
+                meetings = await _context.appoinment.Where(m => m.Confirm == true && m.IsActive == true && m.cTime.Substring(4, 4).Contains(DateTime.Now.ToString("yyyy"))).ToListAsync();
             }
             else
             {
@@ -955,15 +1044,15 @@ namespace BookingForm.Controllers
             //PasswordVerificationResult result = hasher.VerifyHashedPassword(curUser, curUser.PasswordHash, a.password);
             //if (a.password != curUser.PasswordHash)
             //    return NotFound();
-            
+
             if (a == null)
             {
                 return NotFound();
             }
             var sale = await _userManager.GetUserAsync(User);
-            
+
             TempData["name"] = sale.Name;
-   
+
             return RedirectToAction("Print", "Appoinments", new { id });
         }
 

@@ -11,5 +11,6 @@ namespace BookingForm.Models
         public Question Question { get; set; }
         public string Answered { get; set; }
         public bool IsNotCorrect { get; set; }
+        public int QuestionId { get; set; }
     }
 }

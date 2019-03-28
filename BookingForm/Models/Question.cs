@@ -13,6 +13,8 @@ namespace BookingForm.Models
         public List<Bait> Baits { get; set; }
         public int Number { get; set; }
         public string Explain { get; set; }
+        public List<Answer> Answers { get; set; }
+        public int TestId { get; set; }
     }
 
     public class Bait
