@@ -2,25 +2,21 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using BookingForm.Models;
 using MailKit.Net.Smtp;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.FileProviders;
 using MimeKit;
 using Newtonsoft.Json;
 using NPOI.SS.UserModel;
 using NPOI.XSSF.UserModel;
 using OfficeOpenXml;
-using System.Security.Claims;
 using Serilog;
 using System.Text.RegularExpressions;
+using System.Drawing.Printing;
 
 namespace BookingForm.Controllers
 {
@@ -42,14 +38,45 @@ namespace BookingForm.Controllers
             return View();
         }
 
+        [HttpGet]
+        public  async Task<IActionResult> RequestPrint()
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Documents", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
+            return View("PrintDocument");
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> PrintDocument(int number)
+        {
+            if (number <= 0)
+            {
+                return NotFound("Vui lòng nhập số lượng bản in");
+            }
+            var curUser = await _userManager.GetUserAsync(User);
+            if (curUser is null)
+            {
+                return View("Bạn phải đăng nhập để thực hiện tác vụ này");
+            }
+            Document docs = new Document(DateTime.UtcNow, number, curUser.Email);
+            _context.Documents.Add(docs);
+            await _context.SaveChangesAsync();
+            return View("Documents");
+        }
+
         public async Task<bool> IsAuthorized(Sale sale, string resource, string operation)
         {
-           
             if (sale == null)
             {
                 return false;
             }
             var roles = await _userManager.GetRolesAsync(sale);
+           
             var grants = await _context.Grants.Where(g => g.Operation == operation && g.Resource == resource && g.Permission == "Allow").ToListAsync();
             if (grants != null)
             {
@@ -162,82 +189,93 @@ namespace BookingForm.Controllers
             {
                 return View("AccessDenied");
             }
-            string sWebRootFolder = _environment.WebRootPath;
-            //string fname = @"Thông tin đặt giữ chỗ dự án Vincity" + DateTime.Now.ToString("dd-MM-yyyy") + ".xlsx";
-            string sFileName = @"Form thông tin Khách hàng Book căn VinCity" + ".xlsx";
-            string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
-            FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
-            var memory = new MemoryStream();
-            using (var fs = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Create, FileAccess.Write))
+            else
             {
-                IWorkbook workbook;
-                workbook = new XSSFWorkbook();
-                ISheet excelSheet = workbook.CreateSheet("INDIVIDUAL CUSTOMER");
-                IRow row = excelSheet.CreateRow(0);
-
-                row.CreateCell(0).SetCellValue("Customer Name");
-                row.CreateCell(1).SetCellValue("Nationality");
-                row.CreateCell(2).SetCellValue("Gender");
-                row.CreateCell(3).SetCellValue("Birthday<YYYYMMDD>");
-                row.CreateCell(4).SetCellValue("ID Type");
-                row.CreateCell(5).SetCellValue("ID NO.");
-                
-                var appoinments = await _context.appoinment.Where(ap => ap.IsActive == true && ap.Confirm == true).OrderBy(a => a.Contract).ToListAsync();
-                int count = 1;
-                foreach (var appoinment in appoinments)
+                string sWebRootFolder = _environment.WebRootPath;
+                //string fname = @"Thông tin đặt giữ chỗ dự án Vincity" + DateTime.Now.ToString("dd-MM-yyyy") + ".xlsx";
+                string sFileName = @"Form thông tin Khách hàng Book căn VinCity" + ".xlsx";
+                string URL = string.Format("{0}://{1}/{2}", Request.Scheme, Request.Host, sFileName);
+                FileInfo file = new FileInfo(Path.Combine(sWebRootFolder, sFileName));
+                var memory = new MemoryStream();
+                using (var fs = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Create, FileAccess.Write))
                 {
-                    row = excelSheet.CreateRow(count);
+                    IWorkbook workbook;
+                    workbook = new XSSFWorkbook();
+                    ISheet excelSheet = workbook.CreateSheet("INDIVIDUAL CUSTOMER");
+                    IRow row = excelSheet.CreateRow(0);
 
-                    row.CreateCell(0).SetCellValue(appoinment.Customer);
-                    row.CreateCell(1).SetCellValue("01<Native>");
-                    string gender = appoinment.Gender;
-                    if (gender != "")
+                    row.CreateCell(0).SetCellValue("Customer Name");
+                    row.CreateCell(1).SetCellValue("Nationality");
+                    row.CreateCell(2).SetCellValue("Gender");
+                    row.CreateCell(3).SetCellValue("Birthday<YYYYMMDD>");
+                    row.CreateCell(4).SetCellValue("ID Type");
+                    row.CreateCell(5).SetCellValue("ID NO.");
+
+                    var appoinments = await _context.appoinment.Where(ap => ap.IsActive == true && ap.Confirm == true).OrderBy(a => a.Contract).ToListAsync();
+                    int count = 1;
+                    foreach (var appoinment in appoinments)
                     {
-                        if (gender == "Anh" || gender == "Nam")
+                        row = excelSheet.CreateRow(count);
+
+                        row.CreateCell(0).SetCellValue(appoinment.Customer);
+                        row.CreateCell(1).SetCellValue("01<Native>");
+                        string gender = appoinment.Gender;
+                        if (gender != "")
                         {
-                            row.CreateCell(2).SetCellValue("10<Male>");
+                            if (gender == "Anh" || gender == "Nam")
+                            {
+                                row.CreateCell(2).SetCellValue("10<Male>");
+                            }
+                            else if (gender == "Chị" || gender == "Nữ")
+                            {
+                                row.CreateCell(2).SetCellValue("20<Female>");
+                            }
+                            else
+                            {
+                                row.CreateCell(2).SetCellValue("30<Other>");
+                            }
                         }
-                        else if (gender == "Chị" || gender == "Nữ")
+                        if (appoinment.DOB.Year != 1)
                         {
-                            row.CreateCell(2).SetCellValue("20<Female>");
+                            row.CreateCell(3).SetCellValue(appoinment.DOB.ToString("yyyyMMdd"));
                         }
                         else
                         {
-                            row.CreateCell(2).SetCellValue("30<Other>");
+                            row.CreateCell(3).SetCellValue("thiếu");
                         }
-                    }
-                    row.CreateCell(3).SetCellValue("");
-                    string IdType = "";
-                    if (appoinment.Cmnd != null)
-                    {
-                        if (appoinment.Cmnd.Length == 9 || appoinment.Cmnd.Length == 12)
+                        string IdType = "";
+                        if (appoinment.Cmnd != null)
                         {
-                            IdType = "10<CCCD/CMTND>";
+                            if (appoinment.Cmnd.Length == 9 || appoinment.Cmnd.Length == 12)
+                            {
+                                IdType = "10<CCCD/CMTND>";
+                            }
+                            else if (Regex.IsMatch(appoinment.Cmnd.Substring(0, 1), @"^[a-zA-Z]+$") && appoinment.Cmnd.Length == 8)
+                            {
+                                IdType = "30<Passport>";
+                            }
+                            else
+                            {
+                                IdType = "40<Other>";
+                            }
                         }
-                        else if ( Regex.IsMatch(appoinment.Cmnd.Substring(0, 1), @"^[a-zA-Z]+$") && appoinment.Cmnd.Length == 8)
-                        {
-                            IdType = "30<Passport>";
-                        }
-                        else
-                        {
-                            IdType = "40<Other>";
-                        }
-                    }
-                    row.CreateCell(4).SetCellValue(IdType);
+                        row.CreateCell(4).SetCellValue(IdType);
 
-                    row.CreateCell(5).SetCellValue("'" + appoinment.Cmnd);
-                    
-                    count++;
+                        row.CreateCell(5).SetCellValue("'" + appoinment.Cmnd);
+
+                        count++;
+                    }
+
+                    workbook.Write(fs);
                 }
-
-                workbook.Write(fs);
+                using (var stream = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Open))
+                {
+                    await stream.CopyToAsync(memory);
+                }
+                memory.Position = 0;
+                return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", sFileName);
             }
-            using (var stream = new FileStream(Path.Combine(sWebRootFolder, sFileName), FileMode.Open))
-            {
-                await stream.CopyToAsync(memory);
-            }
-            memory.Position = 0;
-            return File(memory, "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", sFileName);
+            
         }
 
         public async Task<IActionResult> _export(int? id)

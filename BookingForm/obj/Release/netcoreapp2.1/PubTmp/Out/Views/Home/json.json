@@ -1,0 +1,137 @@
+[
+  {
+    "id": 1,
+    "content": "Khi mua Mini Hotel th? kh?ch h?ng s? t? thi?t k? v? x?y hay Ch? ??u t? s? x?y d?ng?",
+    "answer": "T?t c? A, B v? C",
+    "baits": [
+      {
+        "id": 1,
+        "content": "Kh?ch h?ng t? thi?t k? v? t? x?y d?ng"
+      },
+      {
+        "id": 2,
+        "content": "Kh?ch h?ng thi?t k?  v? Ch? ??u t? x?y d?ng"
+      },
+      {
+        "id": 3,
+        "content": "Kh?ch h?ng ?y quy?n to?n b? cho Ch? ??u t? t? thi?t k? v? t? x?y d?ng"
+      },
+      {
+        "id": 0,
+        "content": "T?t c? A, B v? C"
+      }
+    ],
+    "number": 14,
+    "explain": "No exception",
+    "answers": null,
+    "testId": 1
+  },
+  {
+    "id": 2,
+    "content": "Kh?ch h?ng mua s?n ph?m Mini Hotel ph?i tu?n th? ?i?u g??",
+    "answer": "X?y 5 t?ng, m?t ?? x?y d?ng l? 60%",
+    "baits": [
+      {
+        "id": 4,
+        "content": "T? x?y d?ng v? ho?n thi?n theo quy ho?ch d? ?n"
+      },
+      {
+        "id": 5,
+        "content": "??m b?o thi?t k? tu?n th? ??ng ph? duy?t c?a C?T v? th?i h?n ??a v?o ho?t ??ng t?i ?a theo quy ??nh v?o n?m 2022"
+      },
+      {
+        "id": 6,
+        "content": "T?t c? c?c ??p ?n tr?n"
+      },
+      {
+        "id": 0,
+        "content": "X?y 5 t?ng, m?t ?? x?y d?ng l? 60%"
+      }
+    ],
+    "number": 15,
+    "explain": "No no exception",
+    "answers": null,
+    "testId": 1
+  },
+  {
+    "id": 3,
+    "content": "D? ?n Grand World Ph? Qu?c c? nh?ng lo?i s?n ph?m n?o?\r\n",
+    "answer": "C? 2 ??p ?n ??u ??ng\r\n",
+    "baits": [
+      {
+        "id": 7,
+        "content": "C?ng tr?nh d?ch v? du l?ch\r\n"
+      },
+      {
+        "id": 8,
+        "content": "C?ng tr?nh kh?ch s?n\r\n"
+      },
+      {
+        "id": 9,
+        "content": "C? 2 ??p ?n ??u sai\r\n"
+      },
+      {
+        "id": 0,
+        "content": "C? 2 ??p ?n ??u ??ng\r\n"
+      }
+    ],
+    "number": 1,
+    "explain": "",
+    "answers": null,
+    "testId": 1
+  },
+  {
+    "id": 5,
+    "content": "D? ?n Grand World Ph? Qu?c c? bao nhi?u lo?i h?nh s?n ph?m?\r\n",
+    "answer": "3",
+    "baits": [
+      {
+        "id": 10,
+        "content": "1"
+      },
+      {
+        "id": 11,
+        "content": "2"
+      },
+      {
+        "id": 12,
+        "content": "4"
+      },
+      {
+        "id": 0,
+        "content": "3"
+      }
+    ],
+    "number": 2,
+    "explain": "",
+    "answers": null,
+    "testId": 1
+  },
+  {
+    "id": 6,
+    "content": "Nh?ng lo?i s?n ph?m c?a Grand World c? t?n th??ng m?i l? g??\r\n",
+    "answer": "Shop, c?n h? du l?ch, mini hotel\r\n",
+    "baits": [
+      {
+        "id": 13,
+        "content": "Shop, kh?ch s?n, mini hotel\r\n"
+      },
+      {
+        "id": 14,
+        "content": "Shoptel, c?n h? du l?ch, kh?ch s?n\r\n"
+      },
+      {
+        "id": 15,
+        "content": "Shophouse, c?n h?, kh?ch s?n\r\n"
+      },
+      {
+        "id": 0,
+        "content": "Shop, c?n h? du l?ch, mini hotel\r\n"
+      }
+    ],
+    "number": 3,
+    "explain": "",
+    "answers": null,
+    "testId": 1
+  }
+]

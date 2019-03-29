@@ -1,0 +1,77 @@
+﻿@model BookingForm.Models.Answer
+
+<div class="answer-page">
+    <div class="answer-question">
+        <h4 id="question">Câu @Model.Question.Number: @Model.Question.Content</h4>
+    </div>
+    <div class="answered">
+        @if (!Model.IsNotCorrect)
+        {
+            if (Model.Answered != "")
+            {
+                <div id="correct-answer">
+                    <p id="correct-text"><i class="fas fa-check"></i>@Model.Answered </p>
+                </div>
+            }
+            else
+            {
+                <div id="incorrect-answer">
+                    <p id="incorrect-text"><i class="fas fa-times"></i>Chưa chọn đáp án </p>
+                    <p id="inincorrect-text"><i class="fas fa-arrow-right"></i>@Model.Question.Answer</p>
+                </div>
+            }
+        }
+        else
+        {
+            <div id="incorrect-answer">
+                <p id="incorrect-text"><i class="fas fa-times"></i>@Model.Answered </p>
+                <p id="inincorrect-text"><i class="fas fa-arrow-right"></i>@Model.Question.Answer</p>
+            </div>
+        }
+    </div>
+    <div class="explain-section">
+        <p id="explain">Giải thích: @Model.Question.Explain</p>
+    </div>
+</div>
+
+<style>
+    #question {
+        font-family: auto;
+    }
+    .explain-section{
+        background-color: gainsboro;
+        border: 1px solid gainsboro;
+    }
+    #explain {
+        margin-top: 5px;
+        margin-left: 5px;
+        margin-bottom: 5px;
+        margin-right: 5px;
+        font-style: italic;
+        font-family: cursive;
+    }
+    #inincorrect-text {
+        margin-left: 20px;
+        /*font-style: oblique;*/
+        /* text-decoration: underline; */
+        color: red;
+    }
+    #question{
+        margin: 5px 0 5px 3px;
+    }
+    .answered{
+        margin: 15px 0 15px 40px;
+    }
+    .fa-check{
+        margin-right: 5px;
+        color: #23d82c;
+    }
+    .fa-times {
+        margin-right: 5px;
+        color: #ff0000;
+    }
+    .fa-arrow-right {
+        margin-right: 5px;
+        color: #23d82c;
+    }
+</style>

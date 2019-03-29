@@ -1,0 +1,52 @@
+﻿@model IEnumerable<BookingForm.Models.Test>
+
+@foreach (var item in Model)
+{
+<div class="test-container">
+    <i class="fas fa-folder-open fa-10x"></i>
+    <p id="test-label">@item.Name</p>
+</div>
+    
+}
+
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@
+    <style>
+        #test-label {
+            margin-left: 20px;
+        }
+        .fa-folder-open {
+            color: #f19911;
+            margin-left: 20px
+        }
+
+        .test-container > #test-label {
+            margin-left: 0;
+            font-family: cursive;
+            display: block;
+        }
+
+        .test-container {
+            margin-top: 20px;
+            border: 1px solid gainsboro;
+            background: white;
+            padding: 10px 10px 10px 10px;
+            width: 322px;
+        }
+
+        .test-container:hover {
+            cursor:pointer;
+        }
+
+    </style>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>
+        $('.test-container').on('click', function () {
+            var testname = $(this).text();
+            var name = testname.trim().split(' ').join('_');
+            var url = '@Url.Action("AttendTest", "Home")' + '?test_name=' + name;
+            window.location.href = url;
+        });
+    </script>

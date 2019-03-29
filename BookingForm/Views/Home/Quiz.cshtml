@@ -1,0 +1,158 @@
+﻿@model BookingForm.Models.Test
+<div class="container1">
+    <div class="alert alert-primary" role="alert">
+        @Model.Name
+    </div>
+
+    @*<form asp-action="Quiz" method="post" id="questionform">*@
+        <div id="accordion">
+            <div class="qtn-page">
+
+            </div>
+        </div>
+        <input type="number" name="score" value="0" min="0" id="score" hidden/>
+        <div id="btn-submit">
+            <input id="submit" type="submit" class="btn btn-submit" name="submit" value="Xem kết quả" />
+        </div>
+        
+    @*</form>*@
+</div>
+
+<style>
+    .container1 {
+        padding-top: 20px;
+        border: 2px solid darkcyan;
+        padding-bottom: 20px;
+        padding-left: 20px;
+        padding-right: 20px;
+    }
+    #btn-submit {
+        text-align: right;
+    }
+    .btn-submit {
+        display: block;
+    }
+    #submit {
+        margin-top: 20px;
+        margin-right: 20px;
+        background: #50e48b;
+    }
+    .alert-primary {
+        color: black !important;
+        font-family: -webkit-pictograph;
+        font-size: x-large;
+        background-color: white !important;
+        border: white !important;
+        text-align: center;
+    }
+</style>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    var questions = JSON.parse('@Html.Raw(Json.Serialize(Model.Questions))');
+    var testname = '@Html.Raw(Model.Name)';
+    var answers = [];
+    function change_answer(number, answer) {
+        var id = '#answer' + number;
+        $(id).val(answer);
+    }
+
+    function addquestion(content, baits, number, count) {
+        var elem = '<div class="card">' +
+            '<div class="card-header" id="heading' + count + '">' +
+            '<h5 class="mb-0">' +
+            '<button class="btn btn-link" data-toggle="collapse" data-target="#collapse' + count + '" aria-expanded="true" aria-controls="collapse' + count + '">' +
+            'Question: ' + count.toString() +
+            '</button>' +
+            '</h5>' +
+            '</div>' +
+            '<div id="collapse' + count + '" class="collapse" aria-labelledby="heading' + count + '" data-parent="#accordion">' +
+            '<div class="card-body">' +
+            '<div class="row">' +
+            '<div class="col-12">' +
+            '<label class="control-label">' +
+            content +
+            '</label>';
+            for (var i = 1; i <= baits.length; i++) {
+                elem = elem + '<div class="custom-control custom-radio">' +
+                    '<input type="radio" class="custom-control-input" onclick="change_answer(' + number + ', \'' + baits[i - 1].content + '\')" id="' + i + number + '" name="radio-stacked' + number + ' " required>' +
+                    ' <label class="custom-control-label" for="' + i + number + '">' + baits[i - 1].content + '</label>' +
+                    '</div>';
+             }
+
+            elem = elem +
+            '<div class="invalid-feedback">Chọn một đáp án</div>' +
+            '</div>' +
+            '<input type="text" name="answers" value="" id="answer' + number + '" hidden />' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>' +
+            '</div>';
+        $('.qtn-page').append(elem);
+    }
+
+    $('#submit').on('click', function () {
+        var correct = 0;
+        for (i = 1; i <= questions.length; i++) {
+            var curid = '#answer' + questions[i - 1].number;
+            var real_answer = $(curid).val();
+            if (real_answer == "") {
+                var answer = { testname: testname, question_number: questions[i - 1].number, answer: "", isnotcorrect: false };
+                answers.push(answer);
+            }
+            else if (questions[i - 1].answer == real_answer) {
+                correct += 1;
+                var answer = { testname: testname, question_number: questions[i - 1].number, answer: real_answer, isnotcorrect: false };
+                answers.push(answer);
+            }
+            else {
+                var answer = { testname: testname, question_number: questions[i - 1].number, answer: real_answer, isnotcorrect: true };
+                answers.push(answer);
+            }
+        }
+        var data = JSON.stringify(answers);
+        var url = '@Url.Action("Quiz", "Home")';
+        $('#score').val(correct * 20);
+        swal({
+            title: "Kết quả!",
+            text: correct.toString() + '/' + questions.length.toString(),
+            type: "success",
+            timer: 3000,
+            icon: "success"
+        }).then(function () {
+            $.ajax({
+                type: 'post',
+                url: url,
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                dataType: 'json',
+                data: data,
+                success: function (newdata) {
+                    console.log('Data received: ');
+                    console.log(newdata);
+                    var new_url = '@Url.Action("Result", "Home")' + '?testname=' + testname.split(' ').join('_');
+                    window.location = new_url;
+                },
+                error: function () {
+                    console.log('Error occured ');
+                }
+            });
+        });
+    });
+
+    $(document).ready(function () {
+        for (i = 0; i < questions.length; i++) {
+            addquestion(questions[i].content, questions[i].baits, questions[i].number, i + 1);
+        }
+        
+    });
+
+</script>
+
+
+@*
+    For more information on enabling MVC for empty projects, visit http://go.microsoft.com/fwlink/?LinkID=397860
+*@

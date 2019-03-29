@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using BookingForm.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
@@ -76,6 +72,11 @@ namespace BookingForm.Models
         public DbSet<Product> Products { get; set; }
         public DbSet<Grant> Grants { get; set; }
         public DbSet<Contact> Contacts { get; set; }
+        public DbSet<Document> Documents { get; set; }
+        public DbSet<Test> Tests { get; set; }
+        public DbSet<Result> Result { get; set; }
+        public DbSet<Question> Question { get; set; }
+        public DbSet<Answer> Answer { get; set; }
     }
 
     public class ApplicationContextDbFactory : IDesignTimeDbContextFactory<BookingFormContext>

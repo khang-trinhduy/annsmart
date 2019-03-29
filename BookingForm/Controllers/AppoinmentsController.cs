@@ -3,18 +3,13 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using BookingForm.Models;
-using DocumentFormat.OpenXml.Packaging;
-using DocumentFormat.OpenXml.Wordprocessing;
 using System.IO;
-using Newtonsoft.Json;
 using System.Globalization;
 using reCAPTCHA.AspNetCore;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.FileProviders;
 using System.Net.Http.Headers;
@@ -378,7 +373,7 @@ namespace BookingForm.Controllers
             TempData["Customer"] = TempData["Customer"];
             TempData["Phone"] = TempData["Phone"];
             TempData["Email"] = TempData["Email"];
-            if (!authorized)
+            if (!authorized || curUser.EmailConfirmed == false)
             {
                 return View("AccessDenied");
             }
@@ -390,7 +385,7 @@ namespace BookingForm.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Customer,Gender,Address,Phone,Email,Job,WorkPlace,Cmnd,Day,Place,Money,Purpose,Requires,Price,Details,DType,Cash,NCH1,NCH2,NCH21,NCH3,NMS,NS,NSHH,NSH,HKTT,password,Contract, NSH1, PlanId, supporter, IdType, IsForeigner")] Appoinment appoinment, List<IFormFile> files)
+        public async Task<IActionResult> Create([Bind("Customer,Gender,Address,Phone,Email,Job,WorkPlace,Cmnd,Day,Place,Money,Purpose,Requires,Price,Details,DType,Cash,NCH1,NCH2,NCH21,NCH3,NMS,NS,NSHH,NSH,HKTT,password,Contract, NSH1, PlanId, supporter, IdType, IsForeigner, View, Direction, Acreage, Floor")] Appoinment appoinment, List<IFormFile> files)
         {
             //if (ModelState.IsValid)
             //{
@@ -402,7 +397,7 @@ namespace BookingForm.Controllers
             }
             var curUser = await _userManager.GetUserAsync(User);
             var authorized = await IsAuthorized(curUser, "Contracts", "Create");
-            if (!authorized)
+            if (!authorized || curUser.EmailConfirmed == false)
             {
                 return View("AccessDenied");
             }
@@ -660,6 +655,23 @@ namespace BookingForm.Controllers
             return View("Error");
         }
 
+        [HttpGet]
+        public async Task<IActionResult> AddDOB(Guid? id)
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Read");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
+            var a = await _context.appoinment.FindAsync(id);
+            if (a != null)
+            {
+                return View(a);
+            }
+            return View("Error");
+        }
+
         [HttpPost]
         public async Task<IActionResult> Passport([Bind("Id", "Customer")] Appoinment a, List<IFormFile> files)
         {
@@ -720,12 +732,37 @@ namespace BookingForm.Controllers
                 }
                 _context.Update(app);
                 await _context.SaveChangesAsync();
-                TempData["StatusMessage"] = "Upload successful!";
+                TempData["StatusMessage"] = "Cập nhật thành công!";
                 return View();
             }
             else
             {
-                TempData["StatusMessage"] = "Failed to upload!";
+                TempData["StatusMessage"] = "Không thể cập nhật!";
+            }
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddDOB([Bind("Id", "Customer", "DOB")] Appoinment a)
+        {
+            var curUser = await _userManager.GetUserAsync(User);
+            var authorized = await IsAuthorized(curUser, "Contracts", "Update");
+            if (!authorized)
+            {
+                return View("AccessDenied");
+            }
+            var app = await _context.appoinment.FindAsync(a.Id);
+            if (app != null)
+            {
+                app.DOB = a.DOB;
+                _context.Update(app);
+                await _context.SaveChangesAsync();
+                TempData["StatusMessage"] = "Cập nhật thành công!";
+                return View();
+            }
+            else
+            {
+                TempData["StatusMessage"] = "Không thể cập nhật!";
             }
             return View();
         }
@@ -736,7 +773,7 @@ namespace BookingForm.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Customer, Gender, Address,Phone,Email, Job, WorkPlace,Cmnd, Day, Place, Money, Purpose, Requires, Details, DType, Cash, NCH1,NCH2, NCH21, NCH3, NMS,NSH, NSH1,NSHH,NS, HKTT, Contract, cTime, dTime,Price, Deposit, Note, IsActive, WDay, WithdrawCode, WMoney, WType")]Appoinment appoinment)
+        public async Task<IActionResult> Edit(Guid id, [Bind("Id,Customer, Gender, Address,Phone,Email, Job, WorkPlace,Cmnd, Day, Place, Money, Purpose, Requires, Details, DType, Cash, NCH1,NCH2, NCH21, NCH3, NMS,NSH, NSH1,NSHH,NS, HKTT, Contract, cTime, dTime,Price, Deposit, Note, IsActive, WDay, WithdrawCode, WMoney, WType, View, Floor, Direction, Acreage")]Appoinment appoinment)
         {
             //if (ModelState.IsValid)
             //{
@@ -785,6 +822,10 @@ namespace BookingForm.Controllers
                 tmp.WithdrawCode = appoinment.WithdrawCode;
                 tmp.WMoney = appoinment.WMoney;
                 tmp.WType = appoinment.WType;
+                tmp.Acreage = appoinment.Acreage;
+                tmp.View = appoinment.View;
+                tmp.Direction = appoinment.Direction;
+                tmp.Floor = appoinment.Floor;
                 _context.Update(tmp);
                 await _context.SaveChangesAsync();
             }

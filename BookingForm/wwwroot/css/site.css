@@ -1,6 +1,7 @@
 ﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification\ 
 for details on configuring this project to bundle and minify static web assets. */
 @import url('https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css');
+
 body {
     padding-top: 50px;
     padding-bottom: 20px;
@@ -13,15 +14,22 @@ body {
     }
 }
 
+
 @media print {
     footer {
         display: block;
         text-align: left;
-        padding-top: 200px;
         position: fixed;
         bottom: 0;
         color: #ff0000;
     }
+    @page {
+        
+    }
+    body {
+        padding-bottom: 100px;
+    }
+
 
     /* Wrapping element */
     /* Set some basic padding to keep content from hitting the edges */

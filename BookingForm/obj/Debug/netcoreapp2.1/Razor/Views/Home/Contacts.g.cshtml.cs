@@ -223,7 +223,7 @@ using BookingForm.Models;
             WriteLiteral("                            ");
             EndContext();
             BeginContext(3667, 83, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "3fd7a8cd9ca84953bf9e6b112f6b85e2", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "f5545e8df26b4b28913d05cc740bded6", async() => {
                 BeginContext(3740, 6, true);
                 WriteLiteral("Xem HĐ");
                 EndContext();
@@ -270,7 +270,7 @@ using BookingForm.Models;
             WriteLiteral("                            ");
             EndContext();
             BeginContext(3864, 77, false);
-            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "70513637afc44270a28ace6f49eb5648", async() => {
+            __tagHelperExecutionContext = __tagHelperScopeManager.Begin("a", global::Microsoft.AspNetCore.Razor.TagHelpers.TagMode.StartTagAndEndTag, "e7b980cde51447dc812cfa339586d696", async() => {
                 BeginContext(3931, 6, true);
                 WriteLiteral("Tạo HĐ");
                 EndContext();

@@ -17,7 +17,8 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
         <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    </environment>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">    
+</environment>
     <environment exclude="Development">
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
@@ -30,7 +31,8 @@
     <environment include="Production">
         <link rel="stylesheet" href="~/css/site.css" />
         <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.bundle.min.js"></script>
-    </environment>
+        <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">    
+</environment>
     <environment exclude="Production">
         <link rel="stylesheet" href="~/css/site.css" />
         <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
@@ -52,106 +54,93 @@
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navba" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Manager
+                                    Quản lý
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navba">
-                                    <a class="dropdown-item" href="/Managers/Employee">Employee</a>
+                                    <a class="dropdown-item" href="/Managers/Employee">Nhân sự</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Managers/Request">Request<span class="badge badge-pill badge-light">@curUser.NOfRequests</span></a>
+                                    <a class="dropdown-item" href="/Managers/Request">Yêu cầu<span class="badge badge-pill badge-light">@curUser.NOfRequests</span></a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Managers/Chart">Chart</a>
+                                    <a class="dropdown-item" href="/Managers/Chart">Biểu đồ</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Managers/Profit">Profit</a>
+                                    <a class="dropdown-item" href="/Managers/Profit">Doanh thu</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Home/RequestsControl">Loan</a>
+                                    <a class="dropdown-item" href="/Home/RequestsControl">Tư vấn vay</a>
                                 </div>
                             </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="#" id="navba" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Administrator
+                            @*<li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="/Home/Dashboard" id="navb" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Hợp đồng giữ chỗ
                                 </a>
-                                <div class="dropdown-menu" aria-labelledby="navba">
-                                    <a class="dropdown-item" href="/Admin/Dashboard">Contracts<span class="badge badge-pill badge-light">@curUser.NOfMeetings</span></a>
+                                <div class="dropdown-menu" aria-labelledby="navb">
+                                    <a class="dropdown-item" href="/Appoinments/Create">Tạo mới</a>
                                     <div class="dropdown-divider"></div>
-                                    <label class="dropdown-header">Excel</label>
-                                    <a class="dropdown-item" href="/Admin/Export">Save all contracts to excel</a>
-                                    <a class="dropdown-item" href="/Admin/_loans">Save all contracts of customers wishing to borrow</a>
+                                    @*<a class="dropdown-item" href="#">Follow</a>
+                        <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/Home/Dashboard">Hợp đồng của bạn<span class="badge badge-pill badge-light">@curUser.NOfMeetings</span></a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Admin/Summary">Summary</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Admin/GetRequest">Request</a>
-                                </div>
-                            </li>
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="/Home/Dashboard" id="navba" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Appointment
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navba">
-                                    <a class="dropdown-item" href="/Appoinments/Create">Book</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Home/Dashboard">Review</a>
+                                    <a class="dropdown-item" href="/Home/Requests">Yêu cầu của bạn</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Help
+                                    Trợ giúp
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="#">Manager</a>
+                                    <a class="dropdown-item" href="/Home/Tutor">Tạo hợp đồng giữ chỗ</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Admin/Tutor">Administrator</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Home/Tutor">Booking</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Home/Request">Request</a>
+                                    <a class="dropdown-item" href="/Home/Request">Tạo yêu cầu</a>
                                 </div>
-                            </li>
+                            </li>*@
+
 
                         }
                         else if (User.IsInRole("Administrator"))
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="Admin/Dashboard" id="navba" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Administrator
+                                    Quản lý
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navba">
-                                    <a class="dropdown-item" href="/Admin/Dashboard">Contracts<span class="badge badge-pill badge-light">@curUser.NOfMeetings</span></a>
+                                    <a class="dropdown-item" href="/Admin/Dashboard">Hợp đồng giữ chỗ<span class="badge badge-pill badge-light">@curUser.NOfMeetings</span></a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Admin/GetRequest">Request<span class="badge badge-pill badge-light">@curUser.NOfRequests</span></a>
+                                    <a class="dropdown-item" href="/Admin/GetRequest">Yêu cầu<span class="badge badge-pill badge-light">@curUser.NOfRequests</span></a>
                                     <div class="dropdown-divider"></div>
                                     <label class="dropdown-header">Excel</label>
-                                    <a class="dropdown-item" href="/Admin/Export">Save all contracts to excel</a>
-                                    <a class="dropdown-item" href="/Admin/_loans">Save all contracts of customers wishing to borrow</a>
+                                    <a class="dropdown-item" href="/Admin/Export">Lưu file</a>
+                                    @*<a class="dropdown-item" href="/Admin/_loans">Save all contracts of customers wishing to borrow</a>*@
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Admin/Summary">Summary</a>
+                                    <a class="dropdown-item" href="/Admin/Summary">Kết sổ</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="/Admin/RequestPrint">In hợp đồng giữ chỗ(bản mẫu)</a>
                                 </div>
                             </li>
                             <li class="divider-vertical"></li>
 
-                            <li class="nav-item dropdown">
-                                <a class="nav-link dropdown-toggle" href="/Home/Dashboard" id="navba" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Appointment
-                                </a>
-                                <div class="dropdown-menu" aria-labelledby="navba">
-                                    <a class="dropdown-item" href="/Home/Dashboard">Contracts</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Appoinments/Create">Book</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Home/Dashboard">Review</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Home/Requests">Requests</a>
-                                </div>
-                            </li>
+                            @*<li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="/Home/Dashboard" id="navba" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Appointment
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navba">
+                        <a class="dropdown-item" href="/Home/Dashboard">Contracts</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/Appoinments/Create">Book</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/Home/Dashboard">Review</a>
+                        <div class="dropdown-divider"></div>
+                        <a class="dropdown-item" href="/Home/Requests">Requests</a>
+                    </div>
+                </li>*@
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Help
+                                    Trợ giúp
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="/Admin/Tutor">Administrator</a>
+                                    <a class="dropdown-item" href="/Admin/Tutor">Dành cho Admin</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Home/Tutor">Sale</a>
+                                    @*<a class="dropdown-item" href="/Home/Tutor">Sale</a>*@
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Home/Request">Request</a>
+                                    <a class="dropdown-item" href="/Home/Request">Quản lý yêu cầu</a>
                                 </div>
                             </li>
 
@@ -160,28 +149,29 @@
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="/Home/Dashboard" id="navbarDropdown1" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Appointment
+                                    Trang chủ
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown1">
-                                    <a class="dropdown-item" href="/Appoinments/Create">Book</a>
+                                    <a class="dropdown-item" href="/Appoinments/Create">Tạo hợp đồng giữ chỗ</a>
+
+                                    @*<div class="dropdown-divider"></div>*@
+                                    @* <a class="dropdown-item" href="#">Follow</a>*@
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Home/Manager">Manage</a>
+                                    <a class="dropdown-item" href="/Home/Dashboard">Hợp đồng của bạn<span class="badge badge-pill badge-light">@curUser.NOfMeetings</span></a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Follow</a>
+                                    <a class="dropdown-item" href="/Home/Manager">Nhóm của bạn</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Home/Dashboard">Review<span class="badge badge-pill badge-light">@curUser.NOfMeetings</span></a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Home/Requests">Requests</a>
+                                    <a class="dropdown-item" href="/Home/Requests">Yêu cầu của bạn</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Help
+                                    Trợ giúp
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="/Home/Tutor">How to book a new appointment with AnnSmart</a>
+                                    <a class="dropdown-item" href="/Home/Tutor">Cách tạo hợp đồng giữ chỗ</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Home/Request">Request</a>
+                                    <a class="dropdown-item" href="/Home/Request">Tạo yêu cầu</a>
                                 </div>
                             </li>
                         }
@@ -189,26 +179,26 @@
                         {
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="/Home/Dashboard" id="navb" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Appointment
+                                    Trang chủ
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navb">
-                                    <a class="dropdown-item" href="/Appoinments/Create">Book</a>
+                                    <a class="dropdown-item" href="/Appoinments/Create">Tạo hợp đồng giữ chỗ</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Follow</a>
+                                    @*<a class="dropdown-item" href="#">Follow</a>
+                        <div class="dropdown-divider"></div>*@
+                                    <a class="dropdown-item" href="/Home/Dashboard">Hợp đồng của bạn<span class="badge badge-pill badge-light">@curUser.NOfMeetings</span></a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Home/Dashboard">Review<span class="badge badge-pill badge-light">@curUser.NOfMeetings</span></a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Home/Requests">Requests</a>
+                                    <a class="dropdown-item" href="/Home/Requests">Yêu cầu của bạn</a>
                                 </div>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Help
+                                    Trợ giúp
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                    <a class="dropdown-item" href="/Home/Tutor">How to book a new appointment with AnnSmart</a>
+                                    <a class="dropdown-item" href="/Home/Tutor">Cách tạo hợp đồng giữ chỗ</a>
                                     <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="/Home/Request">Request</a>
+                                    <a class="dropdown-item" href="/Home/Request">Cách tạo yêu cầu</a>
                                 </div>
                             </li>
                         }
@@ -222,17 +212,17 @@
                             </li>
                             <li>
                                 <a class="nav-link" href="/Home/Contacts" id="navb" role="button" aria-haspopup="true" aria-expanded="false">
-                                    Danh sách KH
+                                    Khách của bạn
                                 </a>
                             </li>
                             <li>
                                 <a class="nav-link" href="/Home/Dashboard" id="navb" role="button" aria-haspopup="true" aria-expanded="false">
-                                    Danh sách HĐ
+                                   Hợp đồng của bạn
                                 </a>
                             </li>
                             <li class="nav-item dropdown">
                                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                    Help
+                                    Trợ giúp
                                 </a>
                                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
                                     @*<a class="dropdown-item" href="/Home/Tutor">How to book a new appointment with AnnSmart</a>
@@ -265,7 +255,10 @@
                             </li>
                         }
                         <li class="nav-item">
-                            <a class="nav-link" href="/Home/Feedback">Feedback</a>
+                            <a class="nav-link" href="/Home/Test"><i class="fas fa-question-circle"></i> Kiểm tra </a>
+                        </li>
+                    <li class="nav-item">
+                            <a class="nav-link" href="/Home/Feedback">Góp ý</a>
                         </li>
                     }
                 </ul>
@@ -324,8 +317,8 @@
                         </div>
                     </div>
                 </a>
-                <div class="card">
-                    @*<img class="card-img-top" src="~/images/c2.jpg" alt="Card image cap">*@
+                @*<div class="card">
+                    @*<img class="card-img-top" src="~/images/c2.jpg" alt="Card image cap">
                     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
                         <ol class="carousel-indicators">
                             <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -353,7 +346,7 @@
                         <p class="card-text">Dedicated system for AnnHome's collaborator.</p>
                         <p class="card-text"><small class="text-muted">Beta</small></p>
                     </div>
-                </div>
+                </div>*@
             </div>
         }
     </div>
@@ -407,9 +400,10 @@
     @{ 
         Random rnd = new Random();
         int rd = rnd.Next(10001, 100001);
+        int x = 1;
     }
     <footer>
-      AnnHome - @rd
+        AnnHome - @DateTime.UtcNow.Date.ToString("dd/MM/yyyy")
     </footer>
 </body>
 </html>
