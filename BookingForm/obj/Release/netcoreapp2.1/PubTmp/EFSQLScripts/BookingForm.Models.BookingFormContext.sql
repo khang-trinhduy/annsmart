@@ -2595,3 +2595,11 @@ END;
 
 GO
 
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190329115148_add alot of things')
+BEGIN
+    INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
+    VALUES (N'20190329115148_add alot of things', N'2.1.8-servicing-32085');
+END;
+
+GO
+

@@ -5,6 +5,9 @@
     </div>
 
     @*<form asp-action="Quiz" method="post" id="questionform">*@
+    <div class="timer-page">
+        <p id="timer-label">Thời gian còn lại: <span id="timer-val"></span></p>
+    </div>
         <div id="accordion">
             <div class="qtn-page">
 
@@ -12,13 +15,17 @@
         </div>
         <input type="number" name="score" value="0" min="0" id="score" hidden/>
         <div id="btn-submit">
-            <input id="submit" type="submit" class="btn btn-submit" name="submit" value="Xem kết quả" />
+            <input id="submit" type="submit" class="btn btn-submit" name="submit" value="Kết thúc" />
         </div>
         
     @*</form>*@
 </div>
 
 <style>
+    .timer-page{
+        display:block;
+        text-align: right;
+    }
     .container1 {
         padding-top: 20px;
         border: 2px solid darkcyan;
@@ -50,6 +57,30 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
+    var date = new Date();
+    var temp_date = new Date(date);
+    temp_date.setMinutes(date.getMinutes() + 25);
+    var countDownDate = temp_date.getTime();
+
+    var x = setInterval(function () {
+
+        var now = new Date().getTime();
+
+        var distance = countDownDate - now;
+
+        var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+        var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+        document.getElementById("timer-val").innerHTML = minutes + "m " + seconds + "s ";
+
+        if (distance < 0) {
+            clearInterval(x);
+            $('#submit').click();
+        }
+    }, 1000);
+
     var questions = JSON.parse('@Html.Raw(Json.Serialize(Model.Questions))');
     var testname = '@Html.Raw(Model.Name)';
     var answers = [];
@@ -94,6 +125,7 @@
     }
 
     $('#submit').on('click', function () {
+        $('#timer-val').val('');
         var correct = 0;
         for (i = 1; i <= questions.length; i++) {
             var curid = '#answer' + questions[i - 1].number;
@@ -101,16 +133,20 @@
             if (real_answer == "") {
                 var answer = { testname: testname, question_number: questions[i - 1].number, answer: "", isnotcorrect: false };
                 answers.push(answer);
+                console.log(answer);
             }
             else if (questions[i - 1].answer == real_answer) {
                 correct += 1;
                 var answer = { testname: testname, question_number: questions[i - 1].number, answer: real_answer, isnotcorrect: false };
                 answers.push(answer);
+                console.log(answer);
             }
             else {
                 var answer = { testname: testname, question_number: questions[i - 1].number, answer: real_answer, isnotcorrect: true };
                 answers.push(answer);
+                console.log(answer);
             }
+            
         }
         var data = JSON.stringify(answers);
         var url = '@Url.Action("Quiz", "Home")';

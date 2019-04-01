@@ -242,7 +242,7 @@ namespace BookingForm.Controllers
             int isnotincorrect = 0;
             foreach (var item in answered.Answer)
             {
-                if (!!item.IsNotCorrect)
+                if (!!!item.IsNotCorrect)
                 {
                     isnotincorrect += 1;
                 }
