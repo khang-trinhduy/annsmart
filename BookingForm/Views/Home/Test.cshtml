@@ -42,11 +42,97 @@
     </style>
 
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/limonte-sweetalert2/7.29.2/sweetalert2.all.js"></script>
     <script>
         $('.test-container').on('click', function () {
             var testname = $(this).text();
             var name = testname.trim().split(' ').join('_');
-            var url = '@Url.Action("AttendTest", "Home")' + '?test_name=' + name;
-            window.location.href = url;
+            var url = '@Url.Action("AttendTest","Home")' + '?test_name=' + name;
+            Swal.mixin({
+                title: 'Cài đặt',
+                
+                showCancelButton: true,
+                
+                animation: false,
+                progressSteps: ['1', '2', '3'],
+                confirmButtonText: 'Tiếp tục &rarr;'
+            }).queue([
+            {
+                text: 'Số lượng câu hỏi',
+                input: 'range',
+                type: 'info',
+                inputAttributes: {
+                    min: 1,
+                    max: 5,
+                    step: 1
+                },
+                inputValue: 3
+            },
+            {
+                text: 'Thời gian (phút)',
+                input: 'range',
+                type: 'info',
+                inputAttributes: {
+                    min: 5,
+                    max: 60,
+                    step: 5
+                },
+                inputValue: 25
+            },
+            {
+                input: 'checkbox',
+                inputValue: 1,
+                inputPlaceholder: 'Hiện cả những câu hỏi đã trả lời'
+            }]).then((result) => {
+                if(result.value) {
+                    Swal.fire({
+                        type: 'success',
+                        title: 'Your choice',
+                        html: 'Your answers: <pre><code>' +
+                            JSON.stringify(result.value) +
+                            '</code></pre>',
+                        confirmButtonText: 'Lovely!'
+                    }).then(function(){
+                        $.ajax({
+                            type: 'get',
+                            url: url,
+                            <!-- dataType: 'json', -->
+                            <!-- headers: { -->
+                                <!-- 'Content-Type': 'application/json' -->
+                            <!-- }, -->
+                            success: function(data){
+                                console.log(data);
+                                Swal.fire({
+                                    html: 'Chuyển đến trang kiểm tra sau <strong></strong> giây!',
+                                    timer: 5000,
+                                    onBeforeOpen: () => {
+                                        Swal.showLoading()
+                                        timerInterval = setInterval(() => {
+                                            Swal.getContent().querySelector('strong')
+                                            .textContent = Math.ceil(Swal.getTimerLeft()/1000)*1
+                                        }, 1000)
+                                        },
+                                        onClose: () => {
+                                            clearInterval(timerInterval)
+                                        }
+                                    }).then((result) => {
+                                        window.location.href = data;
+                                    })
+                            },
+                            error: function(){
+                                Swal.fire({
+                                    type: 'error',
+                                    title: 'Xảy ra lỗi, vui lòng thử lại sau.',
+                                    confirmButtonText: 'Ok'
+                                })
+                            }
+                        })
+                    })
+                }
+            })
+            
+            <!-- var url = '@Url.Action("AttendTest", "Home")' + '?test_name=' + name; -->
+            <!-- window.location.href = url; -->
         });
+
     </script>
