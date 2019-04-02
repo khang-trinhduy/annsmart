@@ -110,9 +110,10 @@ namespace BookingForm.Controllers
             var tests = await _context.Tests.ToListAsync();
             return View(tests);
         }
-//, [FromQuery] int notc, [FromQuery] int minutes, [FromQuery] bool isnotanswered
+
+
         [HttpGet]
-        public async Task<IActionResult> AttendTest(string test_name)
+        public async Task<IActionResult> AttendTest(string test_name, int notc, int minutes, bool isnotanswered)
         {
             var curUser = await _userManager.GetUserAsync(User);
             if (curUser is null)
@@ -123,14 +124,25 @@ namespace BookingForm.Controllers
             var tests = await _context.Tests.Include(t => t.Questions).ThenInclude(q => q.Baits).ToListAsync();
             var model = tests.FirstOrDefault(t => t.Name == string.Join(" ", newname));
             model.Questions = model.Questions.OrderBy(q => Guid.NewGuid()).ToList();
-            
+            if(notc > 0)
+            {
+                model.Questions = model.Questions.Take(notc).ToList();
+            }
+            if(minutes > 0)
+            {
+                ViewBag.time = minutes;
+            }
+            if(!!isnotanswered)
+            {
+                //
+            }
             foreach (var question in model.Questions)
             {
                 question.Baits.Add(new Bait { Content = question.Answer });
                 question.Baits = question.Baits.OrderBy(b => Guid.NewGuid()).ToList();
             }
             // model.Questions = model.Questions.Take(not).ToList();
-            return View(model);
+            return View("Quiz", model);
         }
 
         [HttpGet]
