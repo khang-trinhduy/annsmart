@@ -83,10 +83,10 @@
             {
                 input: 'checkbox',
                 inputValue: 1,
-                inputPlaceholder: 'Hiện cả những câu hỏi đã trả lời'
+                inputPlaceholder: 'Hiện cả những câu hỏi đã đánh dấu'
             }]).then((result) => {
                 if(result.value) {
-                    data = result;
+                    data = result.value;
                     Swal.fire({
                         html: 'Chuyển đến trang kiểm tra sau <strong></strong> giây!',
                         timer: 5000,
@@ -102,7 +102,9 @@
                     }
                     }).then((result) => {
                         console.log(data);
-                        window.location.href = '@Url.Action("AttendTest", "Home")' + '?test_name=' + name + '&notc=' + data[0] + '&minutes=' + data[1] + '&isnotanswered=' + data[2];
+                        var url = '@Url.Action("AttendTest", "Home")' + '?test_name=' + name + '&notc=' + data[0] + '&minutes=' + data[1] + '&isnotanswered=' + data[2];
+                        console.log(url);
+                        window.location.href = url;
                     })
                 }
             })
