@@ -22,5 +22,8 @@ namespace BookingForm.Models
         public int Floor { get; set; }
         [Display(Name = "Diện tích")]
         public double Acreage { get; set; }
+        public DateTime LastModified { get; set; }
+        public string LastModifiedBy { get; set; }
+        public DateTime Create { get; set; }
     }
 }

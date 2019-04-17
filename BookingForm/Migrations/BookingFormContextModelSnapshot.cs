@@ -62,6 +62,8 @@ namespace BookingForm.Migrations
 
                     b.Property<int>("Contract");
 
+                    b.Property<DateTime>("Create");
+
                     b.Property<string>("Customer")
                         .IsRequired();
 
@@ -97,6 +99,10 @@ namespace BookingForm.Migrations
                     b.Property<bool>("IsForeigner");
 
                     b.Property<string>("Job");
+
+                    b.Property<DateTime>("LastModified");
+
+                    b.Property<string>("LastModifiedBy");
 
                     b.Property<double>("Money");
 

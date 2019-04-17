@@ -1301,6 +1301,8 @@ namespace BookingForm.Controllers
             tmp.dTime = a.dTime;
             tmp.Cash = a.Cash;
             tmp.Confirm = true;
+            tmp.LastModified = DateTime.Now;
+            tmp.LastModifiedBy = curUser.Email;
             DateTime first = DateTime.Now;
             DateTime second = DateTime.Now;
             try {

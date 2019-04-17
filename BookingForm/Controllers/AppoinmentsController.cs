@@ -424,6 +424,7 @@ namespace BookingForm.Controllers
             appoinment.SaleDetails = curUser.Info;
             appoinment.Sale = curUser;
             appoinment.SEmail = curUser.Email;
+            appoinment.Create = DateTime.Now;
             ViewBag.plan = await _context.Plans.ToListAsync();
             string str = "";
             if(appoinment.Sale == null)
@@ -758,6 +759,8 @@ namespace BookingForm.Controllers
                 _context.Update(app);
                 await _context.SaveChangesAsync();
                 TempData["StatusMessage"] = "Cập nhật thành công!";
+                app.LastModified = DateTime.Now;
+                app.LastModifiedBy = curUser.Email;
                 return View();
             }
             else
@@ -826,6 +829,8 @@ namespace BookingForm.Controllers
                 tmp.View = appoinment.View;
                 tmp.Direction = appoinment.Direction;
                 tmp.Floor = appoinment.Floor;
+                tmp.LastModified = DateTime.Now;
+                tmp.LastModifiedBy = curUser.Name;
                 _context.Update(tmp);
                 await _context.SaveChangesAsync();
             }

@@ -88,6 +88,8 @@
     <Compile Remove="Migrations\20190128014441_Sun.Designer.cs" />
     <Compile Remove="Migrations\20190327031450_addsomething.cs" />
     <Compile Remove="Migrations\20190327031450_addsomething.Designer.cs" />
+    <Compile Remove="Migrations\20190329115148_add alot of things.cs" />
+    <Compile Remove="Migrations\20190329115148_add alot of things.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

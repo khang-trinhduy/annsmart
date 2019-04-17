@@ -2595,10 +2595,31 @@ END;
 
 GO
 
-IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190329115148_add alot of things')
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190417092938_add-something-important')
+BEGIN
+    ALTER TABLE [appoinment] ADD [Create] datetime2 NOT NULL DEFAULT '0001-01-01T00:00:00.0000000';
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190417092938_add-something-important')
+BEGIN
+    ALTER TABLE [appoinment] ADD [LastModified] datetime2 NOT NULL DEFAULT '0001-01-01T00:00:00.0000000';
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190417092938_add-something-important')
+BEGIN
+    ALTER TABLE [appoinment] ADD [LastModifiedBy] nvarchar(max) NULL;
+END;
+
+GO
+
+IF NOT EXISTS(SELECT * FROM [__EFMigrationsHistory] WHERE [MigrationId] = N'20190417092938_add-something-important')
 BEGIN
     INSERT INTO [__EFMigrationsHistory] ([MigrationId], [ProductVersion])
-    VALUES (N'20190329115148_add alot of things', N'2.1.8-servicing-32085');
+    VALUES (N'20190417092938_add-something-important', N'2.1.8-servicing-32085');
 END;
 
 GO
